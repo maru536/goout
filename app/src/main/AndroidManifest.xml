@@ -16,12 +16,34 @@
         <activity
             android:name=".LoginActivity"
             android:label="@string/app_name">
+            <!--<intent-filter>
+                <action android:name="android.intent.action.MAIN" />
+
+                <category android:name="android.intent.category.LAUNCHER" />
+            </intent-filter>-->
+        </activity>
+        <activity
+            android:name=".MainActivity"
+            android:label="@string/title_activity_main"
+            android:theme="@style/AppTheme.NoActionBar">
+
             <intent-filter>
                 <action android:name="android.intent.action.MAIN" />
 
                 <category android:name="android.intent.category.LAUNCHER" />
             </intent-filter>
+
         </activity>
+        <activity android:name=".ActivityWeather" />
+        <activity android:name=".ActivityTransportation" />
+        <activity android:name=".ActivityMemo" />
+        <activity android:name=".ActivityTransportationBus" />
+        <activity android:name=".ActivityTransportationSubway" />
+        <activity android:name=".ActivityDeviceSettings" />
+        <activity android:name=".ActivityDeviceSettingsSelectVoice" />
+        <activity android:name=".ActivityDeviceSettingsConnectWIFI" />
+        <activity android:name=".ActivityDeviceSettingsConfigWIFI" />
+        <activity android:name=".ActivityInformation"></activity>
     </application>
 
 </manifest>

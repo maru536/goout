@@ -1,0 +1,27 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu xmlns:android="http://schemas.android.com/apk/res/android">
+
+    <item
+        android:id="@+id/nav_weather"
+        android:icon="@drawable/ic_menu_camera"
+        android:title="날씨" />
+
+    <item
+        android:id="@+id/nav_transportation"
+        android:icon="@drawable/ic_menu_gallery"
+        android:title="교통" />
+    <item
+        android:id="@+id/nav_memo"
+        android:icon="@drawable/ic_menu_slideshow"
+        android:title="메모" />
+    <item
+        android:id="@+id/nav_device_settings"
+        android:icon="@drawable/ic_menu_manage"
+        android:title="디바이스 설정" />
+
+    <item
+        android:id="@+id/nav_information"
+        android:icon="@drawable/ic_menu_share"
+        android:title="앱 정보" />
+
+</menu>
