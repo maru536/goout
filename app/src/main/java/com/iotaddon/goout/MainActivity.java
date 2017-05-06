@@ -94,12 +94,17 @@ public class MainActivity extends AppCompatActivity
 
         if (id == R.id.nav_weather) {
             // Handle the camera action
+            Intent intent = new Intent(this, ActivityWeather.class);
+            startActivity(intent);
         } else if (id == R.id.nav_transportation) {
-
+            Intent intent = new Intent(this, ActivityTransportation.class);
+            startActivity(intent);
         } else if (id == R.id.nav_memo) {
-
+            Intent intent = new Intent(this, ActivityMemo.class);
+            startActivity(intent);
         } else if (id == R.id.nav_device_settings) {
-
+            Intent intent = new Intent(this, ActivityDeviceSettings.class);
+            startActivity(intent);
         } else if (id == R.id.nav_information) {
 
         }
