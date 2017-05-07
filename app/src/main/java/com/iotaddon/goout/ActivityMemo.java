@@ -30,6 +30,8 @@ public class ActivityMemo extends AppCompatActivity implements View.OnClickListe
         editContent = (EditText) findViewById(R.id.activity_memo_edit_content);
         btnSet = (Button) findViewById(R.id.activity_memo_btn_set);
 
+        btnSet.setOnClickListener(this);
+
         editContent.addTextChangedListener(new TextWatcher() {
             @Override
             public void beforeTextChanged(CharSequence s, int start, int count, int after) {
@@ -64,7 +66,7 @@ public class ActivityMemo extends AppCompatActivity implements View.OnClickListe
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.activity_memo_btn_set:
-                if(editContent.getText().toString().length()>MAX_CONTENT_LENGTH){
+                if(editContent.getText().toString().length()<MAX_CONTENT_LENGTH){
                     strContent = editContent.getText().toString();
                     Toast.makeText(this,"등록되었습니다.",Toast.LENGTH_SHORT).show();
                 }else{
