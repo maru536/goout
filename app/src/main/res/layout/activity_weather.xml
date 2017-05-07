@@ -50,6 +50,7 @@
                     android:text="기온" />
 
                 <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/activity_weather_chkbox_temper"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -73,6 +74,7 @@
                     android:text="하늘상태" />
 
                 <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/activity_weather_chkbox_weather"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -96,6 +98,7 @@
                     android:text="체감온도" />
 
                 <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/activity_weather_chkbox_bodytemp"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -119,6 +122,7 @@
                     android:text="현재습도" />
 
                 <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/activity_weather_chkbox_wet"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -142,6 +146,7 @@
                     android:text="불쾌지수" />
 
                 <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/activity_weather_chkbox_discomfort"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
@@ -165,6 +170,7 @@
                     android:text="미세먼지" />
 
                 <android.support.v7.widget.AppCompatCheckBox
+                    android:id="@+id/activity_weather_chkbox_dust"
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"

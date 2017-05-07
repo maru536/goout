@@ -49,6 +49,7 @@
             android:layout_height="wrap_content"
             android:layout_gravity="center_horizontal"
             android:layout_margin="20dp"
+            android:id="@+id/activity_memo_btn_set"
             android:text="등록"/>
 
     </LinearLayout>

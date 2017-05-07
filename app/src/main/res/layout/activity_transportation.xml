@@ -54,6 +54,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:id="@+id/activity_transportation_radio_none"
                     android:layout_marginRight="20dp" />
             </RelativeLayout>
 
@@ -77,6 +78,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:id="@+id/activity_transportation_radio_bus"
                     android:layout_marginRight="20dp" />
             </RelativeLayout>
 
@@ -100,6 +102,7 @@
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
+                    android:id="@+id/activity_transportation_radio_subway"
                     android:layout_marginRight="20dp" />
             </RelativeLayout>
 
