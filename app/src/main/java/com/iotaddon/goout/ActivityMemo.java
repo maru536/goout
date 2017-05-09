@@ -1,5 +1,6 @@
 package com.iotaddon.goout;
 
+import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.text.Editable;
@@ -19,6 +20,7 @@ public class ActivityMemo extends AppCompatActivity implements View.OnClickListe
     private Button btnSet;
     private String strContent;
     private final int MAX_CONTENT_LENGTH = 50;
+    private DataManager dataManager = DataManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -49,6 +51,8 @@ public class ActivityMemo extends AppCompatActivity implements View.OnClickListe
             }
         });
 
+
+        editContent.setText(dataManager.getSavedMemo());
     }
 
     @Override
@@ -68,6 +72,7 @@ public class ActivityMemo extends AppCompatActivity implements View.OnClickListe
             case R.id.activity_memo_btn_set:
                 if(editContent.getText().toString().length()<MAX_CONTENT_LENGTH){
                     strContent = editContent.getText().toString();
+                    dataManager.setSavedMemo(strContent);
                     Toast.makeText(this,"등록되었습니다.",Toast.LENGTH_SHORT).show();
                 }else{
                     Toast.makeText(this,"등록할 수 있는 문자를 초과했습니다. 내용을 수정해주세요.",Toast.LENGTH_SHORT).show();

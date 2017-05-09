@@ -69,7 +69,7 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="디바이스 WIFI 연결하기" />
+                    android:text="디바이스 WIFI 설정하기" />
 
                 <TextView
                     android:layout_width="wrap_content"

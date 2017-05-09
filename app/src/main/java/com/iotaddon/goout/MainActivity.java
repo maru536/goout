@@ -44,14 +44,7 @@ public class MainActivity extends AppCompatActivity
         navigationView.setNavigationItemSelectedListener(this);
 
         View headerView = navigationView.getHeaderView(0);
-        TextView txtLogin = (TextView) headerView.findViewById(R.id.nav_login);
-        txtLogin.setOnClickListener(new View.OnClickListener() {
-            @Override
-            public void onClick(View v) {
-                Intent intent = new Intent(getApplicationContext(), LoginActivity.class);
-                startActivity(intent);
-            }
-        });
+        //TextView txtLogin = (TextView) headerView.findViewById(R.id.nav_login);
     }
 
     @Override
