@@ -9,14 +9,12 @@ import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
 
-public class ActivityTransportation extends AppCompatActivity implements View.OnClickListener{
+public class ActivityTransportation extends AppCompatActivity implements View.OnClickListener {
 
     private RadioButton radioNone, radioBus, radioSubway;
     private boolean radioArr[] = new boolean[3];
+    private DataManager dataManager = DataManager.getInstance();
 
-    private final int idx_none = 0;
-    private final int idx_bus = 1;
-    private final int idx_subway = 2;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,13 +22,31 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_transportation);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        radioNone = (RadioButton)findViewById(R.id.activity_transportation_radio_none);
-        radioBus = (RadioButton)findViewById(R.id.activity_transportation_radio_bus);
-        radioSubway = (RadioButton)findViewById(R.id.activity_transportation_radio_subway);
+        radioNone = (RadioButton) findViewById(R.id.activity_transportation_radio_none);
+        radioBus = (RadioButton) findViewById(R.id.activity_transportation_radio_bus);
+        radioSubway = (RadioButton) findViewById(R.id.activity_transportation_radio_subway);
 
         radioNone.setOnClickListener(this);
         radioBus.setOnClickListener(this);
         radioSubway.setOnClickListener(this);
+
+        setRadioButton();
+    }
+
+    private void setRadioButton(){
+        if(dataManager.getSelectedTransportation() == dataManager.TRANSPORTATION_NONE){
+            radioNone.setChecked(true);
+            radioBus.setChecked(false);
+            radioSubway.setChecked(false);
+        }else if(dataManager.getSelectedTransportation() == dataManager.TRANSPORTATION_BUS){
+            radioNone.setChecked(false);
+            radioBus.setChecked(true);
+            radioSubway.setChecked(false);
+        }else if(dataManager.getSelectedTransportation() == dataManager.TRANSPORTATION_SUBWAY){
+            radioNone.setChecked(false);
+            radioBus.setChecked(false);
+            radioSubway.setChecked(true);
+        }
     }
 
     @Override
@@ -48,51 +64,52 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
-        switch(requestCode){
-            case idx_bus:
-                if(resultCode==RESULT_OK){
-                    radioArr[idx_bus] = true;
-                    radioArr[idx_subway] = false;
-                    radioArr[idx_none] = false;
-                    radioSubway.setChecked(false);
-                    radioBus.setChecked(true);
-                    radioNone.setChecked(false);
-                }
-                break;
-            case idx_subway:
-                if(resultCode==RESULT_OK){
-                    radioArr[idx_bus] = false;
-                    radioArr[idx_subway] = true;
-                    radioArr[idx_none] = false;
-                    radioSubway.setChecked(true);
-                    radioBus.setChecked(false);
-                    radioNone.setChecked(false);
-                }
-                break;
-        }
+        if(requestCode == dataManager.TRANSPORTATION_BUS){
+            if (resultCode == RESULT_OK) {
+                radioArr[dataManager.TRANSPORTATION_BUS] = true;
+                radioArr[dataManager.TRANSPORTATION_SUBWAY] = false;
+                radioArr[dataManager.TRANSPORTATION_NONE] = false;
+                radioSubway.setChecked(false);
+                radioBus.setChecked(true);
+                radioNone.setChecked(false);
 
+                dataManager.setSelectedTransportation(requestCode);
+            }
+
+        }else if(requestCode == dataManager.TRANSPORTATION_SUBWAY){
+            if (resultCode == RESULT_OK) {
+                radioArr[dataManager.TRANSPORTATION_BUS] = false;
+                radioArr[dataManager.TRANSPORTATION_SUBWAY] = true;
+                radioArr[dataManager.TRANSPORTATION_NONE] = false;
+                radioSubway.setChecked(true);
+                radioBus.setChecked(false);
+                radioNone.setChecked(false);
+
+                dataManager.setSelectedTransportation(requestCode);
+            }
+        }
     }
 
     @Override
     public void onClick(View v) {
         Intent intent;
-        switch(v.getId()){
+        switch (v.getId()) {
             case R.id.activity_transportation_radio_none:
-                radioArr[idx_bus] = false;
-                radioArr[idx_subway] = false;
-                radioArr[idx_none] = true;
+                radioArr[dataManager.TRANSPORTATION_BUS] = false;
+                radioArr[dataManager.TRANSPORTATION_SUBWAY] = false;
+                radioArr[dataManager.TRANSPORTATION_NONE] = true;
                 radioSubway.setChecked(false);
                 radioBus.setChecked(false);
                 radioNone.setChecked(true);
-                Log.e("check","none");
+                dataManager.setSelectedTransportation(dataManager.TRANSPORTATION_NONE);
                 break;
             case R.id.activity_transportation_radio_bus:
-                intent = new Intent(this,ActivityTransportationBus.class);
-                startActivityForResult(intent,idx_bus);
+                intent = new Intent(this, ActivityTransportationBus.class);
+                startActivityForResult(intent, dataManager.TRANSPORTATION_BUS);
                 break;
             case R.id.activity_transportation_radio_subway:
-                intent = new Intent(this,ActivityTransportationSubway.class);
-                startActivityForResult(intent,idx_subway);
+                intent = new Intent(this, ActivityTransportationSubway.class);
+                startActivityForResult(intent, dataManager.TRANSPORTATION_SUBWAY);
                 break;
         }
     }

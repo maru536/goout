@@ -9,11 +9,28 @@
     tools:context="com.iotaddon.goout.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
+    <ScrollView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_main_scrollview">
+
+        <LinearLayout
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:orientation="vertical">
+
+            <include layout="@layout/content_weather"></include>
+            <include layout="@layout/content_transportation"></include>
+            <include layout="@layout/content_memo"></include>
+        </LinearLayout>
+
+    </ScrollView>
 
     <TextView
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:text="표시할 컨텐츠를 확인하세요."/>
+        android:id="@+id/activity_main_txt"
+        android:text="표시할 컨텐츠를 확인하세요." />
 
 </RelativeLayout>

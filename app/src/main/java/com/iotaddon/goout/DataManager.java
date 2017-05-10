@@ -5,12 +5,17 @@ package com.iotaddon.goout;
  */
 public class DataManager {
 
-    public static final int INDEX_TEMP = 1;
-    public static final int INDEX_DUST = 2;
-    public static final int INDEX_WET = 3;
-    public static final int INDEX_DISCOMFORT = 4;
-    public static final int INDEX_WEATHER = 5;
-    public static final int INDEX_BODYTEMP = 6;
+    public static final int WEATHER_TEMP = 1;
+    public static final int WEATHER_DUST = 2;
+    public static final int WEATHER_WET = 3;
+    public static final int WEATHER_DISCOMFORT = 4;
+    public static final int WEATHER_WEATHER = 5;
+    public static final int WEATHER_BODYTEMP = 6;
+
+    public static final int TRANSPORTATION_NONE = 0;
+    public static final int TRANSPORTATION_BUS = 1;
+    public static final int TRANSPORTATION_SUBWAY = 2;
+
 
     private static DataManager ourInstance = new DataManager();
 

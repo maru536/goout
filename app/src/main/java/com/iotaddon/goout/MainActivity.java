@@ -13,10 +13,22 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.RelativeLayout;
+import android.widget.ScrollView;
 import android.widget.TextView;
+
+import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
         implements NavigationView.OnNavigationItemSelectedListener {
+
+    private RelativeLayout itemBox[] = new RelativeLayout[7];
+    private DataManager dataManager = DataManager.getInstance();
+    private final int ITEM_NUM_MAXIMUM = 6;
+
+    private RelativeLayout contentWeather, contentTransportation, contentMemo;
+    private TextView txtGuide, txtMemoContent;
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,6 +46,25 @@ public class MainActivity extends AppCompatActivity
             }
         });
 
+        contentWeather = (RelativeLayout) findViewById(R.id.content_weather_container);
+        contentTransportation = (RelativeLayout) findViewById(R.id.content_transportation_container);
+        contentMemo = (RelativeLayout) findViewById(R.id.content_memo_container);
+
+        txtGuide = (TextView) findViewById(R.id.activity_main_txt);
+        txtMemoContent = (TextView) findViewById(R.id.content_memo_txt);
+
+        itemBox[0] = (RelativeLayout) findViewById(R.id.activity_weather_item0);
+        itemBox[1] = (RelativeLayout) findViewById(R.id.activity_weather_item1);
+        itemBox[2] = (RelativeLayout) findViewById(R.id.activity_weather_item2);
+        itemBox[3] = (RelativeLayout) findViewById(R.id.activity_weather_item3);
+        itemBox[4] = (RelativeLayout) findViewById(R.id.activity_weather_item4);
+        itemBox[5] = (RelativeLayout) findViewById(R.id.activity_weather_item5);
+        itemBox[6] = (RelativeLayout) findViewById(R.id.activity_weather_item6);
+
+        setWeatherContent();
+        setContentTransportation();
+        setContentMemo();
+
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
                 this, drawer, toolbar, R.string.navigation_drawer_open, R.string.navigation_drawer_close);
@@ -45,6 +76,78 @@ public class MainActivity extends AppCompatActivity
 
         View headerView = navigationView.getHeaderView(0);
         //TextView txtLogin = (TextView) headerView.findViewById(R.id.nav_login);
+    }
+
+    private void setContentTransportation() {
+        if (dataManager.getSelectedTransportation() != dataManager.TRANSPORTATION_NONE) {
+            contentTransportation.setVisibility(View.VISIBLE);
+            txtGuide.setVisibility(View.INVISIBLE);
+        } else {
+            contentTransportation.setVisibility(View.GONE);
+            if (contentWeather.getVisibility() == View.GONE && contentMemo.getVisibility() == View.GONE) {
+                txtGuide.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void setContentMemo() {
+        if (!dataManager.getSavedMemo().equals("")) {
+            txtMemoContent.setText(dataManager.getSavedMemo());
+            contentMemo.setVisibility(View.VISIBLE);
+            txtGuide.setVisibility(View.INVISIBLE);
+        } else {
+            contentMemo.setVisibility(View.GONE);
+            if (contentWeather.getVisibility() == View.GONE && contentTransportation.getVisibility() == View.GONE) {
+                txtGuide.setVisibility(View.VISIBLE);
+            }
+        }
+    }
+
+    private void setWeatherContent() {
+        int itemNum = 0;
+        for (int i = 0; i <= ITEM_NUM_MAXIMUM; i++) {
+            itemBox[i].setVisibility(View.INVISIBLE);
+            if (dataManager.getSelectedWeather(i)) {
+                itemNum++;
+            }
+        }
+
+        if (itemNum > 0) {
+            contentWeather.setVisibility(View.VISIBLE);
+            txtGuide.setVisibility(View.INVISIBLE);
+        } else {
+            contentWeather.setVisibility(View.GONE);
+            if (contentMemo.getVisibility() == View.GONE && contentTransportation.getVisibility() == View.GONE) {
+                txtGuide.setVisibility(View.VISIBLE);
+            }
+        }
+
+
+        switch (itemNum) {
+            case 0:
+                break;
+            case 1:
+                break;
+            case 2:
+                break;
+            case 3:
+                break;
+            case 4:
+                break;
+            case 5:
+                break;
+            case 6:
+                break;
+        }
+        itemBox[itemNum].setVisibility(View.VISIBLE);
+    }
+
+    @Override
+    protected void onResume() {
+        super.onResume();
+        setWeatherContent();
+        setContentTransportation();
+        setContentMemo();
     }
 
     @Override

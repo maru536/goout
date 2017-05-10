@@ -59,7 +59,7 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
             }
         }
 
-        switch(itemNum){
+        switch (itemNum) {
             case 0:
                 break;
             case 1:
@@ -79,12 +79,12 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
     }
 
     private void setCheckBox() {
-        chkTemp.setChecked(dataManager.getSelectedWeather(dataManager.INDEX_TEMP));
-        chkDust.setChecked(dataManager.getSelectedWeather(dataManager.INDEX_DUST));
-        chkWet.setChecked(dataManager.getSelectedWeather(dataManager.INDEX_WET));
-        chkWeather.setChecked(dataManager.getSelectedWeather(dataManager.INDEX_WEATHER));
-        chkDiscomfort.setChecked(dataManager.getSelectedWeather(dataManager.INDEX_DISCOMFORT));
-        chkBodytemp.setChecked(dataManager.getSelectedWeather(dataManager.INDEX_BODYTEMP));
+        chkTemp.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_TEMP));
+        chkDust.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_DUST));
+        chkWet.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_WET));
+        chkWeather.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_WEATHER));
+        chkDiscomfort.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_DISCOMFORT));
+        chkBodytemp.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_BODYTEMP));
     }
 
     @Override
@@ -102,27 +102,27 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.activity_weather_chkbox_temper:
-                dataManager.setSelectedWeather(DataManager.INDEX_TEMP, isChecked);
+                dataManager.setSelectedWeather(DataManager.WEATHER_TEMP, isChecked);
                 setItemBox();
                 break;
             case R.id.activity_weather_chkbox_dust:
-                dataManager.setSelectedWeather(DataManager.INDEX_DUST, isChecked);
+                dataManager.setSelectedWeather(DataManager.WEATHER_DUST, isChecked);
                 setItemBox();
                 break;
             case R.id.activity_weather_chkbox_wet:
-                dataManager.setSelectedWeather(DataManager.INDEX_WET, isChecked);
+                dataManager.setSelectedWeather(DataManager.WEATHER_WET, isChecked);
                 setItemBox();
                 break;
             case R.id.activity_weather_chkbox_weather:
-                dataManager.setSelectedWeather(DataManager.INDEX_WEATHER, isChecked);
+                dataManager.setSelectedWeather(DataManager.WEATHER_WEATHER, isChecked);
                 setItemBox();
                 break;
             case R.id.activity_weather_chkbox_discomfort:
-                dataManager.setSelectedWeather(DataManager.INDEX_DISCOMFORT, isChecked);
+                dataManager.setSelectedWeather(DataManager.WEATHER_DISCOMFORT, isChecked);
                 setItemBox();
                 break;
             case R.id.activity_weather_chkbox_bodytemp:
-                dataManager.setSelectedWeather(DataManager.INDEX_BODYTEMP, isChecked);
+                dataManager.setSelectedWeather(DataManager.WEATHER_BODYTEMP, isChecked);
                 setItemBox();
                 break;
 
