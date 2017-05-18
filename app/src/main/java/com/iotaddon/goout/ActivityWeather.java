@@ -48,6 +48,7 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
         setItemBox();
 
 
+
     }
 
     private void setItemBox() {

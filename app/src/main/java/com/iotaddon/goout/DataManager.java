@@ -28,13 +28,19 @@ public class DataManager {
     private String savedMemo = "";
     private InfoUserAddress userAddress= new InfoUserAddress(0,0,"");
     private boolean outAlarm = false;
+    private DataWeather dataWeather;
 
     private DataManager() {
+        dataWeather = new DataWeather();
     }
 
-    public void setUserAddress(double x, double y, String name){
-        userAddress.setX(x);
-        userAddress.setY(y);
+    public DataWeather getDataWeather() {
+        return dataWeather;
+    }
+
+    public void setUserAddress(double latitude, double longitude, String name){
+        userAddress.setLatitude(latitude);
+        userAddress.setLongitude(longitude);
         userAddress.setName(name);
     }
 
