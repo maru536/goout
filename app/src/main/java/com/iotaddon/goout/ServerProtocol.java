@@ -27,7 +27,7 @@ import javax.net.ssl.SSLSession;
 public class ServerProtocol {
     private static final String serverAddr = "http://ourserver";
 
-    public static String push(String StrUrl, JSONObject body) {
+    public static JSONObject post(String StrUrl, JSONObject body) {
         try {
             URL url = new URL("https://fcm.googleapis.com/fcm/send");
             HttpsURLConnection con = (HttpsURLConnection) url.openConnection();
@@ -51,7 +51,7 @@ public class ServerProtocol {
             // Parse the JSON string and return the notification key
             JSONObject response = new JSONObject(responseString);
             Log.e("KimDC", response.toString());
-            return response.toString();
+            return response;
         }
         catch (IOException ioe) {
             ioe.printStackTrace();
@@ -60,11 +60,11 @@ public class ServerProtocol {
             je.printStackTrace();
         }
         finally {
-            return "";
+            return new JSONObject();
         }
     }
 
-    public static void get(String strUrl) {
+    public static JSONObject get(String strUrl, JSONObject header) {
         try {
             // Get HTTPS URL connection
             URL url = new URL(strUrl);
@@ -90,24 +90,29 @@ public class ServerProtocol {
             conn.setInstanceFollowRedirects(true);
 
             // Print response from host
-            InputStream in = conn.getInputStream();
-            BufferedReader reader = new BufferedReader(new InputStreamReader(in));
-            String line = null;
+            InputStream is = conn.getInputStream();
+            //BufferedReader reader = new BufferedReader(new InputStreamReader(in));
+            String responseString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
+            /*String line = null;
             while ((line = reader.readLine()) != null) {
                 System.out.printf("%s\n", line);
-            }
+            }*/
 
-            reader.close();
+            //reader.close();
+            is.close();
+
+            return new JSONObject(responseString);
         } catch (IOException ioe) {
             ioe.printStackTrace();
+        } catch (JSONException jsone) {
+            jsone.printStackTrace();
         } catch (NoSuchAlgorithmException nsae) {
             nsae.printStackTrace();
         } catch (KeyManagementException kme) {
             kme.printStackTrace();
         }
         finally {
-
+            return new JSONObject();
         }
-
     }
 }
