@@ -20,13 +20,112 @@ import javax.net.ssl.HttpsURLConnection;
 import javax.net.ssl.SSLContext;
 import javax.net.ssl.SSLSession;
 
+import okhttp3.Call;
+import okhttp3.Callback;
+import okhttp3.MediaType;
+import okhttp3.OkHttpClient;
+import okhttp3.Request;
+import okhttp3.RequestBody;
+import okhttp3.Response;
+
 /**
  * Created by maru5 on 2017-05-09.
  */
 
 public class ServerProtocol {
-    private static final String serverAddr = "http://ourserver";
+    private static final String serverAddress = "http://13.124.126.90:8080";
+    private static String mResponse;
 
+    public static JSONObject post(String url, JSONObject body) {
+        JSONObject response = new JSONObject();
+
+        try {
+            OkHttpClient client = new OkHttpClient();
+
+            MediaType mediaType = MediaType.parse("application/json");
+            RequestBody requestBody = RequestBody.create(mediaType, body.toString());
+            Request request = new Request.Builder()
+                    .url(serverAddress+url)
+                    .post(requestBody)
+                    .addHeader("content-type", "application/json")
+                    .addHeader("cache-control", "no-cache")
+                    .addHeader("postman-token", "9f321e22-0c77-3e92-e315-493293174615")
+                    .build();
+
+            Log.d("KimDC", serverAddress+url);
+
+            //Response result = client.newCall(request).execute();
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code " + response);
+                    }
+                    else {
+                        mResponse = response.toString();
+                    }
+                }
+            });
+
+            response = new JSONObject();
+        }
+        finally {
+
+        }
+
+        return response;
+    }
+
+    public static JSONObject get(String url) {
+        JSONObject response = new JSONObject();
+
+        try {
+            OkHttpClient client = new OkHttpClient();
+
+            Request request = new Request.Builder()
+                    .url(serverAddress+url)
+                    .get()
+                    .addHeader("cache-control", "no-cache")
+                    .addHeader("postman-token", "4d9324a7-0db1-b170-3852-b15b7ea6910a")
+                    .build();
+
+            Log.d("KimDC", serverAddress+url);
+
+
+            client.newCall(request).enqueue(new Callback() {
+                @Override
+                public void onFailure(Call call, IOException e) {
+                    e.printStackTrace();
+                }
+
+                @Override
+                public void onResponse(Call call, Response response) throws IOException {
+                    if (!response.isSuccessful()) {
+                        throw new IOException("Unexpected code " + response);
+                    }
+                    else {
+                        mResponse = response.toString();
+                    }
+                }
+            });
+
+            response = new JSONObject();
+        }
+        finally {
+
+
+        }
+
+        return response;
+    }
+
+    /*
     public static JSONObject post(String StrUrl, JSONObject body) {
         try {
             URL url = new URL("https://fcm.googleapis.com/fcm/send");
@@ -35,7 +134,7 @@ public class ServerProtocol {
 
             // HTTP request header
             con.setRequestProperty("Content-Type", "application/json");
-            con.setRequestProperty("Authorization", "key=AAAATq7NFIE:APA91bH4duimExAt8-D41AHMrd4I3amepEjmSpF2RI5-u8UfLp1FH4k959-2Sl5i1Jl_HQwmSGfx76XR-BygTjkSj7iwLwbBmL8bgRLgYAnZB2VOXr9Hhn335-96g3y8jXkCLGxms2lm");
+            //con.setRequestProperty("Authorization", "key=AAAATq7NFIE:APA91bH4duimExAt8-D41AHMrd4I3amepEjmSpF2RI5-u8UfLp1FH4k959-2Sl5i1Jl_HQwmSGfx76XR-BygTjkSj7iwLwbBmL8bgRLgYAnZB2VOXr9Hhn335-96g3y8jXkCLGxms2lm");
             con.setRequestMethod("POST");
             con.connect();
 
@@ -93,10 +192,10 @@ public class ServerProtocol {
             InputStream is = conn.getInputStream();
             //BufferedReader reader = new BufferedReader(new InputStreamReader(in));
             String responseString = new Scanner(is, "UTF-8").useDelimiter("\\A").next();
-            /*String line = null;
+            String line = null;
             while ((line = reader.readLine()) != null) {
                 System.out.printf("%s\n", line);
-            }*/
+            }
 
             //reader.close();
             is.close();
@@ -114,5 +213,5 @@ public class ServerProtocol {
         finally {
             return new JSONObject();
         }
-    }
+    }*/
 }
