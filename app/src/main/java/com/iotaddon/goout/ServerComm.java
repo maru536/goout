@@ -8,14 +8,33 @@ import java.util.HashMap;
  */
 
 public class ServerComm {
-    public static JSONObject regist(String deviceID, String macAddr) {
+    private volatile static ServerComm mUniqueInstance;
+    private ServerProtocol mServerProtocol;
+
+    private ServerComm() {
+        mServerProtocol = new ServerProtocol();
+    }
+
+    public static ServerComm getInstance() {
+        if (mUniqueInstance == null) {
+            synchronized (ServerComm.class) {
+                if (mUniqueInstance == null) {
+                    mUniqueInstance = new ServerComm();
+                }
+            }
+        }
+
+        return mUniqueInstance;
+    }
+
+    public void regist(String deviceID, String macAddr) {
         HashMap id = new HashMap();
 
         id.put("deviceId", deviceID);
         id.put("id", macAddr);
 
         JSONObject body = new JSONObject(id);
-        return ServerProtocol.post("/signup", body);
+        mServerProtocol.post("/signup", body);
     }
 
     /*public static JSONObject memo(String deviceID, String content) {
@@ -28,12 +47,12 @@ public class ServerComm {
         return ServerProtocol.post("http://addr", body);
     }*/
 
-    public static JSONObject weather(double longitude, double latitude) {
-        return ServerProtocol.get("/weather?lon="+longitude+"&lat="+latitude);
+    public void weather(double longitude, double latitude) {
+        mServerProtocol.get("/weather?lon="+longitude+"&lat="+latitude);
     }
 
-    public static JSONObject dust(double longitude, double latitude) {
-        return ServerProtocol.get("/dust?lon="+longitude+"&lat="+latitude);
+    public void dust(double longitude, double latitude) {
+        mServerProtocol.get("/dust?lon="+longitude+"&lat="+latitude);
     }
 
     /*public static JSONObject traffic(double src_latitude, double src_longitude, double dst_latitude, double dst_longitude) {

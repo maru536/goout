@@ -31,6 +31,7 @@ public class MainActivity extends AppCompatActivity
     private Button btnDust;
     private Button btnRegist;
     private TextView tvResponse;
+    private ServerComm mServerComm;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -64,31 +65,26 @@ public class MainActivity extends AppCompatActivity
         btnDust = (Button)findViewById(R.id.btn_dust);
         btnRegist = (Button)findViewById(R.id.btn_regist);
         tvResponse = (TextView)findViewById(R.id.tv_response);
+        mServerComm = ServerComm.getInstance();
 
         btnWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("KimDC", "weather");
-                JSONObject response = ServerComm.weather(126.9658000000, 37.5714000000);
-                tvResponse.setText(response.toString());
+                mServerComm.weather(126.9658000000, 37.5714000000);
             }
         });
 
         btnDust.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("KimDC", "Dust");
-                JSONObject response = ServerComm.dust(126.9658000000, 37.5714000000);
-                tvResponse.setText(response.toString());
+                mServerComm.dust(126.9658000000, 37.5714000000);
             }
         });
 
         btnRegist.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                Log.d("KimDC", "Regist");
-                JSONObject response = ServerComm.regist("as", "df");
-                tvResponse.setText(response.toString());
+                mServerComm.regist("as", "df");
             }
         });
     }
