@@ -5,18 +5,18 @@ package com.iotaddon.goout;
  */
 
 public class DataWeather {
-    DataWeatherRain dataWeatherRain;
-    DataWeatherResult dataWeatherResult;
-    DataWeatherSky dataWeatherSky;
-    DataWeatherStation dataWeatherStation;
-    DataWeatherTemperature dataWeatherTemperature;
-    DataWeatherTimeObservation dataWeatherTimeObservation;
-    DataWeatherWind dataWeatherWind;
-    DataWeatherHumidity dataWeatherHumidity;
-    DataWeatherCommon dataWeatherCommon;
-    DataWeatherPrecipitation dataWeatherPrecipitation;
-    DataWeatherPressure dataWeatherPressure;
-    DataWeatherLightning dataWeatherLightning;
+    private DataWeatherRain dataWeatherRain;
+    private DataWeatherResult dataWeatherResult;
+    private DataWeatherSky dataWeatherSky;
+    private DataWeatherStation dataWeatherStation;
+    private DataWeatherTemperature dataWeatherTemperature;
+    private DataWeatherTimeObservation dataWeatherTimeObservation;
+    private DataWeatherWind dataWeatherWind;
+    private DataWeatherHumidity dataWeatherHumidity;
+    private DataWeatherCommon dataWeatherCommon;
+    private DataWeatherPrecipitation dataWeatherPrecipitation;
+    private DataWeatherPressure dataWeatherPressure;
+    private DataWeatherLightning dataWeatherLightning;
 
     public DataWeather(){
         dataWeatherCommon = new DataWeatherCommon("","");

@@ -14,6 +14,7 @@ import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
 import android.view.Menu;
 import android.view.MenuItem;
+import android.widget.LinearLayout;
 import android.widget.RelativeLayout;
 import android.widget.ScrollView;
 import android.widget.TextView;
@@ -21,10 +22,13 @@ import android.widget.TextView;
 import org.w3c.dom.Text;
 
 public class MainActivity extends AppCompatActivity
-        implements NavigationView.OnNavigationItemSelectedListener {
+        implements View.OnClickListener{
 
     private RelativeLayout itemBox[] = new RelativeLayout[7];
+    private LinearLayout drawerMenu[] = new LinearLayout[4];
+    private TextView itemTxt[][] = new TextView[7][7];
     private DataManager dataManager = DataManager.getInstance();
+    private WeatherDataUpdateListener weatherListener;
     private final int ITEM_NUM_MAXIMUM = 6;
 
     private RelativeLayout contentWeather, contentTransportation, contentMemo;
@@ -38,22 +42,25 @@ public class MainActivity extends AppCompatActivity
         Toolbar toolbar = (Toolbar) findViewById(R.id.toolbar);
         setSupportActionBar(toolbar);
 
+        weatherListener = new WeatherDataUpdateListener() {
+            @Override
+            public void doUpdate() {
+                Log.e("update log","log check");
+                setWeatherContent();
+                setContentTransportation();
+                setContentMemo();
+            }
+        };
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-
-                AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER){
-                    @Override
-                    protected void onPostExecute(Object o) {
-                        super.onPostExecute(o);
-                        String res = (String)o;
-
-                        Log.e("RES", res);
-                    }
-                };
+                AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER);
+                asyncTaskHttpCommunicator.setListener(weatherListener);
+                asyncTaskHttpCommunicator.execute();
             }
         });
 
@@ -72,7 +79,33 @@ public class MainActivity extends AppCompatActivity
         itemBox[5] = (RelativeLayout) findViewById(R.id.activity_weather_item5);
         itemBox[6] = (RelativeLayout) findViewById(R.id.activity_weather_item6);
 
-        setWeatherContent();
+        itemTxt[1][1] = (TextView)findViewById(R.id.content_weather_txt_1_1);
+        itemTxt[2][1] = (TextView)findViewById(R.id.content_weather_txt_2_1);
+        itemTxt[2][2] = (TextView)findViewById(R.id.content_weather_txt_2_1);
+        itemTxt[3][1] = (TextView)findViewById(R.id.content_weather_txt_3_1);
+        itemTxt[3][2] = (TextView)findViewById(R.id.content_weather_txt_3_2);
+        itemTxt[3][3] = (TextView)findViewById(R.id.content_weather_txt_3_3);
+        itemTxt[4][1] = (TextView)findViewById(R.id.content_weather_txt_4_1);
+        itemTxt[4][2] = (TextView)findViewById(R.id.content_weather_txt_4_2);
+        itemTxt[4][3] = (TextView)findViewById(R.id.content_weather_txt_4_3);
+        itemTxt[4][4] = (TextView)findViewById(R.id.content_weather_txt_4_4);
+        itemTxt[5][1] = (TextView)findViewById(R.id.content_weather_txt_5_1);
+        itemTxt[5][2] = (TextView)findViewById(R.id.content_weather_txt_5_2);
+        itemTxt[5][3] = (TextView)findViewById(R.id.content_weather_txt_5_3);
+        itemTxt[5][4] = (TextView)findViewById(R.id.content_weather_txt_5_4);
+        itemTxt[5][5] = (TextView)findViewById(R.id.content_weather_txt_5_5);
+        itemTxt[6][1] = (TextView)findViewById(R.id.content_weather_txt_6_1);
+        itemTxt[6][2] = (TextView)findViewById(R.id.content_weather_txt_6_2);
+        itemTxt[6][3] = (TextView)findViewById(R.id.content_weather_txt_6_3);
+        itemTxt[6][4] = (TextView)findViewById(R.id.content_weather_txt_6_4);
+        itemTxt[6][5] = (TextView)findViewById(R.id.content_weather_txt_6_5);
+        itemTxt[6][6] = (TextView)findViewById(R.id.content_weather_txt_6_6);
+
+
+
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER);
+        asyncTaskHttpCommunicator.setListener(weatherListener);
+        asyncTaskHttpCommunicator.execute();
         setContentTransportation();
         setContentMemo();
 
@@ -82,11 +115,16 @@ public class MainActivity extends AppCompatActivity
         drawer.setDrawerListener(toggle);
         toggle.syncState();
 
-        NavigationView navigationView = (NavigationView) findViewById(R.id.nav_view);
-        navigationView.setNavigationItemSelectedListener(this);
+        drawerMenu[0] = (LinearLayout)findViewById(R.id.drawer_menu_weather);
+        drawerMenu[1] = (LinearLayout)findViewById(R.id.drawer_menu_transportation);
+        drawerMenu[2] = (LinearLayout)findViewById(R.id.drawer_menu_memo);
+        drawerMenu[3] = (LinearLayout)findViewById(R.id.drawer_menu_settings);
 
-        View headerView = navigationView.getHeaderView(0);
-        //TextView txtLogin = (TextView) headerView.findViewById(R.id.nav_login);
+        drawerMenu[0].setOnClickListener(this);
+        drawerMenu[1].setOnClickListener(this);
+        drawerMenu[2].setOnClickListener(this);
+        drawerMenu[3].setOnClickListener(this);
+
     }
 
     private void setContentTransportation() {
@@ -132,24 +170,7 @@ public class MainActivity extends AppCompatActivity
                 txtGuide.setVisibility(View.VISIBLE);
             }
         }
-
-
-        switch (itemNum) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-        }
+        checkWeatherIndex(itemNum);
         itemBox[itemNum].setVisibility(View.VISIBLE);
     }
 
@@ -159,6 +180,30 @@ public class MainActivity extends AppCompatActivity
         setWeatherContent();
         setContentTransportation();
         setContentMemo();
+    }
+
+    public void checkWeatherIndex(int m){
+        int c = 0;
+        for(int i=0;i<=ITEM_NUM_MAXIMUM;i++){
+            if(c>m)
+                break;
+            if(dataManager.getSelectedWeather(i)){
+                c++;
+                if(i==dataManager.WEATHER_BODYTEMP){
+                    itemTxt[m][c].setText(dataManager.getDataWeather().getDataWeatherTemperature().getTc()+"");
+                }else if(i==dataManager.WEATHER_DISCOMFORT){
+                    itemTxt[m][c].setText(dataManager.getDataWeather().getDataWeatherRain().getSinceOntime()+"");
+                }else if(i==dataManager.WEATHER_DUST){
+                    itemTxt[m][c].setText(dataManager.getDataWeather().getDataWeatherSky().getName()+"");
+                }else if(i==dataManager.WEATHER_TEMP){
+                    itemTxt[m][c].setText(dataManager.getDataWeather().getDataWeatherTemperature().getTc()+"");
+                }else if(i==dataManager.WEATHER_WEATHER){
+                    itemTxt[m][c].setText(dataManager.getDataWeather().getDataWeatherSky().getName()+"");
+                }else if(i==dataManager.WEATHER_WET){
+                    itemTxt[m][c].setText(dataManager.getDataWeather().getDataWeatherHumidity().getHumidity()+"");
+                }
+            }
+        }
     }
 
     @Override
@@ -193,31 +238,37 @@ public class MainActivity extends AppCompatActivity
         return super.onOptionsItemSelected(item);
     }
 
-    @SuppressWarnings("StatementWithEmptyBody")
     @Override
-    public boolean onNavigationItemSelected(MenuItem item) {
-        // Handle navigation view item clicks here.
-        int id = item.getItemId();
+    public void onClick(View v) {
+        DrawerLayout drawer;
+        Intent intent;
 
-        if (id == R.id.nav_weather) {
-            // Handle the camera action
-            Intent intent = new Intent(this, ActivityWeather.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_transportation) {
-            Intent intent = new Intent(this, ActivityTransportation.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_memo) {
-            Intent intent = new Intent(this, ActivityMemo.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_device_settings) {
-            Intent intent = new Intent(this, ActivityDeviceSettings.class);
-            startActivity(intent);
-        } else if (id == R.id.nav_information) {
-
+        switch(v.getId()){
+            case R.id.drawer_menu_weather:
+                intent = new Intent(this, ActivityWeather.class);
+                startActivity(intent);
+                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.drawer_menu_transportation:
+                intent = new Intent(this, ActivityTransportation.class);
+                startActivity(intent);
+                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.drawer_menu_memo:
+                intent = new Intent(this, ActivityMemo.class);
+                startActivity(intent);
+                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                break;
+            case R.id.drawer_menu_settings:
+                intent = new Intent(this, ActivityDeviceSettings.class);
+                startActivity(intent);
+                drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
+                drawer.closeDrawer(GravityCompat.START);
+                break;
         }
-
-        DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
-        drawer.closeDrawer(GravityCompat.START);
-        return true;
     }
+
 }
