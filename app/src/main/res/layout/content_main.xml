@@ -9,7 +9,7 @@
     tools:context="com.iotaddon.goout.MainActivity"
     tools:showIn="@layout/app_bar_main">
 
-    <ScrollView
+    <!--<ScrollView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
         android:id="@+id/activity_main_scrollview">
@@ -24,7 +24,14 @@
             <include layout="@layout/content_memo"></include>
         </LinearLayout>
 
-    </ScrollView>
+    </ScrollView>-->
+    <android.support.v7.widget.RecyclerView
+        android:layout_width="match_parent"
+        android:layout_height="match_parent"
+        android:id="@+id/activity_main_recycleview">
+
+    </android.support.v7.widget.RecyclerView>
+
 
     <TextView
         android:layout_width="wrap_content"

@@ -10,7 +10,7 @@ import android.widget.RelativeLayout;
 
 public class ActivityWeather extends AppCompatActivity implements CompoundButton.OnCheckedChangeListener {
 
-    private CheckBox chkTemp, chkDust, chkWet, chkDiscomfort, chkWeather, chkBodytemp;
+    private CheckBox chkTemp, chkDust, chkHumidity, chkSky, chkPrecipitation, chkWind;
     private RelativeLayout itemBox[] = new RelativeLayout[7];
     private DataManager dataManager = DataManager.getInstance();
     private final int ITEM_NUM_MAXIMUM = 6;
@@ -21,37 +21,37 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
         setContentView(R.layout.activity_weather);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
 
-        chkTemp = (CheckBox) findViewById(R.id.activity_weather_chkbox_temper);
+        chkTemp = (CheckBox) findViewById(R.id.activity_weather_chkbox_temp);
         chkDust = (CheckBox) findViewById(R.id.activity_weather_chkbox_dust);
-        chkWet = (CheckBox) findViewById(R.id.activity_weather_chkbox_wet);
-        chkWeather = (CheckBox) findViewById(R.id.activity_weather_chkbox_weather);
-        chkDiscomfort = (CheckBox) findViewById(R.id.activity_weather_chkbox_discomfort);
-        chkBodytemp = (CheckBox) findViewById(R.id.activity_weather_chkbox_bodytemp);
+        chkHumidity = (CheckBox) findViewById(R.id.activity_weather_chkbox_humidity);
+        chkSky = (CheckBox) findViewById(R.id.activity_weather_chkbox_sky);
+        chkPrecipitation = (CheckBox) findViewById(R.id.activity_weather_chkbox_precipitation);
+        chkWind = (CheckBox) findViewById(R.id.activity_weather_chkbox_wind);
 
-        itemBox[0] = (RelativeLayout) findViewById(R.id.activity_weather_item0);
+/*        itemBox[0] = (RelativeLayout) findViewById(R.id.activity_weather_item0);
         itemBox[1] = (RelativeLayout) findViewById(R.id.activity_weather_item1);
         itemBox[2] = (RelativeLayout) findViewById(R.id.activity_weather_item2);
         itemBox[3] = (RelativeLayout) findViewById(R.id.activity_weather_item3);
         itemBox[4] = (RelativeLayout) findViewById(R.id.activity_weather_item4);
         itemBox[5] = (RelativeLayout) findViewById(R.id.activity_weather_item5);
-        itemBox[6] = (RelativeLayout) findViewById(R.id.activity_weather_item6);
+        itemBox[6] = (RelativeLayout) findViewById(R.id.activity_weather_item6);*/
 
 
         chkTemp.setOnCheckedChangeListener(this);
         chkDust.setOnCheckedChangeListener(this);
-        chkWeather.setOnCheckedChangeListener(this);
-        chkWet.setOnCheckedChangeListener(this);
-        chkDiscomfort.setOnCheckedChangeListener(this);
-        chkBodytemp.setOnCheckedChangeListener(this);
+        chkHumidity.setOnCheckedChangeListener(this);
+        chkSky.setOnCheckedChangeListener(this);
+        chkPrecipitation.setOnCheckedChangeListener(this);
+        chkWind.setOnCheckedChangeListener(this);
 
         setCheckBox();
-        setItemBox();
+        /*setItemBox();*/
 
 
 
     }
 
-    private void setItemBox() {
+    /*private void setItemBox() {
         int itemNum = 0;
         for (int i = 0; i <= ITEM_NUM_MAXIMUM; i++) {
             itemBox[i].setVisibility(View.INVISIBLE);
@@ -77,15 +77,15 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
                 break;
         }
         itemBox[itemNum].setVisibility(View.VISIBLE);
-    }
+    }*/
 
     private void setCheckBox() {
         chkTemp.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_TEMP));
         chkDust.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_DUST));
-        chkWet.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_WET));
-        chkWeather.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_WEATHER));
-        chkDiscomfort.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_DISCOMFORT));
-        chkBodytemp.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_BODYTEMP));
+        chkHumidity.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_HUMIDITY));
+        chkSky.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_SKY));
+        chkPrecipitation.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_PRECIPITATION));
+        chkWind.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_WIND));
     }
 
     @Override
@@ -102,29 +102,23 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
-            case R.id.activity_weather_chkbox_temper:
+            case R.id.activity_weather_chkbox_temp:
                 dataManager.setSelectedWeather(DataManager.WEATHER_TEMP, isChecked);
-                setItemBox();
                 break;
             case R.id.activity_weather_chkbox_dust:
                 dataManager.setSelectedWeather(DataManager.WEATHER_DUST, isChecked);
-                setItemBox();
                 break;
-            case R.id.activity_weather_chkbox_wet:
-                dataManager.setSelectedWeather(DataManager.WEATHER_WET, isChecked);
-                setItemBox();
+            case R.id.activity_weather_chkbox_humidity:
+                dataManager.setSelectedWeather(DataManager.WEATHER_HUMIDITY, isChecked);
                 break;
-            case R.id.activity_weather_chkbox_weather:
-                dataManager.setSelectedWeather(DataManager.WEATHER_WEATHER, isChecked);
-                setItemBox();
+            case R.id.activity_weather_chkbox_sky:
+                dataManager.setSelectedWeather(DataManager.WEATHER_SKY, isChecked);
                 break;
-            case R.id.activity_weather_chkbox_discomfort:
-                dataManager.setSelectedWeather(DataManager.WEATHER_DISCOMFORT, isChecked);
-                setItemBox();
+            case R.id.activity_weather_chkbox_wind:
+                dataManager.setSelectedWeather(DataManager.WEATHER_WIND, isChecked);
                 break;
-            case R.id.activity_weather_chkbox_bodytemp:
-                dataManager.setSelectedWeather(DataManager.WEATHER_BODYTEMP, isChecked);
-                setItemBox();
+            case R.id.activity_weather_chkbox_precipitation:
+                dataManager.setSelectedWeather(DataManager.WEATHER_PRECIPITATION, isChecked);
                 break;
 
         }
