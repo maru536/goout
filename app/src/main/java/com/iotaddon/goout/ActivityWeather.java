@@ -1,5 +1,7 @@
 package com.iotaddon.goout;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -20,6 +22,7 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_weather);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
 
         chkTemp = (CheckBox) findViewById(R.id.activity_weather_chkbox_temp);
         chkDust = (CheckBox) findViewById(R.id.activity_weather_chkbox_dust);
@@ -80,12 +83,12 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
     }*/
 
     private void setCheckBox() {
-        chkTemp.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_TEMP));
-        chkDust.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_DUST));
-        chkHumidity.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_HUMIDITY));
-        chkSky.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_SKY));
-        chkPrecipitation.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_PRECIPITATION));
-        chkWind.setChecked(dataManager.getSelectedWeather(dataManager.WEATHER_WIND));
+        chkTemp.setChecked(dataManager.getSelectedWeather(dataManager.TYPE_WEATHER_TEMP));
+        chkDust.setChecked(dataManager.getSelectedWeather(dataManager.TYPE_WEATHER_DUST));
+        chkHumidity.setChecked(dataManager.getSelectedWeather(dataManager.TYPE_WEATHER_HUMIDITY));
+        chkSky.setChecked(dataManager.getSelectedWeather(dataManager.TYPE_WEATHER_SKY));
+        chkPrecipitation.setChecked(dataManager.getSelectedWeather(dataManager.TYPE_WEATHER_PRECIPITATION));
+        chkWind.setChecked(dataManager.getSelectedWeather(dataManager.TYPE_WEATHER_WIND));
     }
 
     @Override
@@ -103,22 +106,22 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
         switch (buttonView.getId()) {
             case R.id.activity_weather_chkbox_temp:
-                dataManager.setSelectedWeather(DataManager.WEATHER_TEMP, isChecked);
+                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_TEMP, isChecked);
                 break;
             case R.id.activity_weather_chkbox_dust:
-                dataManager.setSelectedWeather(DataManager.WEATHER_DUST, isChecked);
+                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_DUST, isChecked);
                 break;
             case R.id.activity_weather_chkbox_humidity:
-                dataManager.setSelectedWeather(DataManager.WEATHER_HUMIDITY, isChecked);
+                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_HUMIDITY, isChecked);
                 break;
             case R.id.activity_weather_chkbox_sky:
-                dataManager.setSelectedWeather(DataManager.WEATHER_SKY, isChecked);
+                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_SKY, isChecked);
                 break;
             case R.id.activity_weather_chkbox_wind:
-                dataManager.setSelectedWeather(DataManager.WEATHER_WIND, isChecked);
+                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_WIND, isChecked);
                 break;
             case R.id.activity_weather_chkbox_precipitation:
-                dataManager.setSelectedWeather(DataManager.WEATHER_PRECIPITATION, isChecked);
+                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_PRECIPITATION, isChecked);
                 break;
 
         }

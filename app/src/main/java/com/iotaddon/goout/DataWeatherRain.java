@@ -14,6 +14,15 @@ public class DataWeatherRain {
     private double last30min;
     private double last1hour;
     private double sinceOntime;
+    private boolean selectVoice;
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
+    }
 
     public DataWeatherRain(double last6hour, double last12hour, double last24hour, double sinceMidnight, double last10min, double last15min, double last30min, double last1hour, double sinceOntime) {
         this.last6hour = last6hour;
@@ -25,6 +34,7 @@ public class DataWeatherRain {
         this.last30min = last30min;
         this.last1hour = last1hour;
         this.sinceOntime = sinceOntime;
+        this.selectVoice = false;
     }
 
     public double getLast6hour() {

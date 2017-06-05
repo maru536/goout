@@ -6,9 +6,19 @@ package com.iotaddon.goout;
 
 public class DataWeatherHumidity {
     private double humidity;
+    private boolean selectVoice;
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
+    }
 
     public DataWeatherHumidity(double humidity) {
         this.humidity = humidity;
+        this.selectVoice = false;
     }
 
     public double getHumidity() {

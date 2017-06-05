@@ -7,10 +7,20 @@ package com.iotaddon.goout;
 public class DataWeatherPressure {
     private double surface;
     private double sealevel;
+    private boolean selectVoice;
 
     public DataWeatherPressure(double surface, double sealevel) {
         this.surface = surface;
         this.sealevel = sealevel;
+        this.selectVoice = false;
+    }
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
     }
 
     public double getSurface() {

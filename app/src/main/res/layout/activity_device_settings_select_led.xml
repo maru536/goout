@@ -1,11 +1,11 @@
 <?xml version="1.0" encoding="utf-8"?>
 <RelativeLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
-    android:id="@+id/activity_device_settings"
+    android:id="@+id/activity_device_settings_select_led"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     android:background="#e6e6e6"
-    tools:context="com.iotaddon.goout.ActivityDeviceSettings">
+    tools:context="com.iotaddon.goout.ActivityDeviceSettingsSelectLed">
 
     <ScrollView
         android:layout_width="match_parent"
@@ -18,7 +18,7 @@
             android:orientation="vertical">
 
             <RelativeLayout
-                android:id="@+id/activity_device_settings_relative_placepicker"
+                android:id="@+id/activity_device_settings_select_led_1"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#ffffffff"
@@ -35,16 +35,15 @@
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:layout_gravity="center"
-                        android:text="사용자 위치 선택하기" />
-
+                        android:text="LED 1" />
                     <TextView
                         android:layout_width="wrap_content"
                         android:layout_height="wrap_content"
                         android:layout_margin="2dp"
                         android:visibility="gone"
+                        android:id="@+id/activity_device_settings_select_led_1_txt"
                         android:layout_gravity="center"
-                        android:id="@+id/activity_device_settings_txt_place"
-                        android:text="" />
+                        android:text="선택" />
 
                 </LinearLayout>
 
@@ -59,17 +58,34 @@
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/activity_device_settings_relative_wifi_connect"
+                android:id="@+id/activity_device_settings_select_led_2"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#ffffffff"
                 android:layout_marginBottom="1px">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="디바이스 WIFI 설정하기" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_gravity="center"
+                        android:text="LED 2" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:visibility="gone"
+                        android:id="@+id/activity_device_settings_select_led_2_txt"
+                        android:layout_gravity="center"
+                        android:text="선택" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -79,20 +95,39 @@
                     android:layout_marginRight="20dp"
                     android:padding="10dp"
                     android:text=">" />
+
+
             </RelativeLayout>
 
             <RelativeLayout
-                android:id="@+id/activity_device_settings_relative_select_led"
+                android:id="@+id/activity_device_settings_select_led_3"
                 android:layout_width="match_parent"
                 android:layout_height="60dp"
                 android:background="#ffffffff"
                 android:layout_marginBottom="1px">
 
-                <TextView
+                <LinearLayout
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="디바이스 LED 표시 정보 선택" />
+                    android:orientation="vertical">
+
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:layout_gravity="center"
+                        android:text="LED 3" />
+                    <TextView
+                        android:layout_width="wrap_content"
+                        android:layout_height="wrap_content"
+                        android:layout_margin="2dp"
+                        android:visibility="gone"
+                        android:id="@+id/activity_device_settings_select_led_3_txt"
+                        android:layout_gravity="center"
+                        android:text="선택" />
+
+                </LinearLayout>
 
                 <TextView
                     android:layout_width="wrap_content"
@@ -102,26 +137,6 @@
                     android:layout_marginRight="20dp"
                     android:padding="10dp"
                     android:text=">" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="#ffffffff"
-                android:layout_marginBottom="1px">
-
-                <TextView
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="외출 시 애플리케이션 알림 사용" />
-
-                <android.support.v7.widget.AppCompatCheckBox
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:layout_marginRight="20dp" />
             </RelativeLayout>
 
         </LinearLayout>

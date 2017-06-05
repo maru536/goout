@@ -7,10 +7,20 @@ package com.iotaddon.goout;
 public class DataWeatherSky {
     private String name;
     private String code;
+    private boolean selectVoice;
 
     public DataWeatherSky(String name, String code) {
         this.name = name;
         this.code = code;
+        this.selectVoice = false;
+    }
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
     }
 
     public String getName() {

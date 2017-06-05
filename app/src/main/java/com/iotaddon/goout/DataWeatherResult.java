@@ -8,11 +8,21 @@ public class DataWeatherResult {
     private int code;
     private String requestUrl;
     private String message;
+    private boolean selectVoice;
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
+    }
 
     public DataWeatherResult(int code, String requestUrl, String message) {
         this.code = code;
         this.requestUrl = requestUrl;
         this.message = message;
+        this.selectVoice = false;
     }
 
     public int getCode() {

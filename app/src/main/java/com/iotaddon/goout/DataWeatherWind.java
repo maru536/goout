@@ -7,10 +7,20 @@ package com.iotaddon.goout;
 public class DataWeatherWind {
     private double wdir;
     private double wspd;
+    private boolean selectVoice;
 
     public DataWeatherWind(double wdir, double wspd) {
         this.wdir = wdir;
         this.wspd = wspd;
+        this.selectVoice = false;
+    }
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
     }
 
     public double getWdir() {

@@ -5,18 +5,26 @@ package com.iotaddon.goout;
  */
 public class DataManager {
 
-    public static final int ITEM_NUM_MAXIMUM = 6;
-    public static final int WEATHER_TEMP = 1;
-    public static final int WEATHER_DUST = 2;
-    public static final int WEATHER_HUMIDITY = 3;
-    public static final int WEATHER_SKY = 4;
-    public static final int WEATHER_WIND = 5;
-    public static final int WEATHER_PRECIPITATION = 6;
+    public static final int WEAHTER_ITEM_NUM_MAXIMUM = 6;
+    public static final int TYPE_WEATHER_TEMP = 1;
+    public static final int TYPE_WEATHER_DUST = 2;
+    public static final int TYPE_WEATHER_HUMIDITY = 3;
+    public static final int TYPE_WEATHER_SKY = 4;
+    public static final int TYPE_WEATHER_WIND = 5;
+    public static final int TYPE_WEATHER_PRECIPITATION = 6;
+    public static final int TYPE_NONE = 0;
 
-    public static final int TRANSPORTATION_NONE = 0;
-    public static final int TRANSPORTATION_BUS = 1;
-    public static final int TRANSPORTATION_SUBWAY = 2;
 
+    public static final int TYPE_TRANSPORTATION_NONE = 10;
+    public static final int TYPE_TRANSPORTATION_BUS = 11;
+    public static final int TYPE_TRANSPORTATION_SUBWAY = 12;
+
+    public static final int TYPE_LED_1 = 0;
+    public static final int TYPE_LED_2 = 1;
+    public static final int TYPE_LED_3 = 2;
+
+
+    public static final int TYPE_MEMO = 20;
 
     private static DataManager ourInstance = new DataManager();
 
@@ -25,6 +33,7 @@ public class DataManager {
     }
 
     private boolean selectedWeather[] = new boolean[7];
+    private int selectedLEDs[] = new int[3];
     private int selectedTransportation = 0;
     private String savedMemo = "";
     private InfoUserAddress userAddress= new InfoUserAddress(0,0,"");
@@ -33,6 +42,17 @@ public class DataManager {
 
     private DataManager() {
         dataWeather = new DataWeather();
+        selectedLEDs[0] = TYPE_NONE;
+        selectedLEDs[1] = TYPE_NONE;
+        selectedLEDs[2] = TYPE_NONE;
+    }
+
+    public void setSelectedLed(int led, int type){
+        selectedLEDs[led] = type;
+    }
+
+    public int getSelectedLed(int led){
+        return selectedLEDs[led];
     }
 
     public DataWeather getDataWeather() {

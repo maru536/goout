@@ -6,15 +6,14 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 
-public class ActivityTransportationSubway extends AppCompatActivity {
+public class ActivityDeviceSettingsSelectLedB extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_transportation_subway);
+        setContentView(R.layout.activity_device_settings_select_led_b);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
-
     }
 
     @Override
@@ -22,7 +21,6 @@ public class ActivityTransportationSubway extends AppCompatActivity {
 
         switch (item.getItemId()) {
             case android.R.id.home:
-                setResult(RESULT_OK);
                 onBackPressed();
                 return true;
         }

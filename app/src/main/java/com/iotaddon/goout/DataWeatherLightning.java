@@ -6,9 +6,19 @@ package com.iotaddon.goout;
 
 public class DataWeatherLightning {
     private int lightning;
+    private boolean selectVoice;
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
+    }
 
     public DataWeatherLightning(int lightning) {
         this.lightning = lightning;
+        this.selectVoice = false;
     }
 
     public int getLightning() {

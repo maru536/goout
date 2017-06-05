@@ -25,7 +25,8 @@ public class AsyncTaskHttpCommunicator extends AsyncTask<Void, Void, String> {
     private String strUrl = "";
     private WeatherDataUpdateListener listener = null;
 
-    public static final String HTTP_URL_WEATHER = "http://13.124.126.90:8080/weather?lon=126.9658000000&lat=37.5714000000";
+    //public static final String HTTP_URL_WEATHER = "http://13.124.126.90:8080/weather?lon=126.9658000000&lat=37.5714000000";
+    public static final String HTTP_URL_WEATHER = "http://13.124.126.90:8080/weather?";
     public static final String HTTP_URL_TRANSPORTATION = "";
     public static final String HTTP_URL_WEATHER_DUST = "http://13.124.126.90:8080/dust?lon=126.9658000000&lat=37.5714000000";
 
@@ -43,7 +44,13 @@ public class AsyncTaskHttpCommunicator extends AsyncTask<Void, Void, String> {
         String result = "";
         URL url;
         try {
-            url = new URL(strUrl); // URL화 한다.
+            double lat, lon;
+            lat = DataManager.getInstance().getUserAddress().getLatitude();
+            lon = DataManager.getInstance().getUserAddress().getLongitude();
+            String pos = "lon="+lon+"&lat="+lat;
+            String addr = strUrl+pos;
+            Log.e("url = ",addr);
+            url = new URL(addr); // URL화 한다.
             HttpURLConnection conn = (HttpURLConnection) url.openConnection(); // URL을 연결한 객체 생성.
             conn.setRequestProperty("Content-Type","application/json");
             conn.setRequestMethod("GET"); // get방식 통신
@@ -99,7 +106,7 @@ public class AsyncTaskHttpCommunicator extends AsyncTask<Void, Void, String> {
 
                     JSONObject jsonSky = jsonMinutely.getJSONObject(0).getJSONObject("sky");
                     dataWeather.getDataWeatherSky().setName(jsonSky.getString("name"));
-                    dataWeather.getDataWeatherSky().setName(jsonSky.getString("code"));
+                    dataWeather.getDataWeatherSky().setCode(jsonSky.getString("code"));
 
                     JSONObject jsonRain = jsonMinutely.getJSONObject(0).getJSONObject("rain");
                     dataWeather.getDataWeatherRain().setLast6hour(jsonRain.getDouble("last6hour"));

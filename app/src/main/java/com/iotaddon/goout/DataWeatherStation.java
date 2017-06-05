@@ -10,6 +10,7 @@ public class DataWeatherStation {
     private String name;
     private int id;
     private String type;
+    private boolean selectVoice;
 
     public DataWeatherStation(double latitude, double longitude, String name, int id, String type) {
         this.latitude = latitude;
@@ -17,6 +18,15 @@ public class DataWeatherStation {
         this.name = name;
         this.id = id;
         this.type = type;
+        this.selectVoice = false;
+    }
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
     }
 
     public double getLatitude() {

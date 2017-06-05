@@ -21,16 +21,16 @@
         android:fitsSystemWindows="true">
 
         <LinearLayout
-            android:layout_width="wrap_content"
+            android:layout_width="match_parent"
             android:layout_height="match_parent"
-            android:layout_marginLeft="20dp"
-            android:layout_marginTop="100dp"
+            android:layout_marginTop="50dp"
             android:orientation="vertical">
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
                 android:padding="10dp"
+                android:layout_marginLeft="10dp"
                 android:layout_marginTop="20dp"
                 android:id="@+id/drawer_menu_weather"
                 android:orientation="horizontal">
@@ -38,21 +38,21 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/ic_wb_sunny_black_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="20dp"
                     android:text="날씨" />
 
             </LinearLayout>
 
             <LinearLayout
-                android:layout_width="wrap_content"
+                android:layout_width="match_parent"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
                 android:padding="10dp"
                 android:id="@+id/drawer_menu_transportation"
                 android:orientation="horizontal">
@@ -60,13 +60,13 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/ic_directions_bus_black_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="20dp"
                     android:text="교통" />
 
             </LinearLayout>
@@ -74,21 +74,21 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
                 android:padding="10dp"
+                android:layout_marginLeft="10dp"
                 android:id="@+id/drawer_menu_memo"
                 android:orientation="horizontal">
 
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/ic_assignment_black_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="20dp"
                     android:text="메모" />
 
             </LinearLayout>
@@ -96,7 +96,7 @@
             <LinearLayout
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginTop="20dp"
+                android:layout_marginLeft="10dp"
                 android:padding="10dp"
                 android:id="@+id/drawer_menu_settings"
                 android:orientation="horizontal">
@@ -104,13 +104,13 @@
                 <ImageView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:src="@drawable/ic_menu_camera" />
+                    android:src="@drawable/ic_settings_black_24dp" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_gravity="center"
-                    android:layout_marginLeft="40dp"
+                    android:layout_marginLeft="20dp"
                     android:text="디바이스 설정" />
 
             </LinearLayout>

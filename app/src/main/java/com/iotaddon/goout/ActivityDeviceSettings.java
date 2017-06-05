@@ -3,24 +3,21 @@ package com.iotaddon.goout;
 import android.Manifest;
 import android.content.Intent;
 import android.content.pm.PackageManager;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
-import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
-import android.widget.Button;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
-import android.widget.Toast;
 
 import com.google.android.gms.common.GooglePlayServicesNotAvailableException;
 import com.google.android.gms.common.GooglePlayServicesRepairableException;
 import com.google.android.gms.location.places.Place;
 import com.google.android.gms.location.places.ui.PlacePicker;
-
-import org.w3c.dom.Text;
 
 public class ActivityDeviceSettings extends AppCompatActivity implements View.OnClickListener {
 
@@ -28,23 +25,23 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
     private static final int PLACE_PICKER_REQUEST = 1;
 
 
-    RelativeLayout btnLED, btnVoice, btnWIFI, btnPlace;
-    TextView txtPlace;
+    private RelativeLayout btnVoice, btnWIFI, btnPlace;
+    private TextView txtPlace;
+    private DataManager dataManager = DataManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_settings);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
 
-        btnLED = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_led);
-        btnVoice = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_select_voice);
+        btnVoice = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_select_led);
         btnWIFI = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_wifi_connect);
         btnPlace = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_placepicker);
 
         txtPlace = (TextView)findViewById(R.id.activity_device_settings_txt_place);
 
-        btnLED.setOnClickListener(this);
         btnVoice.setOnClickListener(this);
         btnWIFI.setOnClickListener(this);
         btnPlace.setOnClickListener(this);
@@ -72,12 +69,8 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
                 intent = new Intent(this, ActivityDeviceSettingsConnectWIFI.class);
                 startActivity(intent);
                 break;
-            case R.id.activity_device_settings_relative_select_voice:
-                intent = new Intent(this, ActivityDeviceSettingsSelectVoice.class);
-                startActivity(intent);
-                break;
-            case R.id.activity_device_settings_relative_led:
-                intent = new Intent(this, ActivityDeviceSettingsLED.class);
+            case R.id.activity_device_settings_relative_select_led:
+                intent = new Intent(this, ActivityDeviceSettingsSelectLed.class);
                 startActivity(intent);
                 break;
             case R.id.activity_device_settings_relative_placepicker:
@@ -129,6 +122,7 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
                 Place place = PlacePicker.getPlace(data, this);
                 txtPlace.setText(place.getName());
                 txtPlace.setVisibility(View.VISIBLE);
+                dataManager.setUserAddress(place.getLatLng().latitude,place.getLatLng().longitude,place.getName().toString());
             }
         }
     }

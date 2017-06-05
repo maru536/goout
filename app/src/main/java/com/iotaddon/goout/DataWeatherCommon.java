@@ -7,10 +7,20 @@ package com.iotaddon.goout;
 public class DataWeatherCommon {
     private String alertYn;
     private String stormYn;
+    private boolean selectVoice;
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
+    }
 
     public DataWeatherCommon(String alertYn, String stormYn) {
         this.alertYn = alertYn;
         this.stormYn = stormYn;
+        this.selectVoice = false;
     }
 
     public String getAlertYn() {

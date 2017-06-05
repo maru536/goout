@@ -6,9 +6,19 @@ package com.iotaddon.goout;
 
 public class DataWeatherTimeObservation {
     private String date;
+    private boolean selectVoice;
 
     public DataWeatherTimeObservation(String date) {
         this.date = date;
+        this.selectVoice = false;
+    }
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
     }
 
     public String getDate() {

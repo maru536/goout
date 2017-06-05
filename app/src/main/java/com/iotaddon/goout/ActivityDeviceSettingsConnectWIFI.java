@@ -1,6 +1,8 @@
 package com.iotaddon.goout;
 
 import android.content.Intent;
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -16,6 +18,7 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_settings_connect_wifi);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
 
         btnNext = (Button)findViewById(R.id.activity_device_settings_connect_wifi_btn_next);
         btnNext.setOnClickListener(this);

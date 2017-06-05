@@ -1,5 +1,7 @@
 package com.iotaddon.goout;
 
+import android.graphics.Color;
+import android.graphics.drawable.ColorDrawable;
 import android.provider.ContactsContract;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -27,6 +29,7 @@ public class ActivityMemo extends AppCompatActivity implements View.OnClickListe
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_memo);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+        getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
 
         txtLength = (TextView) findViewById(R.id.activity_memo_txt_length);
         editContent = (EditText) findViewById(R.id.activity_memo_edit_content);

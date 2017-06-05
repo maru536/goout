@@ -7,6 +7,7 @@
     android:layout_height="match_parent"
     app:layout_behavior="@string/appbar_scrolling_view_behavior"
     tools:context="com.iotaddon.goout.MainActivity"
+    android:background="#e6e6e6"
     tools:showIn="@layout/app_bar_main">
 
     <!--<ScrollView
@@ -38,6 +39,6 @@
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
         android:id="@+id/activity_main_txt"
-        android:text="표시할 컨텐츠를 확인하세요." />
+        android:text="표시할 컨텐츠를 선택하세요." />
 
 </RelativeLayout>

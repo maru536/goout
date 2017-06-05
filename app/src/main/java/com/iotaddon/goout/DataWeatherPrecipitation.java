@@ -7,10 +7,20 @@ package com.iotaddon.goout;
 public class DataWeatherPrecipitation {
     private double sinceOntime;
     private int type;
+    private boolean selectVoice;
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
+    }
 
     public DataWeatherPrecipitation(double sinceOntime, int type) {
         this.sinceOntime = sinceOntime;
         this.type = type;
+        this.selectVoice = false;
     }
 
     public double getSinceOntime() {

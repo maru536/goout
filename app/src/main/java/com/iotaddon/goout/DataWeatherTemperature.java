@@ -8,11 +8,21 @@ public class DataWeatherTemperature {
     private double tc;
     private double tmax;
     private double tmin;
+    private boolean selectVoice;
 
     public DataWeatherTemperature(double tc, double tmax, double tmin) {
         this.tc = tc;
         this.tmax = tmax;
         this.tmin = tmin;
+        this.selectVoice = false;
+    }
+
+    public boolean isSelectVoice() {
+        return selectVoice;
+    }
+
+    public void setSelectVoice(boolean selectVoice) {
+        this.selectVoice = selectVoice;
     }
 
     public double getTc() {

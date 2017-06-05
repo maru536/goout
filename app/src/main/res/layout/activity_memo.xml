@@ -4,6 +4,7 @@
     android:id="@+id/activity_memo"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:background="#e6e6e6"
     tools:context="com.iotaddon.goout.ActivityMemo">
 
     <ScrollView
@@ -21,8 +22,7 @@
             android:padding="10dp"
             android:id="@+id/activity_memo_edit_content"
             android:hint="내용을 입력하세요."
-            android:layout_margin="10dp"
-            android:background="@drawable/border_content" />
+            android:background="#ffffffff" />
 
         <LinearLayout
             android:layout_width="wrap_content"
