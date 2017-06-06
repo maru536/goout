@@ -40,7 +40,7 @@ public class ActivityDeviceSettingsSelectLedA extends AppCompatActivity {
         adapter = new ActivityDeviceSettingsSelectLedA.ItemAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);
 
-        FilterSelectedInfo.setSelectedInfo(arrayList);
+        FilterSelectedInfo.setSelectedInfo(arrayList, FilterSelectedInfo.FILTER_TYPE_LED);
 
         final GestureDetector gestureDetector = new GestureDetector(ActivityDeviceSettingsSelectLedA.this, new GestureDetector.SimpleOnGestureListener() {
             @Override

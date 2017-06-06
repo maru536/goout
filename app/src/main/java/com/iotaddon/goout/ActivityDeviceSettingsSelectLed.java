@@ -14,6 +14,7 @@ public class ActivityDeviceSettingsSelectLed extends AppCompatActivity implement
 
     private RelativeLayout led1,led2,led3;
     private TextView txt1, txt2, txt3;
+    private DataManager dataManager = DataManager.getInstance();
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -34,7 +35,9 @@ public class ActivityDeviceSettingsSelectLed extends AppCompatActivity implement
         led2.setOnClickListener(this);
         led3.setOnClickListener(this);
 
-
+        setSelectedText(DataManager.TYPE_LED_1, dataManager.getSelectedLed(DataManager.TYPE_LED_1), txt1);
+        setSelectedText(DataManager.TYPE_LED_2, dataManager.getSelectedLed(DataManager.TYPE_LED_2), txt2);
+        setSelectedText(DataManager.TYPE_LED_3, dataManager.getSelectedLed(DataManager.TYPE_LED_3), txt3);
     }
 
     @Override
@@ -49,18 +52,29 @@ public class ActivityDeviceSettingsSelectLed extends AppCompatActivity implement
     }
 
     @Override
+    protected void onResume() {
+        super.onResume();
+        setSelectedText(DataManager.TYPE_LED_1, dataManager.getSelectedLed(DataManager.TYPE_LED_1), txt1);
+        setSelectedText(DataManager.TYPE_LED_2, dataManager.getSelectedLed(DataManager.TYPE_LED_2), txt2);
+        setSelectedText(DataManager.TYPE_LED_3, dataManager.getSelectedLed(DataManager.TYPE_LED_3), txt3);
+    }
+
+    @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
 
         switch(requestCode){
             case DataManager.TYPE_LED_1:
                 setSelectedText(DataManager.TYPE_LED_1, resultCode, txt1);
+                dataManager.setSelectedLed(DataManager.TYPE_LED_1, resultCode);
                 break;
             case DataManager.TYPE_LED_2:
                 setSelectedText(DataManager.TYPE_LED_2, resultCode, txt2);
+                dataManager.setSelectedLed(DataManager.TYPE_LED_2, resultCode);
                 break;
             case DataManager.TYPE_LED_3:
                 setSelectedText(DataManager.TYPE_LED_3, resultCode, txt3);
+                dataManager.setSelectedLed(DataManager.TYPE_LED_3, resultCode);
                 break;
         }
     }
@@ -68,35 +82,35 @@ public class ActivityDeviceSettingsSelectLed extends AppCompatActivity implement
     private void setSelectedText(int led, int res, TextView view){
         switch(res){
             case DataManager.TYPE_WEATHER_DUST:
-                view.setText("미세먼지");
+                view.setText(FilterSelectedInfo.TITLE_WEATHER_DUST);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_WEATHER_SKY:
-                view.setText("날씨");
+                view.setText(FilterSelectedInfo.TITLE_WEATHER_SKY);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_WEATHER_HUMIDITY:
-                view.setText("습도");
+                view.setText(FilterSelectedInfo.TITLE_WEATHER_HUMIDITY);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_WEATHER_PRECIPITATION:
-                view.setText("강수");
+                view.setText(FilterSelectedInfo.TITLE_WEATHER_PRECIPITATION);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_WEATHER_TEMP:
-                view.setText("온도");
+                view.setText(FilterSelectedInfo.TITLE_WEATHER_TEMP);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_WEATHER_WIND:
-                view.setText("바람");
+                view.setText(FilterSelectedInfo.TITLE_WEATHER_WIND);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_TRANSPORTATION_BUS:
-                view.setText("버스 도착시간");
+                view.setText(FilterSelectedInfo.TITLE_TRANSPORTATION_BUS);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_TRANSPORTATION_SUBWAY:
-                view.setText("지하철 도착시간");
+                view.setText(FilterSelectedInfo.TITLE_TRANSPORTATION_SUBWAY);
                 view.setVisibility(View.VISIBLE);
                 break;
             case DataManager.TYPE_NONE:

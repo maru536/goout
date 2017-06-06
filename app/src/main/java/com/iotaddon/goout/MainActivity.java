@@ -98,7 +98,7 @@ public class MainActivity extends AppCompatActivity
         asyncTaskHttpCommunicator.setListener(weatherListener);
         asyncTaskHttpCommunicator.execute();
 
-        FilterSelectedInfo.setSelectedInfo(arrayList);
+        FilterSelectedInfo.setSelectedInfo(arrayList, FilterSelectedInfo.FILTER_TYPE_MAIN);
         if(arrayList.size()>0)
             txtGuide.setVisibility(View.GONE);
         else
@@ -125,7 +125,7 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        FilterSelectedInfo.setSelectedInfo(arrayList);
+        FilterSelectedInfo.setSelectedInfo(arrayList, FilterSelectedInfo.FILTER_TYPE_MAIN);
         if(arrayList.size()>0)
             txtGuide.setVisibility(View.GONE);
         else
