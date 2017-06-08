@@ -23,6 +23,7 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
         setContentView(R.layout.activity_weather);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
         chkTemp = (CheckBox) findViewById(R.id.activity_weather_chkbox_temp);
         chkDust = (CheckBox) findViewById(R.id.activity_weather_chkbox_dust);

@@ -44,16 +44,24 @@
 
         </LinearLayout>
 
-        <Button
-            android:layout_width="150dp"
-            android:layout_height="wrap_content"
-            android:layout_gravity="center_horizontal"
-            android:layout_margin="20dp"
-            android:id="@+id/activity_memo_btn_set"
-            android:text="등록"/>
 
     </LinearLayout>
 
     </ScrollView>
 
+    <RelativeLayout
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:id="@+id/activity_memo_btn_set"
+        android:background="#33b5e5"
+        android:layout_alignParentBottom="true">
+
+        <TextView
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_centerInParent="true"
+            android:textColor="#ffffffff"
+            android:text="등록"/>
+
+    </RelativeLayout>
 </RelativeLayout>

@@ -26,6 +26,11 @@ public class DataManager {
 
     public static final int TYPE_MEMO = 20;
 
+    public static final int MAX_TRANSPORTATION_VALUE = 30;
+    public static final String UNIT_TRANSPORTATION = "분";
+
+    //temp data type
+
     private static DataManager ourInstance = new DataManager();
 
     public static DataManager getInstance() {

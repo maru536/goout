@@ -8,6 +8,27 @@ public class DataWeatherPrecipitation {
     private double sinceOntime;
     private int type;
     private boolean selectVoice;
+    private double warningValue;
+    private boolean isHigher = false;
+    public final static int MAX_VALUE_WEATHER_PRECIPITATION = 10000;
+    public final static String UNIT_WEATHER_PRECIPITATION = "mm";
+
+
+    public double getWarningValue() {
+        return warningValue;
+    }
+
+    public void setWarningValue(double warningValue) {
+        this.warningValue = warningValue;
+    }
+
+    public boolean isHigher() {
+        return isHigher;
+    }
+
+    public void setHigher(boolean higher) {
+        isHigher = higher;
+    }
 
     public boolean isSelectVoice() {
         return selectVoice;
@@ -21,6 +42,8 @@ public class DataWeatherPrecipitation {
         this.sinceOntime = sinceOntime;
         this.type = type;
         this.selectVoice = false;
+        this.isHigher = true;
+        this.warningValue = MAX_VALUE_WEATHER_PRECIPITATION/100;
     }
 
     public double getSinceOntime() {

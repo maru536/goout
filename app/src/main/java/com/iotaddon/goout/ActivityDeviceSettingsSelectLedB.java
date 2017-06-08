@@ -30,6 +30,7 @@ public class ActivityDeviceSettingsSelectLedB extends AppCompatActivity {
         setContentView(R.layout.activity_device_settings_select_led_b);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
         recyclerView = (RecyclerView) findViewById(R.id.activity_device_settings_select_led_2_recycleview);
         //recyclerView.setHasFixedSize(true);

@@ -22,6 +22,7 @@ public class ActivityTransportationBus extends AppCompatActivity{
         setContentView(R.layout.activity_transportation_bus);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
         editSearch = (EditText)findViewById(R.id.activity_transportation_bus_edit_search);
         tabLayout = (TabLayout)findViewById(R.id.activity_transportation_bus_tab);

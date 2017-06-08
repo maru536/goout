@@ -182,7 +182,6 @@ public class MainActivity extends AppCompatActivity
 
         private ArrayList<ItemContents> items;
         private Context context;
-        Intent intent;
 
         public ItemAdapter(ArrayList<ItemContents> items, Context context) {
             this.items = items;
@@ -198,51 +197,36 @@ public class MainActivity extends AppCompatActivity
 
         @Override
         public void onBindViewHolder(MainActivity.ItemAdapter.ViewHolder holder, final int position) {
-            ItemContents item = items.get(position);
+            final ItemContents item = items.get(position);
             holder.more.setVisibility(View.VISIBLE);
             holder.icon.setImageResource(R.mipmap.ic_launcher);
+            SelectWeatherIcon.setWarningBorder(holder.container, item.getContentsType(), context);
             if (item.getContentsType() == dataManager.TYPE_WEATHER_HUMIDITY) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_WEATHER_HUMIDITY);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_WIND) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_WEATHER_WIND);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_DUST) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_WEATHER_DUST);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_TEMP) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_WEATHER_TEMP);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_SKY) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
                 //holder.container.setBackground(getDrawable(R.drawable.border_red));
                 SelectWeatherIcon.setWeatherSkyIcon(holder.icon, dataManager.getDataWeather().getDataWeatherSky().getCode(),context);
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_WEATHER_SKY);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_PRECIPITATION) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_WEATHER_PRECIPITATION);
             } else if (item.getContentsType() == dataManager.TYPE_TRANSPORTATION_BUS) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_TRANSPORTATION_BUS);
             } else if (item.getContentsType() == dataManager.TYPE_TRANSPORTATION_SUBWAY) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                intent = new Intent(context, ActivityMoreConfiguration.class);
-                intent.addFlags(dataManager.TYPE_TRANSPORTATION_SUBWAY);
             } else if (item.getContentsType() == dataManager.TYPE_MEMO) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
@@ -252,6 +236,9 @@ public class MainActivity extends AppCompatActivity
             holder.more.setOnClickListener(new View.OnClickListener() {
                 @Override
                 public void onClick(View v) {
+                    Intent intent;
+                    intent = new Intent(context, ActivityMoreConfiguration.class);
+                    intent.putExtra("INFO_TYPE",item.getContentsType());
                     startActivity(intent);
                 }
             });

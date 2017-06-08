@@ -22,6 +22,7 @@ public class ActivityDeviceSettingsSelectLed extends AppCompatActivity implement
         setContentView(R.layout.activity_device_settings_select_led);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
         led1 = (RelativeLayout)findViewById(R.id.activity_device_settings_select_led_1);
         led2 = (RelativeLayout)findViewById(R.id.activity_device_settings_select_led_2);

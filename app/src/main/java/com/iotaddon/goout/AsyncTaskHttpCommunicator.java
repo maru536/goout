@@ -28,7 +28,7 @@ public class AsyncTaskHttpCommunicator extends AsyncTask<Void, Void, String> {
     //public static final String HTTP_URL_WEATHER = "http://13.124.126.90:8080/weather?lon=126.9658000000&lat=37.5714000000";
     public static final String HTTP_URL_WEATHER = "http://13.124.126.90:8080/weather?";
     public static final String HTTP_URL_TRANSPORTATION = "";
-    public static final String HTTP_URL_WEATHER_DUST = "http://13.124.126.90:8080/dust?lon=126.9658000000&lat=37.5714000000";
+    public static final String HTTP_URL_WEATHER_DUST = "http://13.124.126.90:8080/dust?";
 
 
     public void setListener(WeatherDataUpdateListener listener) {
@@ -140,6 +140,7 @@ public class AsyncTaskHttpCommunicator extends AsyncTask<Void, Void, String> {
                 e.printStackTrace();
             }
         }else if(strUrl == HTTP_URL_WEATHER_DUST){
+
 
         }else if(strUrl == HTTP_URL_TRANSPORTATION){
 

@@ -11,6 +11,8 @@ import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
+import android.widget.CompoundButton;
 import android.widget.RelativeLayout;
 import android.widget.TextView;
 
@@ -26,6 +28,7 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
 
 
     private RelativeLayout btnVoice, btnWIFI, btnPlace;
+    private CheckBox chkAlarm;
     private TextView txtPlace;
     private DataManager dataManager = DataManager.getInstance();
 
@@ -35,12 +38,23 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_device_settings);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
         btnVoice = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_select_led);
         btnWIFI = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_wifi_connect);
         btnPlace = (RelativeLayout) findViewById(R.id.activity_device_settings_relative_placepicker);
 
         txtPlace = (TextView)findViewById(R.id.activity_device_settings_txt_place);
+
+        chkAlarm = (CheckBox)findViewById(R.id.activity_device_settings_chk_alarm);
+
+        chkAlarm.setChecked(dataManager.isOutAlarm());
+        chkAlarm.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                dataManager.setOutAlarm(isChecked);
+            }
+        });
 
         btnVoice.setOnClickListener(this);
         btnWIFI.setOnClickListener(this);

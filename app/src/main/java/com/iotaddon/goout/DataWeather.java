@@ -17,6 +17,7 @@ public class DataWeather {
     private DataWeatherPrecipitation dataWeatherPrecipitation;
     private DataWeatherPressure dataWeatherPressure;
     private DataWeatherLightning dataWeatherLightning;
+    private DataWeatherDust dataWeatherDust;
 
     public DataWeather(){
         dataWeatherCommon = new DataWeatherCommon("","");
@@ -31,6 +32,12 @@ public class DataWeather {
         dataWeatherTemperature = new DataWeatherTemperature(0,0,0);
         dataWeatherWind = new DataWeatherWind(0,0);
         dataWeatherTimeObservation = new DataWeatherTimeObservation("");
+        dataWeatherDust = new DataWeatherDust("",0);
+
+    }
+
+    public DataWeatherDust getDataWeatherDust() {
+        return dataWeatherDust;
     }
 
     public DataWeatherRain getDataWeatherRain() {

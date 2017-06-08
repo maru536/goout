@@ -24,6 +24,7 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
         setContentView(R.layout.activity_transportation);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
         radioNone = (RadioButton) findViewById(R.id.activity_transportation_radio_none);
         radioBus = (RadioButton) findViewById(R.id.activity_transportation_radio_bus);

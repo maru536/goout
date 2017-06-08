@@ -14,6 +14,7 @@ public class ActivityTransportationSubway extends AppCompatActivity {
         setContentView(R.layout.activity_transportation_subway);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
     }
 

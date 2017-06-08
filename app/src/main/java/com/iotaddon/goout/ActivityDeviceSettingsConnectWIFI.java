@@ -19,6 +19,7 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
         setContentView(R.layout.activity_device_settings_connect_wifi);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
+        getSupportActionBar().setElevation(0);
 
         btnNext = (Button)findViewById(R.id.activity_device_settings_connect_wifi_btn_next);
         btnNext.setOnClickListener(this);

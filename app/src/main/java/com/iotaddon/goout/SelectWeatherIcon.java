@@ -2,7 +2,9 @@ package com.iotaddon.goout;
 
 import android.content.Context;
 import android.graphics.drawable.Drawable;
+import android.view.View;
 import android.widget.ImageView;
+import android.widget.LinearLayout;
 
 import java.util.Calendar;
 import java.util.Date;
@@ -97,6 +99,89 @@ public class SelectWeatherIcon {
             return false;
         }else{
             return true;
+        }
+    }
+
+    public static void setWarningBorder(LinearLayout container, int type, Context context){
+        DataManager dataManager = DataManager.getInstance();
+        if (type == DataManager.TYPE_WEATHER_HUMIDITY) {
+            if(dataManager.getDataWeather().getDataWeatherHumidity().isHigher()){
+                if(dataManager.getDataWeather().getDataWeatherHumidity().getWarningValue() < dataManager.getDataWeather().getDataWeatherHumidity().getHumidity()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }else{
+                if(dataManager.getDataWeather().getDataWeatherHumidity().getWarningValue() > dataManager.getDataWeather().getDataWeatherHumidity().getHumidity()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }
+        } else if (type == DataManager.TYPE_WEATHER_WIND) {
+            if(dataManager.getDataWeather().getDataWeatherWind().isHigher()){
+                if(dataManager.getDataWeather().getDataWeatherWind().getWarningValue() < dataManager.getDataWeather().getDataWeatherWind().getWspd()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }else{
+                if(dataManager.getDataWeather().getDataWeatherWind().getWarningValue() > dataManager.getDataWeather().getDataWeatherWind().getWspd()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }
+        } else if (type == DataManager.TYPE_WEATHER_DUST) {
+            if(dataManager.getDataWeather().getDataWeatherDust().isHigher()){
+                if(dataManager.getDataWeather().getDataWeatherDust().getWarningValue() < dataManager.getDataWeather().getDataWeatherDust().getValue()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }else{
+                if(dataManager.getDataWeather().getDataWeatherDust().getWarningValue() > dataManager.getDataWeather().getDataWeatherDust().getValue()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }
+        } else if (type == DataManager.TYPE_WEATHER_TEMP) {
+            if(dataManager.getDataWeather().getDataWeatherTemperature().isHigher()){
+                if(dataManager.getDataWeather().getDataWeatherTemperature().getWarningValue() < dataManager.getDataWeather().getDataWeatherTemperature().getTc()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }else{
+                if(dataManager.getDataWeather().getDataWeatherTemperature().getWarningValue() > dataManager.getDataWeather().getDataWeatherTemperature().getTc()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }
+        } else if (type == DataManager.TYPE_WEATHER_SKY) {
+
+        } else if (type == DataManager.TYPE_WEATHER_PRECIPITATION) {
+            if(dataManager.getDataWeather().getDataWeatherPrecipitation().isHigher()){
+                if(dataManager.getDataWeather().getDataWeatherPrecipitation().getWarningValue() < dataManager.getDataWeather().getDataWeatherPrecipitation().getSinceOntime()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }else{
+                if(dataManager.getDataWeather().getDataWeatherPrecipitation().getWarningValue() > dataManager.getDataWeather().getDataWeatherPrecipitation().getSinceOntime()){
+                    container.setBackground(context.getDrawable(R.drawable.border_red));
+                }else{
+                    container.setBackgroundColor(context.getColor(android.R.color.transparent));
+                }
+            }
+        } else if (type == DataManager.TYPE_TRANSPORTATION_BUS) {
+
+        } else if (type == DataManager.TYPE_TRANSPORTATION_SUBWAY) {
+
+        }else{
+            container.setBackgroundColor(context.getColor(android.R.color.transparent));
         }
     }
 }
