@@ -6,20 +6,50 @@
     android:layout_height="match_parent"
     tools:context="com.iotaddon.goout.ActivityDeviceSettingsConnectWIFI">
 
-    <TextView
+    <LinearLayout
+        android:id="@+id/activity_device_settings_config_wifi_container"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:layout_centerInParent="true"
-        android:id="@+id/activity_device_settings_connect_wifi_txt"
-        android:text="디바이스의 WIFI 설정 버튼을 누르고 다음 버튼을 누르세요"/>
+        android:orientation="vertical">
+
+        <TextView
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:gravity="center_horizontal"
+            android:layout_centerInParent="true"
+            android:id="@+id/activity_device_settings_connect_wifi_txt"
+            android:text="디바이스의 WIFI 설정 버튼을 누르고 다음 버튼을 누르세요"/>
+
+        <EditText
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_ssid"
+            android:padding="10dp"
+            android:hint="WIFI 이름을 입력하세요."
+            android:layout_margin="5dp"
+            android:lines="1"
+            android:gravity="center"
+            android:background="@drawable/border_content"/>
+        <EditText
+            android:layout_width="220dp"
+            android:layout_height="wrap_content"
+            android:id="@+id/et_pwd"
+            android:layout_margin="5dp"
+            android:padding="10dp"
+            android:lines="1"
+            android:hint="WIFI PIN 번호를 입력하세요."
+            android:gravity="center"
+            android:background="@drawable/border_content"/>
+    </LinearLayout>
 
     <Button
         android:layout_width="200dp"
         android:layout_height="wrap_content"
         android:layout_centerHorizontal="true"
         android:layout_marginTop="100dp"
-        android:layout_below="@id/activity_device_settings_connect_wifi_txt"
-        android:id="@+id/activity_device_settings_connect_wifi_btn_next"
+        android:layout_below="@id/activity_device_settings_config_wifi_container"
+        android:id="@+id/activity_device_settings_connect_wifi_btn_connect"
         android:text="다음"/>
 
 </RelativeLayout>
