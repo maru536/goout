@@ -17,7 +17,7 @@ import okhttp3.Response;
  * Created by maru5 on 2017-05-09.
  */
 
-public class ServerProtocol {
+public class HttpProtocol {
     private static final String mServerAddress = "http://13.124.126.90:8080";
     private String mResponse;
 

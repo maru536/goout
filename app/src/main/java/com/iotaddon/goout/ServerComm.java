@@ -1,19 +1,16 @@
 package com.iotaddon.goout;
 
-import org.json.JSONObject;
-import java.util.HashMap;
-
 /**
  * Created by maru5 on 2017-05-20.
  */
 
 public class ServerComm {
     private volatile static ServerComm mUniqueInstance;
-    private ServerProtocol mServerProtocol;
+    private HttpProtocol mHttpProtocol;
     private final static String mApAddress = "http://192.168.10.1";
 
     private ServerComm() {
-        mServerProtocol = new ServerProtocol();
+        mHttpProtocol = new HttpProtocol();
     }
 
     public static ServerComm getInstance() {
@@ -29,7 +26,7 @@ public class ServerComm {
     }
 
     public void regist(String deviceID, String macAddr) {
-        mServerProtocol.apGet(mApAddress);
+        mHttpProtocol.apGet(mApAddress);
 
         /*HashMap id = new HashMap();
 
@@ -37,7 +34,7 @@ public class ServerComm {
         id.put("id", macAddr);
 
         JSONObject body = new JSONObject(id);
-        mServerProtocol.post("/signup", body);*/
+        mHttpProtocol.post("/signup", body);*/
     }
 
     /*public static JSONObject memo(String deviceID, String content) {
@@ -47,15 +44,15 @@ public class ServerComm {
         id.put("Memo", content);
 
         JSONObject body = new JSONObject(id);
-        return ServerProtocol.post("http://addr", body);
+        return HttpProtocol.post("http://addr", body);
     }*/
 
     public void weather(double longitude, double latitude) {
-        mServerProtocol.get("/weather?lon="+longitude+"&lat="+latitude);
+        mHttpProtocol.get("/weather?lon="+longitude+"&lat="+latitude);
     }
 
     public void dust(double longitude, double latitude) {
-        mServerProtocol.get("/dust?lon="+longitude+"&lat="+latitude);
+        mHttpProtocol.get("/dust?lon="+longitude+"&lat="+latitude);
     }
 
     /*public static JSONObject traffic(double src_latitude, double src_longitude, double dst_latitude, double dst_longitude) {
@@ -68,7 +65,7 @@ public class ServerComm {
 
         JSONObject header = new JSONObject(biPosition);
 
-        return ServerProtocol.get("http://", header);
+        return HttpProtocol.get("http://", header);
     }*/
 
     /*public static JSONObject transportation(String station, int number) {
@@ -79,6 +76,6 @@ public class ServerComm {
 
         JSONObject header = new JSONObject(position);
 
-        return ServerProtocol.get("http://", header);
+        return HttpProtocol.get("http://", header);
     }*/
 }
