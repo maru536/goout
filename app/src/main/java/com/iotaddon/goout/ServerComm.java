@@ -10,6 +10,7 @@ import java.util.HashMap;
 public class ServerComm {
     private volatile static ServerComm mUniqueInstance;
     private ServerProtocol mServerProtocol;
+    private final static String mApAddress = "http://192.168.10.1";
 
     private ServerComm() {
         mServerProtocol = new ServerProtocol();
@@ -28,13 +29,15 @@ public class ServerComm {
     }
 
     public void regist(String deviceID, String macAddr) {
-        HashMap id = new HashMap();
+        mServerProtocol.apGet(mApAddress);
+
+        /*HashMap id = new HashMap();
 
         id.put("deviceId", deviceID);
         id.put("id", macAddr);
 
         JSONObject body = new JSONObject(id);
-        mServerProtocol.post("/signup", body);
+        mServerProtocol.post("/signup", body);*/
     }
 
     /*public static JSONObject memo(String deviceID, String content) {

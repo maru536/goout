@@ -74,6 +74,46 @@ public class ServerProtocol {
                 if (!response.isSuccessful()) {
                     throw new IOException("Unexpected code " + response);
                 } else {
+                    mResponse = response.toString();
+                    Log.d("KimDC", mResponse);
+                    mResponse = response.headers().toString();
+                    Log.d("KimDC", mResponse);
+                    mResponse = response.body().string();
+                    Log.d("KimDC", mResponse);
+                    //mResponse = response.body().string();
+                    //응답 왔을때 처리
+                }
+            }
+        });
+    }
+
+    public void apGet(String url) {
+        OkHttpClient client = new OkHttpClient();
+
+        Request request = new Request.Builder()
+                .url(url)
+                //.get()
+                //.addHeader("cache-control", "no-cache")
+                //.addHeader("postman-token", "4d9324a7-0db1-b170-3852-b15b7ea6910a")
+                .build();
+
+        client.newCall(request).enqueue(new Callback() {
+            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                if (!response.isSuccessful()) {
+                    throw new IOException("Unexpected code " + response);
+                } else {
+                    mResponse = response.toString();
+                    Log.d("KimDC", mResponse);
+                    mResponse = response.headers().toString();
+                    Log.d("KimDC", mResponse);
+                    mResponse = response.message();
+                    Log.d("KimDC", mResponse);
                     mResponse = response.body().string();
                     Log.d("KimDC", mResponse);
                     //응답 왔을때 처리
