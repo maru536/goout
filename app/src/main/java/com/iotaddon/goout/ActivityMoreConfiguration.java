@@ -178,6 +178,7 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 seekBar.setMax((dataWeather.getDataWeatherHumidity().MAX_VALUE_WEATHER_HUMIDITY));
                 txtUnit.setText(dataWeather.getDataWeatherHumidity().UNIT_WEATHER_HUMIDITY);
                 seekBar.setProgress(dataWeather.getDataWeatherHumidity().getWarningValue());
+                warningValue = dataWeather.getDataWeatherHumidity().getWarningValue();
                 isHigher = dataWeather.getDataWeatherHumidity().isHigher();
                 txtValue.setText(dataWeather.getDataWeatherHumidity().getWarningValue()+"");
                 setArrowImage(isHigher);
@@ -186,6 +187,7 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 seekBar.setMax((dataWeather.getDataWeatherPrecipitation().MAX_VALUE_WEATHER_PRECIPITATION));
                 txtUnit.setText(dataWeather.getDataWeatherPrecipitation().UNIT_WEATHER_PRECIPITATION);
                 seekBar.setProgress(convertDoubleToInt(dataWeather.getDataWeatherPrecipitation().getWarningValue()));
+                warningValue = dataWeather.getDataWeatherHumidity().getWarningValue();
                 isHigher = dataWeather.getDataWeatherPrecipitation().isHigher();
                 txtValue.setText(dataWeather.getDataWeatherPrecipitation().getWarningValue()+"");
                 setArrowImage(isHigher);
@@ -194,6 +196,7 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 seekBar.setMax((dataWeather.getDataWeatherWind().MAX_VALUE_WEATHER_WIND));
                 txtUnit.setText(dataWeather.getDataWeatherWind().UNIT_WEATHER_WIND);
                 seekBar.setProgress(convertDoubleToInt(dataWeather.getDataWeatherWind().getWarningValue()));
+                warningValue = dataWeather.getDataWeatherHumidity().getWarningValue();
                 isHigher = dataWeather.getDataWeatherWind().isHigher();
                 txtValue.setText(dataWeather.getDataWeatherWind().getWarningValue()+"");
                 setArrowImage(isHigher);
@@ -202,6 +205,7 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 seekBar.setMax((dataWeather.getDataWeatherDust().MAX_VALUE_WEATHER_DUST));
                 txtUnit.setText(dataWeather.getDataWeatherDust().UNIT_WEATHER_DUST);
                 seekBar.setProgress(dataWeather.getDataWeatherDust().getWarningValue());
+                warningValue = dataWeather.getDataWeatherHumidity().getWarningValue();
                 isHigher = dataWeather.getDataWeatherHumidity().isHigher();
                 txtValue.setText(dataWeather.getDataWeatherDust().getWarningValue()+"");
                 setArrowImage(isHigher);
@@ -210,6 +214,7 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 seekBar.setMax((dataWeather.getDataWeatherTemperature().MAX_VALUE_WEATHER_TEMP));
                 txtUnit.setText(dataWeather.getDataWeatherTemperature().UNIT_WEATHER_TEMP);
                 seekBar.setProgress(convertMinusToPlus(dataWeather.getDataWeatherTemperature().getWarningValue()));
+                warningValue = dataWeather.getDataWeatherHumidity().getWarningValue();
                 txtValue.setText(dataWeather.getDataWeatherTemperature().getWarningValue()+"");
                 isHigher = dataWeather.getDataWeatherTemperature().isHigher();
                 setArrowImage(isHigher);
