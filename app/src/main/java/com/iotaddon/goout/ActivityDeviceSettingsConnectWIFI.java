@@ -91,7 +91,7 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
 
                 JSONObject jsonAp = new JSONObject(apInfo);
 
-                new Thread(new ConnectThread("192.168.10.1", 80)).start();
+                new Thread(new ConnectThread("192.168.10.1", 8080)).start();
 
                 while (!isConnected) {
                     //wait socket open
