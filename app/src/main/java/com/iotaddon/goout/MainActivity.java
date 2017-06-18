@@ -4,8 +4,6 @@ import android.content.Context;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
-import android.graphics.drawable.Drawable;
-import android.os.Build;
 import android.os.Bundle;
 import android.support.design.widget.FloatingActionButton;
 import android.support.design.widget.Snackbar;
@@ -14,37 +12,31 @@ import android.support.v7.widget.RecyclerView;
 import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
-import android.support.design.widget.NavigationView;
 import android.support.v4.view.GravityCompat;
 import android.support.v4.widget.DrawerLayout;
 import android.support.v7.app.ActionBarDrawerToggle;
 import android.support.v7.app.AppCompatActivity;
 import android.support.v7.widget.Toolbar;
-import android.view.Menu;
-import android.view.MenuItem;
 import android.view.ViewGroup;
-import android.widget.Button;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
-import android.widget.RelativeLayout;
-import android.widget.ScrollView;
 import android.widget.TextView;
+
+import com.google.firebase.iid.FirebaseInstanceId;
+import com.google.firebase.messaging.FirebaseMessaging;
 
 import org.json.JSONArray;
 import org.json.JSONException;
 import org.json.JSONObject;
-import org.w3c.dom.Text;
 
 import java.util.ArrayList;
 
 public class MainActivity extends AppCompatActivity
         implements View.OnClickListener {
 
-    //private RelativeLayout itemBox[] = new RelativeLayout[7];
     private LinearLayout drawerMenu[] = new LinearLayout[4];
-    //private TextView itemTxt[][] = new TextView[7][7];
     private DataManager dataManager = DataManager.getInstance();
-    private WeatherDataUpdateListener weatherListener;
+    private HttpResponseDataUpdateListener weatherListener, weatherDustListener;
 
     //private RelativeLayout contentWeather, contentTransportation, contentMemo;
     //private TextView txtGuide, txtMemoContent;
@@ -63,6 +55,9 @@ public class MainActivity extends AppCompatActivity
 
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
 
+        FirebaseMessaging.getInstance().subscribeToTopic("out_alarm");
+        FirebaseInstanceId.getInstance().getToken();
+
         recyclerView = (RecyclerView) findViewById(R.id.activity_main_recycleview);
         //recyclerView.setHasFixedSize(true);
         layoutManager = new LinearLayoutManager(this);
@@ -71,12 +66,98 @@ public class MainActivity extends AppCompatActivity
         adapter = new MainActivity.ItemAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);
 
-        weatherListener = new WeatherDataUpdateListener() {
+        weatherListener = new HttpResponseDataUpdateListener() {
             @Override
-            public void doUpdate() {
-                /*setWeatherContent();
-                setContentTransportation();
-                setContentMemo();*/
+            public void doUpdate(String res) {
+                DataManager dataManager = DataManager.getInstance();
+                DataWeather dataWeather = dataManager.getDataWeather();
+                try {
+                    JSONObject json = new JSONObject(res);
+                    if (json.has("weather")) {
+                        JSONObject jsonWeather = json.getJSONObject("weather");
+                        JSONArray jsonMinutely = jsonWeather.getJSONArray("minutely");
+                        Log.e("ㅁㄴㅇㅁㄴㅇ", jsonMinutely.toString() + "   /  " + jsonMinutely.length());
+                        JSONObject jsonStation = jsonMinutely.getJSONObject(0).getJSONObject("station");
+                        dataWeather.getDataWeatherStation().setLongitude(jsonStation.getDouble("longitude"));
+                        dataWeather.getDataWeatherStation().setLatitude(jsonStation.getDouble("latitude"));
+                        dataWeather.getDataWeatherStation().setName(jsonStation.getString("name"));
+                        dataWeather.getDataWeatherStation().setId(jsonStation.getInt("id"));
+                        dataWeather.getDataWeatherStation().setType(jsonStation.getString("type"));
+
+                        JSONObject jsonWind = jsonMinutely.getJSONObject(0).getJSONObject("wind");
+                        dataWeather.getDataWeatherWind().setWdir(jsonWind.getDouble("wdir"));
+                        dataWeather.getDataWeatherWind().setWdir(jsonWind.getDouble("wspd"));
+
+                        JSONObject jsonPrecipitation = jsonMinutely.getJSONObject(0).getJSONObject("precipitation");
+                        dataWeather.getDataWeatherPrecipitation().setSinceOntime(jsonPrecipitation.getDouble("sinceOntime"));
+                        dataWeather.getDataWeatherPrecipitation().setType(jsonPrecipitation.getInt("type"));
+
+                        JSONObject jsonSky = jsonMinutely.getJSONObject(0).getJSONObject("sky");
+                        dataWeather.getDataWeatherSky().setName(jsonSky.getString("name"));
+                        dataWeather.getDataWeatherSky().setCode(jsonSky.getString("code"));
+
+                        JSONObject jsonRain = jsonMinutely.getJSONObject(0).getJSONObject("rain");
+                        dataWeather.getDataWeatherRain().setLast6hour(jsonRain.getDouble("last6hour"));
+                        dataWeather.getDataWeatherRain().setLast12hour(jsonRain.getDouble("last12hour"));
+                        dataWeather.getDataWeatherRain().setLast24hour(jsonRain.getDouble("last24hour"));
+                        dataWeather.getDataWeatherRain().setSinceMidnight(jsonRain.getDouble("sinceMidnight"));
+                        dataWeather.getDataWeatherRain().setLast10min(jsonRain.getDouble("last10min"));
+                        dataWeather.getDataWeatherRain().setLast15min(jsonRain.getDouble("last15min"));
+                        dataWeather.getDataWeatherRain().setLast30min(jsonRain.getDouble("last30min"));
+                        dataWeather.getDataWeatherRain().setLast1hour(jsonRain.getDouble("last1hour"));
+                        dataWeather.getDataWeatherRain().setSinceOntime(jsonRain.getDouble("sinceOntime"));
+
+                        JSONObject jsonTemperature = jsonMinutely.getJSONObject(0).getJSONObject("temperature");
+                        dataWeather.getDataWeatherTemperature().setTc(jsonTemperature.getDouble("tc"));
+                        dataWeather.getDataWeatherTemperature().setTmax(jsonTemperature.getDouble("tmax"));
+                        dataWeather.getDataWeatherTemperature().setTmin(jsonTemperature.getDouble("tmin"));
+
+                        dataWeather.getDataWeatherHumidity().setHumidity(jsonMinutely.getJSONObject(0).getDouble("humidity"));
+
+                        JSONObject jsonPressure = jsonMinutely.getJSONObject(0).getJSONObject("pressure");
+                        dataWeather.getDataWeatherPressure().setSealevel(jsonPressure.getDouble("seaLevel"));
+                        dataWeather.getDataWeatherPressure().setSurface(jsonPressure.getDouble("surface"));
+
+                        dataWeather.getDataWeatherLightning().setLightning(jsonMinutely.getJSONObject(0).getInt("lightning"));
+
+                        dataWeather.getDataWeatherTimeObservation().setDate(jsonMinutely.getJSONObject(0).getString("timeObservation"));
+                    } else {
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                FilterSelectedInfo.setSelectedInfo(arrayList, FilterSelectedInfo.FILTER_TYPE_MAIN);
+                changeContentsState();
+                adapter.notifyDataSetChanged();
+            }
+
+        };
+
+        weatherDustListener = new HttpResponseDataUpdateListener() {
+            @Override
+            public void doUpdate(String res) {
+                DataManager dataManager = DataManager.getInstance();
+                DataWeather dataWeather = dataManager.getDataWeather();
+                Log.e("dust res", res);
+                try {
+                    JSONObject json = new JSONObject(res);
+                    if (json.has("weather")) {
+                        JSONObject jsonWeather = json.getJSONObject("weather");
+                        JSONArray jsonDust = jsonWeather.getJSONArray("dust");
+                        JSONObject jsonDustObject = jsonDust.getJSONObject(0);
+                        JSONObject jsonPm10 = jsonDustObject.getJSONObject("pm10");
+                        dataWeather.getDataWeatherDust().setGrade(jsonPm10.getString("grade"));
+                        dataWeather.getDataWeatherDust().setValue(jsonPm10.getDouble("value"));
+                    } else {
+                        return;
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                FilterSelectedInfo.setSelectedInfo(arrayList, FilterSelectedInfo.FILTER_TYPE_MAIN);
+                changeContentsState();
+                adapter.notifyDataSetChanged();
             }
         };
 
@@ -86,24 +167,25 @@ public class MainActivity extends AppCompatActivity
             public void onClick(View view) {
                 Snackbar.make(view, "Replace with your own action", Snackbar.LENGTH_LONG)
                         .setAction("Action", null).show();
-                AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER);
+                AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER, "");
                 asyncTaskHttpCommunicator.setListener(weatherListener);
                 asyncTaskHttpCommunicator.execute();
+                AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
+                asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
+                asyncTaskHttpCommunicatorDust.execute();
             }
         });
 
         txtGuide = (TextView) findViewById(R.id.activity_main_txt);
 
-        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER);
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER, "");
         asyncTaskHttpCommunicator.setListener(weatherListener);
         asyncTaskHttpCommunicator.execute();
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
+        asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
+        asyncTaskHttpCommunicatorDust.execute();
 
-        FilterSelectedInfo.setSelectedInfo(arrayList, FilterSelectedInfo.FILTER_TYPE_MAIN);
-        if(arrayList.size()>0)
-            txtGuide.setVisibility(View.GONE);
-        else
-            txtGuide.setVisibility(View.VISIBLE);
-        adapter.notifyDataSetChanged();
+        changeContentsState();
 
         DrawerLayout drawer = (DrawerLayout) findViewById(R.id.drawer_layout);
         ActionBarDrawerToggle toggle = new ActionBarDrawerToggle(
@@ -125,13 +207,13 @@ public class MainActivity extends AppCompatActivity
 
     @Override
     protected void onResume() {
-        FilterSelectedInfo.setSelectedInfo(arrayList, FilterSelectedInfo.FILTER_TYPE_MAIN);
-        if(arrayList.size()>0)
-            txtGuide.setVisibility(View.GONE);
-        else
-            txtGuide.setVisibility(View.VISIBLE);
-        adapter.notifyDataSetChanged();
         super.onResume();
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER, "");
+        asyncTaskHttpCommunicator.setListener(weatherListener);
+        asyncTaskHttpCommunicator.execute();
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
+        asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
+        asyncTaskHttpCommunicatorDust.execute();
     }
 
     @Override
@@ -207,20 +289,24 @@ public class MainActivity extends AppCompatActivity
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_WIND) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
+                holder.icon.setImageResource(R.drawable.ic_wind);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_DUST) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_TEMP) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
+                holder.icon.setImageResource(R.drawable.ic_temp);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_SKY) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
                 //holder.container.setBackground(getDrawable(R.drawable.border_red));
-                SelectWeatherIcon.setWeatherSkyIcon(holder.icon, dataManager.getDataWeather().getDataWeatherSky().getCode(),context);
+                if (dataManager.getDataWeather().getDataWeatherSky().getCode().length() > 0)
+                    SelectWeatherIcon.setWeatherSkyIcon(holder.icon, dataManager.getDataWeather().getDataWeatherSky().getCode(), context);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_PRECIPITATION) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
+                holder.icon.setImageResource(R.drawable.ic_umbrella);
             } else if (item.getContentsType() == dataManager.TYPE_TRANSPORTATION_BUS) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
@@ -230,6 +316,7 @@ public class MainActivity extends AppCompatActivity
             } else if (item.getContentsType() == dataManager.TYPE_MEMO) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
+                holder.icon.setImageResource(R.drawable.ic_note);
                 holder.more.setVisibility(View.GONE);
             }
 
@@ -238,7 +325,7 @@ public class MainActivity extends AppCompatActivity
                 public void onClick(View v) {
                     Intent intent;
                     intent = new Intent(context, ActivityMoreConfiguration.class);
-                    intent.putExtra("INFO_TYPE",item.getContentsType());
+                    intent.putExtra("INFO_TYPE", item.getContentsType());
                     startActivity(intent);
                 }
             });
@@ -265,6 +352,13 @@ public class MainActivity extends AppCompatActivity
                 container = (LinearLayout) itemView.findViewById(R.id.item_contents_linear_container);
             }
         }
+    }
+
+    private void changeContentsState(){
+        if (arrayList.size() > 0)
+            txtGuide.setVisibility(View.GONE);
+        else
+            txtGuide.setVisibility(View.VISIBLE);
     }
 
 }

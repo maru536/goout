@@ -4,12 +4,12 @@ package com.iotaddon.goout;
  * Created by junhan on 2017-05-08.
  */
 
-public class InfoUserAddress {
+public class DataUserAddress {
     private double latitude;
     private double longitude;
     private String name;
 
-    public InfoUserAddress(double latitude, double longitude, String name) {
+    public DataUserAddress(double latitude, double longitude, String name) {
         this.latitude = latitude;
         this.longitude = longitude;
         this.name = name;

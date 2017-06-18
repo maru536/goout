@@ -1,13 +1,25 @@
-<FrameLayout xmlns:android="http://schemas.android.com/apk/res/android"
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
     xmlns:tools="http://schemas.android.com/tools"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
+    android:orientation="vertical"
     tools:context="com.iotaddon.goout.FragmentSearchBusStation">
 
     <!-- TODO: Update blank fragment layout -->
-    <TextView
+    <EditText
+        android:layout_width="match_parent"
+        android:layout_height="50dp"
+        android:background="#ffffffff"
+        android:hint="station name"
+        android:id="@+id/fragment_transportation_search_bus_edit"
+        android:layout_marginBottom="1px"
+        android:padding="10dp"/>
+
+    <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"
-        android:text="@string/hello_blank_fragment" />
+        android:id="@+id/fragment_transportation_search_bus_recycler">
 
-</FrameLayout>
+    </android.support.v7.widget.RecyclerView>
+
+</LinearLayout>

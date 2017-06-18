@@ -30,35 +30,16 @@
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_centerInParent="true"
-                    android:text="선택 안함" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
-                    android:layout_alignParentRight="true"
-                    android:layout_centerVertical="true"
-                    android:id="@+id/activity_transportation_radio_none"
-                    android:layout_marginRight="20dp" />
-            </RelativeLayout>
-
-            <RelativeLayout
-                android:layout_width="match_parent"
-                android:layout_height="60dp"
-                android:background="#ffffffff"
-                android:layout_marginBottom="1px">
+                    android:text="버스" />
 
                 <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
-                    android:layout_centerInParent="true"
-                    android:text="버스" />
-
-                <RadioButton
-                    android:layout_width="wrap_content"
-                    android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:id="@+id/activity_transportation_radio_bus"
+                    android:padding="10dp"
+                    android:text=">"
+                    android:id="@+id/activity_transportation_txt_bus"
                     android:layout_marginRight="20dp" />
             </RelativeLayout>
 
@@ -74,12 +55,14 @@
                     android:layout_centerInParent="true"
                     android:text="지하철" />
 
-                <RadioButton
+                <TextView
                     android:layout_width="wrap_content"
                     android:layout_height="wrap_content"
                     android:layout_alignParentRight="true"
                     android:layout_centerVertical="true"
-                    android:id="@+id/activity_transportation_radio_subway"
+                    android:padding="10dp"
+                    android:text=">"
+                    android:id="@+id/activity_transportation_txt_subway"
                     android:layout_marginRight="20dp" />
             </RelativeLayout>
 

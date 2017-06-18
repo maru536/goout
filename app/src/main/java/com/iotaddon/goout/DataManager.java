@@ -13,11 +13,11 @@ public class DataManager {
     public static final int TYPE_WEATHER_WIND = 5;
     public static final int TYPE_WEATHER_PRECIPITATION = 6;
     public static final int TYPE_NONE = 0;
+    public static final int TYPE_TRANSPORTATION_BUS = 10;
+    public static final int TYPE_TRANSPORTATION_SUBWAY = 11;
 
-
-    public static final int TYPE_TRANSPORTATION_NONE = 10;
-    public static final int TYPE_TRANSPORTATION_BUS = 11;
-    public static final int TYPE_TRANSPORTATION_SUBWAY = 12;
+    public static final int TYPE_TRANSPORTATION_BUS_SELECTED = 0;
+    public static final int TYPE_TRANSPORTATION_SUBWAY_SELECTED = 1;
 
     public static final int TYPE_LED_1 = 0;
     public static final int TYPE_LED_2 = 1;
@@ -39,17 +39,32 @@ public class DataManager {
 
     private boolean selectedWeather[] = new boolean[7];
     private int selectedLEDs[] = new int[3];
-    private int selectedTransportation = 0;
+    private boolean selectedTransportation[] = new boolean[2];
     private String savedMemo = "";
-    private InfoUserAddress userAddress= new InfoUserAddress(0,0,"");
+    private DataUserAddress userAddress= new DataUserAddress(37.03808,127.10989,"");
     private boolean outAlarm = false;
     private DataWeather dataWeather;
+    private DataBusInfo dataBusInfo;
+    private String fcmToken;
 
     private DataManager() {
         dataWeather = new DataWeather();
+        dataBusInfo = new DataBusInfo(0,"");
         selectedLEDs[0] = TYPE_NONE;
         selectedLEDs[1] = TYPE_NONE;
         selectedLEDs[2] = TYPE_NONE;
+    }
+
+    public String getFcmToken() {
+        return fcmToken;
+    }
+
+    public void setFcmToken(String fcmToken) {
+        this.fcmToken = fcmToken;
+    }
+
+    public DataBusInfo getDataBusInfo() {
+        return dataBusInfo;
     }
 
     public void setSelectedLed(int led, int type){
@@ -70,7 +85,15 @@ public class DataManager {
         userAddress.setName(name);
     }
 
-    public InfoUserAddress getUserAddress() {
+    public void setSelectedTransportation(int type, boolean selected){
+        this.selectedTransportation[type] = selected;
+    }
+
+    public boolean getSelectedTransportation(int type){
+        return this.selectedTransportation[type];
+    }
+
+    public DataUserAddress getUserAddress() {
         return userAddress;
     }
 
@@ -80,14 +103,6 @@ public class DataManager {
 
     public boolean getSelectedWeather(int idx){
         return selectedWeather[idx];
-    }
-
-    public int getSelectedTransportation() {
-        return selectedTransportation;
-    }
-
-    public void setSelectedTransportation(int selectedTransportation) {
-        this.selectedTransportation = selectedTransportation;
     }
 
     public String getSavedMemo() {

@@ -10,22 +10,6 @@
     android:background="#e6e6e6"
     tools:showIn="@layout/app_bar_main">
 
-    <!--<ScrollView
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        android:id="@+id/activity_main_scrollview">
-
-        <LinearLayout
-            android:layout_width="match_parent"
-            android:layout_height="match_parent"
-            android:orientation="vertical">
-
-            <include layout="@layout/content_weather"></include>
-            <include layout="@layout/content_transportation"></include>
-            <include layout="@layout/content_memo"></include>
-        </LinearLayout>
-
-    </ScrollView>-->
     <android.support.v7.widget.RecyclerView
         android:layout_width="match_parent"
         android:layout_height="match_parent"

@@ -14,7 +14,6 @@ public class ActivityTransportationBus extends AppCompatActivity{
 
     private TabLayout tabLayout;
     private ViewPager viewPager;
-    private EditText editSearch;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -24,10 +23,9 @@ public class ActivityTransportationBus extends AppCompatActivity{
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
         getSupportActionBar().setElevation(0);
 
-        editSearch = (EditText)findViewById(R.id.activity_transportation_bus_edit_search);
         tabLayout = (TabLayout)findViewById(R.id.activity_transportation_bus_tab);
-        tabLayout.addTab(tabLayout.newTab().setText("버스"));
         tabLayout.addTab(tabLayout.newTab().setText("정류장"));
+        tabLayout.addTab(tabLayout.newTab().setText("주변 정류장"));
 
         viewPager = (ViewPager)findViewById(R.id.activity_transportation_bus_pager);
         TabPagerAdapter tabPagerAdapter = new TabPagerAdapter(getSupportFragmentManager(), tabLayout.getTabCount());
@@ -35,7 +33,6 @@ public class ActivityTransportationBus extends AppCompatActivity{
         viewPager.addOnPageChangeListener(new TabLayout.TabLayoutOnPageChangeListener(tabLayout));
 
         viewPager.setCurrentItem(0);
-        editSearch.setHint("버스번호 검색");
 
         tabLayout.addOnTabSelectedListener(new TabLayout.OnTabSelectedListener() {
             @Override
@@ -43,10 +40,8 @@ public class ActivityTransportationBus extends AppCompatActivity{
                 viewPager.setCurrentItem(tab.getPosition());
                 switch(tab.getPosition()){
                     case 0:
-                        editSearch.setHint("버스번호 검색");
                         break;
                     case 1:
-                        editSearch.setHint("정류장 번호 검색");
                         break;
                 }
             }

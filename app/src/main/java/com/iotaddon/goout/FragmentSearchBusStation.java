@@ -1,12 +1,28 @@
 package com.iotaddon.goout;
 
 import android.content.Context;
+import android.content.Intent;
 import android.net.Uri;
 import android.os.Bundle;
 import android.support.v4.app.Fragment;
+import android.support.v7.widget.LinearLayoutManager;
+import android.support.v7.widget.RecyclerView;
+import android.text.Editable;
+import android.text.TextWatcher;
+import android.util.Log;
+import android.view.GestureDetector;
 import android.view.LayoutInflater;
+import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.EditText;
+import android.widget.LinearLayout;
+import android.widget.TextView;
+
+import org.json.JSONException;
+import org.json.JSONObject;
+
+import java.util.ArrayList;
 
 
 /**
@@ -21,9 +37,18 @@ public class FragmentSearchBusStation extends Fragment {
 
     private OnFragmentInteractionListener mListener;
 
+    private DataManager dataManager = DataManager.getInstance();
+    private RecyclerView recyclerView;
+    private FragmentSearchBusStation.ItemAdapter adapter;
+    private RecyclerView.LayoutManager layoutManager;
+    private ArrayList<DataBusStation> arrayList;
+    private EditText editSearch;
+    private HttpResponseDataUpdateListener weatherListener;
+
     public FragmentSearchBusStation() {
         // Required empty public constructor
     }
+
     // TODO: Rename and change types and number of parameters
     public static FragmentSearchBusStation newInstance() {
         FragmentSearchBusStation fragment = new FragmentSearchBusStation();
@@ -41,13 +66,115 @@ public class FragmentSearchBusStation extends Fragment {
     public View onCreateView(LayoutInflater inflater, ViewGroup container,
                              Bundle savedInstanceState) {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_fragment_search_bus_station, container, false);
+        View view = inflater.inflate(R.layout.fragment_fragment_search_bus_station, container, false);
+
+        recyclerView = (RecyclerView) view.findViewById(R.id.fragment_transportation_search_bus_recycler);
+        //recyclerView.setHasFixedSize(true);
+        layoutManager = new LinearLayoutManager(getContext());
+        recyclerView.setLayoutManager(layoutManager);
+        arrayList = new ArrayList<>();
+        adapter = new FragmentSearchBusStation.ItemAdapter(arrayList, getContext());
+        recyclerView.setAdapter(adapter);
+        editSearch = (EditText) view.findViewById(R.id.fragment_transportation_search_bus_edit);
+        editSearch.setHint("정류장 번호 숫자만 입력");
+
+        weatherListener = new HttpResponseDataUpdateListener() {
+            @Override
+            public void doUpdate(String res) {
+                try {
+                    Log.e("transportation res", res);
+                    JSONObject json = new JSONObject(res);
+                    JSONObject jsonResponse = json.getJSONObject("response");
+                    JSONObject jsonMsgBody = jsonResponse.getJSONObject("msgBody");
+                    JSONObject jsonStation = jsonMsgBody.getJSONObject("busStationList");
+                    DataBusStation dataBusStation = new DataBusStation(jsonStation.getInt("districtCd"), jsonStation.getString("regionName"), jsonStation.getDouble("x"), jsonStation.getDouble("y"), jsonStation.getString("stationName"), jsonStation.getString("centerYn"), jsonStation.getString("mobileNo"), jsonStation.getInt("stationId"));
+                    arrayList.clear();
+                    arrayList.add(dataBusStation);
+                    adapter.notifyDataSetChanged();
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+            }
+        };
+
+        editSearch.addTextChangedListener(new TextWatcher() {
+            @Override
+            public void beforeTextChanged(CharSequence s, int start, int count, int after) {
+
+            }
+
+            @Override
+            public void onTextChanged(CharSequence s, int start, int before, int count) {
+
+            }
+
+            @Override
+            public void afterTextChanged(Editable s) {
+                String text = editSearch.getText().toString();
+                if (text.length() == 5) {
+                    AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_TRANSPORTATION_BUS_STATION, text);
+                    asyncTaskHttpCommunicator.setListener(weatherListener);
+                    asyncTaskHttpCommunicator.execute();
+                }else{
+                    arrayList.clear();
+                    adapter.notifyDataSetChanged();
+                }
+            }
+        });
+
+        final GestureDetector gestureDetector = new GestureDetector(getContext(), new GestureDetector.SimpleOnGestureListener() {
+            @Override
+            public boolean onSingleTapUp(MotionEvent e) {
+                return true;
+            }
+        });
+
+        recyclerView.addOnItemTouchListener(new RecyclerView.OnItemTouchListener() {
+            @Override
+            public boolean onInterceptTouchEvent(RecyclerView rv, MotionEvent e) {
+                View child = rv.findChildViewUnder(e.getX(), e.getY());
+                if (child != null && gestureDetector.onTouchEvent(e)) {
+                    int position = rv.getChildAdapterPosition(child);
+
+                    Intent intent = new Intent(getContext(), ActivityTransportationBusInfo.class);
+                    intent.putExtra("stationId",arrayList.get(position).getStationId());
+                    startActivityForResult(intent, 0);
+                }
+                return false;
+            }
+
+            @Override
+            public void onTouchEvent(RecyclerView rv, MotionEvent e) {
+
+            }
+
+            @Override
+            public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
+
+            }
+        });
+
+        return view;
     }
 
     // TODO: Rename method, update argument and hook method into UI event
     public void onButtonPressed(Uri uri) {
         if (mListener != null) {
             mListener.onFragmentInteraction(uri);
+        }
+    }
+
+    @Override
+    public void onActivityResult(int requestCode, int resultCode, Intent data) {
+        super.onActivityResult(requestCode, resultCode, data);
+        if(requestCode == 0) {
+            if (resultCode == getActivity().RESULT_OK) {
+                dataManager.setSelectedTransportation(dataManager.TYPE_TRANSPORTATION_BUS_SELECTED, true);
+                getActivity().setResult(getActivity().RESULT_OK);
+                getActivity().finish();
+            } else {
+                dataManager.setSelectedTransportation(dataManager.TYPE_TRANSPORTATION_BUS_SELECTED, false);
+            }
         }
     }
 
@@ -80,5 +207,56 @@ public class FragmentSearchBusStation extends Fragment {
     public interface OnFragmentInteractionListener {
         // TODO: Update argument type and name
         void onFragmentInteraction(Uri uri);
+    }
+
+    class ItemAdapter extends RecyclerView.Adapter<FragmentSearchBusStation.ItemAdapter.ViewHolder> {
+
+
+        private ArrayList<DataBusStation> items;
+        private Context context;
+
+        public ItemAdapter(ArrayList<DataBusStation> items, Context context) {
+            this.context = context;
+            this.items = items;
+        }
+
+        @Override
+        public FragmentSearchBusStation.ItemAdapter.ViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+            View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_bus_station_contents, parent, false);
+            FragmentSearchBusStation.ItemAdapter.ViewHolder holder = new FragmentSearchBusStation.ItemAdapter.ViewHolder(view);
+            return holder;
+        }
+
+        @Override
+        public void onBindViewHolder(FragmentSearchBusStation.ItemAdapter.ViewHolder holder, final int position) {
+            DataBusStation item = items.get(position);
+            holder.txtStation.setText(item.getStationName());
+            holder.txtId.setText(item.getStationId()+"");
+            holder.container.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+
+                }
+            });
+        }
+
+
+        @Override
+        public int getItemCount() {
+            return items.size();
+        }
+
+        public class ViewHolder extends RecyclerView.ViewHolder {
+
+            TextView txtStation, txtId;
+            LinearLayout container;
+
+            public ViewHolder(View itemView) {
+                super(itemView);
+                txtStation = (TextView)itemView.findViewById(R.id.item_bus_station_contents_txt_name);
+                txtId = (TextView)itemView.findViewById(R.id.item_bus_station_contents_txt_id);
+                container = (LinearLayout)itemView.findViewById(R.id.item_bus_station_contents_linear_container);
+            }
+        }
     }
 }

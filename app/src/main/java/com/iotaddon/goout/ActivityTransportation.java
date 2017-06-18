@@ -10,11 +10,11 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.TextView;
 
 public class ActivityTransportation extends AppCompatActivity implements View.OnClickListener {
 
-    private RadioButton radioNone, radioBus, radioSubway;
-    private int selectedRadio = DataManager.TYPE_TRANSPORTATION_NONE;
+    private TextView txtBus, txtSubway;
     private DataManager dataManager = DataManager.getInstance();
 
 
@@ -26,31 +26,12 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
         getSupportActionBar().setElevation(0);
 
-        radioNone = (RadioButton) findViewById(R.id.activity_transportation_radio_none);
-        radioBus = (RadioButton) findViewById(R.id.activity_transportation_radio_bus);
-        radioSubway = (RadioButton) findViewById(R.id.activity_transportation_radio_subway);
+        txtBus = (TextView) findViewById(R.id.activity_transportation_txt_bus);
+        txtSubway = (TextView) findViewById(R.id.activity_transportation_txt_subway);
 
-        radioNone.setOnClickListener(this);
-        radioBus.setOnClickListener(this);
-        radioSubway.setOnClickListener(this);
+        txtBus.setOnClickListener(this);
+        txtSubway.setOnClickListener(this);
 
-        setRadioButton();
-    }
-
-    private void setRadioButton() {
-        if (dataManager.getSelectedTransportation() == dataManager.TYPE_TRANSPORTATION_BUS) {
-            radioNone.setChecked(false);
-            radioBus.setChecked(true);
-            radioSubway.setChecked(false);
-        } else if (dataManager.getSelectedTransportation() == dataManager.TYPE_TRANSPORTATION_SUBWAY) {
-            radioNone.setChecked(false);
-            radioBus.setChecked(false);
-            radioSubway.setChecked(true);
-        } else {
-            radioNone.setChecked(true);
-            radioBus.setChecked(false);
-            radioSubway.setChecked(false);
-        }
     }
 
     @Override
@@ -67,23 +48,13 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
     @Override
     protected void onActivityResult(int requestCode, int resultCode, Intent data) {
         super.onActivityResult(requestCode, resultCode, data);
-
-        if (requestCode == dataManager.TYPE_TRANSPORTATION_BUS) {
-            if (resultCode == RESULT_OK) {
-                selectedRadio = dataManager.TYPE_TRANSPORTATION_BUS;
-                radioSubway.setChecked(false);
-                radioBus.setChecked(true);
-                radioNone.setChecked(false);
-                dataManager.setSelectedTransportation(requestCode);
+        if(requestCode == dataManager.TYPE_TRANSPORTATION_BUS){
+            if(resultCode == RESULT_OK){
+                finish();
             }
-
-        } else if (requestCode == dataManager.TYPE_TRANSPORTATION_SUBWAY) {
-            if (resultCode == RESULT_OK) {
-                selectedRadio = dataManager.TYPE_TRANSPORTATION_SUBWAY;
-                radioSubway.setChecked(true);
-                radioBus.setChecked(false);
-                radioNone.setChecked(false);
-                dataManager.setSelectedTransportation(requestCode);
+        }else if(requestCode == dataManager.TYPE_TRANSPORTATION_SUBWAY){
+            if(resultCode == RESULT_OK){
+                finish();
             }
         }
     }
@@ -92,18 +63,11 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
     public void onClick(View v) {
         Intent intent;
         switch (v.getId()) {
-            case R.id.activity_transportation_radio_none:
-                selectedRadio = dataManager.TYPE_TRANSPORTATION_NONE;
-                radioSubway.setChecked(false);
-                radioBus.setChecked(false);
-                radioNone.setChecked(true);
-                dataManager.setSelectedTransportation(dataManager.TYPE_TRANSPORTATION_NONE);
-                break;
-            case R.id.activity_transportation_radio_bus:
+            case R.id.activity_transportation_txt_bus:
                 intent = new Intent(this, ActivityTransportationBus.class);
                 startActivityForResult(intent, dataManager.TYPE_TRANSPORTATION_BUS);
                 break;
-            case R.id.activity_transportation_radio_subway:
+            case R.id.activity_transportation_txt_subway:
                 intent = new Intent(this, ActivityTransportationSubway.class);
                 startActivityForResult(intent, dataManager.TYPE_TRANSPORTATION_SUBWAY);
                 break;

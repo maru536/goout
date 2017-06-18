@@ -1,9 +1,0 @@
-package com.iotaddon.goout;
-
-/**
- * Created by junhan on 2017-05-23.
- */
-
-public interface WeatherDataUpdateListener {
-    public void doUpdate();
-}

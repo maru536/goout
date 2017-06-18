@@ -27,7 +27,7 @@ public class FilterSelectedInfo {
     private static void setContentTransportation(ArrayList<ItemContents> arrayList, int type) {
         DataManager dataManager = DataManager.getInstance();
 
-        if (dataManager.getSelectedTransportation() == dataManager.TYPE_TRANSPORTATION_BUS) {
+        if (dataManager.getSelectedTransportation(dataManager.TYPE_TRANSPORTATION_BUS_SELECTED)) {
             if (type == FILTER_TYPE_LED) {
                 for (int led = 0; led < 3; led++) {
                     if (dataManager.getSelectedLed(led)== dataManager.TYPE_TRANSPORTATION_BUS){
@@ -35,9 +35,10 @@ public class FilterSelectedInfo {
                     }
                 }
             }
-            ItemContents itemContents = new ItemContents(dataManager.TYPE_TRANSPORTATION_BUS, TITLE_TRANSPORTATION_BUS, "버스 도착까지 5분 남았습니다.");
+            ItemContents itemContents = new ItemContents(dataManager.TYPE_TRANSPORTATION_BUS, TITLE_TRANSPORTATION_BUS, dataManager.getDataBusInfo().getRtNm()+ " 도착까지 5분 남았습니다.");
             arrayList.add(itemContents);
-        } else if (dataManager.getSelectedTransportation() == dataManager.TYPE_TRANSPORTATION_SUBWAY) {
+        }
+        if (dataManager.getSelectedTransportation(dataManager.TYPE_TRANSPORTATION_SUBWAY_SELECTED)) {
             if (type == FILTER_TYPE_LED) {
                 for (int led = 0; led < 3; led++) {
                     if (dataManager.getSelectedLed(led)== dataManager.TYPE_TRANSPORTATION_SUBWAY){
@@ -75,7 +76,7 @@ public class FilterSelectedInfo {
                     }
                     if(selected)
                         continue;
-                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_HUMIDITY, dataManager.getDataWeather().getDataWeatherHumidity().getHumidity() + "");
+                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_HUMIDITY, dataManager.getDataWeather().getDataWeatherHumidity().getHumidity() + dataManager.getDataWeather().getDataWeatherHumidity().UNIT_WEATHER_HUMIDITY);
                     arrayList.add(itemContents);
                 } else if (i == dataManager.TYPE_WEATHER_WIND) {
                     boolean selected = false;
@@ -99,7 +100,7 @@ public class FilterSelectedInfo {
                     }
                     if(selected)
                         continue;
-                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_DUST, dataManager.getDataWeather().getDataWeatherHumidity().getHumidity() + "");
+                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_DUST, dataManager.getDataWeather().getDataWeatherDust().getGrade());
                     arrayList.add(itemContents);
                 } else if (i == dataManager.TYPE_WEATHER_TEMP) {
                     boolean selected = false;
@@ -111,7 +112,7 @@ public class FilterSelectedInfo {
                     }
                     if(selected)
                         continue;
-                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_TEMP, dataManager.getDataWeather().getDataWeatherTemperature().getTc() + "");
+                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_TEMP, dataManager.getDataWeather().getDataWeatherTemperature().getTc() + dataManager.getDataWeather().getDataWeatherTemperature().UNIT_WEATHER_TEMP);
                     arrayList.add(itemContents);
                 } else if (i == dataManager.TYPE_WEATHER_SKY) {
                     boolean selected = false;
@@ -135,7 +136,7 @@ public class FilterSelectedInfo {
                     }
                     if(selected)
                         continue;
-                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_PRECIPITATION, dataManager.getDataWeather().getDataWeatherPrecipitation().getSinceOntime() + "");
+                    ItemContents itemContents = new ItemContents(i, TITLE_WEATHER_PRECIPITATION, dataManager.getDataWeather().getDataWeatherPrecipitation().getSinceOntime() + dataManager.getDataWeather().getDataWeatherPrecipitation().UNIT_WEATHER_PRECIPITATION);
                     arrayList.add(itemContents);
                 }
             }

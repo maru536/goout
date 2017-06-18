@@ -20,10 +20,10 @@ public class TabPagerAdapter extends FragmentPagerAdapter {
     @Override
     public Fragment getItem(int position) {
         switch(position){
-            case 0:
-                FragmentSearchBus fragmentSearchBus = FragmentSearchBus.newInstance();
-                return fragmentSearchBus;
             case 1:
+                FragmentSearchAroundBusStation fragmentSearchAroundBusStation = FragmentSearchAroundBusStation.newInstance();
+                return fragmentSearchAroundBusStation;
+            case 0:
                 FragmentSearchBusStation fragmentSearchBusStation = FragmentSearchBusStation.newInstance();
                 return fragmentSearchBusStation;
             default:
