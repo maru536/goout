@@ -1,11 +1,15 @@
 package com.iotaddon.goout;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
@@ -46,6 +50,12 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
     private ServerComm mServerComm = ServerComm.getInstance();
     private String deviceID;
 
+    private static final int INTERNET_REQUEST_CODE = 101;
+    private static final int ACCESS_NETWORK_STATE_REQUEST_CODE = 102;
+    private static final int CHANGE_WIFI_STATE_REQUEST_CODE = 103;
+    private static final int ACCESS_WIFI_STATE_REQUEST_CODE = 104;
+    private static final int READ_PHONE_STATE_REQUEST_CODE = 105;
+    private static final int READ_CONTACTS_REQUEST_CODE = 106;
     final static String TAG = "ConnectWifiActivity";
 
     @Override
@@ -53,6 +63,50 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_settings_connect_wifi);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, INTERNET_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, ACCESS_NETWORK_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CHANGE_WIFI_STATE}, CHANGE_WIFI_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_WIFI_STATE}, ACCESS_WIFI_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS_REQUEST_CODE);
+        }
+
+
         deviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         mWifiManager = (WifiManager)this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -281,5 +335,64 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
             }
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case INTERNET_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "INTERNET Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "INTERNET Permission has been granted by user");
+                }
+            }
+
+            case ACCESS_NETWORK_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "ACCESS_NETWORK_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "ACCESS_NETWORK_STATE Permission has been granted by user");
+                }
+            }
+
+            case CHANGE_WIFI_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "CHANGE_WIFI_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "CHANGE_WIFI_STATE Permission has been granted by user");
+                }
+            }
+
+            case ACCESS_WIFI_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "ACCESS_WIFI_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "ACCESS_WIFI_STATE Permission has been granted by user");
+                }
+            }
+
+            case READ_PHONE_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "READ_PHONE_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "READ_PHONE_STATE Permission has been granted by user");
+                }
+            }
+
+            case READ_CONTACTS_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "READ_CONTACTS Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "READ_CONTACTS Permission has been granted by user");
+                }
+            }
+        }
     }
 }

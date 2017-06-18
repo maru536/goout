@@ -36,7 +36,7 @@ void setup()
   Serial.print("WL_CONNECTED : ");
   Serial.println(WL_CONNECTED);
 
-  APServerStart();        
+  APServerStart();
 }
 
 void loop()
@@ -140,7 +140,6 @@ void APServerStart() {
   Serial.println(status);
 
   Serial.println("Access point started");
-  printAPServerWifiStatus();
 
   // start the web server on port 80
   APServer.begin();
@@ -148,113 +147,65 @@ void APServerStart() {
 }
 
 void clientStart() {
+  initClient();
   WiFi.init(&Serial3);
 
-  // check for the presence of the shield
-  Serial.print("Start Client1 : ");
-  Serial.println(status);
-  if (WiFi.status() == WL_NO_SHIELD) {
-    Serial.println("WiFi shield not present");
-    // don't continue
-    while (true);
-  }
-  Serial.print("Start Client2 : ");
-  Serial.println(status);
+    // check for the presence of the shield
+    if (WiFi.status() == WL_NO_SHIELD) {
+        Serial.println("WiFi shield not present");
+        //SerialUSB.println("WiFi shield not present");
+        // don't continue
+        while (true);
+    }
+
+    // attempt to connect to WiFi network
+    while ( status != WL_CONNECTED) {
+        Serial.print("Attempting to connect to WPA SSID: ");
+        Serial.println(clientSsid);
+        // Connect to WPA/WPA2 network
+        status = WiFi.begin(clientSsid, clientPwd);
+    }
+
+    // you're connected now, so print out the data
+    Serial.println("You're connected to the network");
+    
+    Serial.println();
+    Serial.println("Starting connection to server...");
+    
+    // if you get a connection, report back via serial
+    if (client.connect(serverAddr, 8080)) {
+        Serial.println("Connected to server");
+        requestDust(126.9658, 37.5714);
+    }
+}
+
+void requestDust(double lon, double lat) 
+{  
+  // Make a HTTP request
+  client.print("GET /dust?lon=");
+  client.print(lon);
+  client.print("&lat=");
+  client.print(lat);
+  client.println(" HTTP/1.1");
+  client.println("Host: arduino.cc");
+  client.println("Connection: close");
+  client.println();
+}
+
+void initClient() 
+{
   status = 0;
-
-  // attempt to connect to WiFi network
-  while (status != WL_CONNECTED) {
-    Serial.print("Attempting to connect to WPA SSID: ");
-    Serial.println(clientSsid);
-    // Connect to WPA/WPA2 network
-    IPAddress localIp(192, 168, 219, 141);
-    WiFi.configAP(localIp);
-    status = WiFi.begin(clientSsid, clientPwd);
-  }
-  Serial.print("Check Client1 : ");
-  Serial.println(status);
-
-  // you're connected now, so print out the data
-  Serial.println("You're connected to the network");
-    
-  printClientWifiStatus();
-    
-  Serial.println();
-  Serial.println("Starting connection to server...");
-    
-  // if you get a connection, report back via serial
-  /*while (!client.connect(serverAddr, 8080)) {
-    Serial.print("c");
-  }
-  Serial.println("");*/
-  if (client.connect(serverAddr, 8080)) {
-    Serial.println("Connected to server");
-    // Make a HTTP request
-    client.println("GET /dust?lon=126.9658000000&lat=37.5714000000 HTTP/1.1");
-    client.println("Host: arduino.cc");
-    client.println("Connection: close");
-    client.println();
-  }
+  for(int i = 0; i < MAX_SOCK_NUM; i++) 
+    WizFi310Drv::_state[i] = -1;
+  IPAddress ip(192, 168, 219, 141);
+  IPAddress subnet(255, 255, 255, 0);
+  IPAddress gw(192, 168, 219, 1);
+  WiFi.config(ip, subnet, gw);
 }
 
 void sendHttpMacResponse(WiFiClient client)
 {
     client.print(mac);
-    /*client.print(
-    "HTTP/1.1 200 OK\r\n"
-    "Content-Type: application/json;charset=UTF-8\r\n"
-    "Transfer-Encoding: chunked\r\n"  // the connection will be closed after completion of the response
-    "Date: Sun, 04 Jun 2017 12:06:40 GMT\r\n"        // refresh the page automatically every 20 sec
-    "\r\n");
-    
-    client.print("{mac : asd}\r\n");*/
-    /*client.print("<!DOCTYPE HTML>\r\n");
-    client.print("<html>\r\n");
-    client.print("<h1>Hello World!</h1>\r\n");
-    client.print("Requests received: ");
-    client.print(++reqCount);
-    client.print("<br>\r\n");
-    client.print("MAC : ");
-    client.print(mac);
-    client.print("<br>\r\n");
-    client.print("Analog input A0: ");
-    client.print(analogRead(0));
-    client.print("<br>\r\n");
-    client.print("</html>\r\n");*/
-}
-
-void printAPServerWifiStatus()
-{
-    // print your WiFi shield's IP address
-    IPAddress ip = WiFi.localIP();
-    Serial.print("IP Address: ");
-    Serial.println(ip);
-
-    // print where to go in the browser
-    Serial.println();
-    Serial.print("To see this page in action, connect to ");
-    Serial.print(serverSsid);
-    Serial.print(" and open a browser to http://");
-    Serial.println(ip);
-    Serial.println();
-}
-
-void printClientWifiStatus()
-{
-    // print the SSID of the network you're attached to
-    Serial.print("SSID: ");
-    Serial.println(WiFi.SSID());
-    
-    // print your WiFi shield's IP address
-    IPAddress ip = WiFi.localIP();
-    Serial.print("IP Address: ");
-    Serial.println(ip);
-    
-    // print the received signal strength
-    long rssi = WiFi.RSSI();
-    Serial.print("Signal strength (RSSI):");
-    Serial.print(rssi);
-    Serial.println(" dBm");
 }
 
 int strLength(char str[], int max_size)  
