@@ -12,6 +12,7 @@
         android:background="#ffffffff"
         android:hint="station name"
         android:id="@+id/fragment_transportation_search_bus_edit"
+        android:singleLine="true"
         android:layout_marginBottom="1px"
         android:padding="10dp"/>
 

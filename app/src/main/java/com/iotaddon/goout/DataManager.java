@@ -41,7 +41,7 @@ public class DataManager {
     private int selectedLEDs[] = new int[3];
     private boolean selectedTransportation[] = new boolean[2];
     private String savedMemo = "";
-    private DataUserAddress userAddress= new DataUserAddress(37.03808,127.10989,"");
+    private DataUserAddress userAddress= new DataUserAddress(0,0,"");
     private boolean outAlarm = false;
     private DataWeather dataWeather;
     private DataBusInfo dataBusInfo;

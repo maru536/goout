@@ -1,8 +1,10 @@
 package com.iotaddon.goout;
 
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
@@ -62,6 +64,24 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
     @Override
     public void onClick(View v) {
         Intent intent;
+        if(dataManager.getUserAddress().getLatitude()==0){
+            AlertDialog.Builder gsDialog = new AlertDialog.Builder(this);
+            gsDialog.setTitle("내 위치 설정하기");
+            gsDialog.setMessage("날씨 정보를 사용하기 위해서 위치를 설정해야 합니다. 지금 위치설정을 하시겠습니까?");
+            gsDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // GPS설정 화면으로 이동
+                    Intent intent = new Intent(getApplicationContext(), ActivityDeviceSettings.class);
+                    startActivity(intent);
+                }
+            })
+                    .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    }).create().show();
+            return;
+        }
         switch (v.getId()) {
             case R.id.activity_transportation_txt_bus:
                 intent = new Intent(this, ActivityTransportationBus.class);

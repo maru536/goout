@@ -1,14 +1,18 @@
 package com.iotaddon.goout;
 
 import android.Manifest;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.pm.PackageManager;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.provider.Settings;
 import android.support.v4.app.ActivityCompat;
 import android.support.v4.content.ContextCompat;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.CheckBox;
@@ -88,6 +92,9 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
                 startActivity(intent);
                 break;
             case R.id.activity_device_settings_relative_placepicker:
+                if(!chkGpsService()){
+                    return;
+                }
                 int permissionLocation = ContextCompat.checkSelfPermission(getApplicationContext(), Manifest.permission.ACCESS_FINE_LOCATION);
                 if (permissionLocation == PackageManager.PERMISSION_DENIED) {
                     ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_FINE_LOCATION}, REQUEST_LOCATION);
@@ -138,6 +145,38 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
                 txtPlace.setVisibility(View.VISIBLE);
                 dataManager.setUserAddress(place.getLatLng().latitude,place.getLatLng().longitude,place.getName().toString());
             }
+        }
+    }
+
+    private boolean chkGpsService() {
+
+        String gps = android.provider.Settings.Secure.getString(getContentResolver(), Settings.Secure.LOCATION_PROVIDERS_ALLOWED);
+
+        Log.d(gps, "aaaa");
+
+        if (!(gps.matches(".*gps.*") && gps.matches(".*network.*"))) {
+
+            // GPS OFF 일때 Dialog 표시
+            AlertDialog.Builder gsDialog = new AlertDialog.Builder(this);
+            gsDialog.setTitle("위치 서비스 설정");
+            gsDialog.setMessage("본 어플리케이션의 서비스 이용을 위해 위치서비스 기능이 필요합니다.\n위치 서비스 기능을 설정하시겠습니까?");
+            gsDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // GPS설정 화면으로 이동
+                    Intent intent = new Intent(android.provider.Settings.ACTION_LOCATION_SOURCE_SETTINGS);
+                    intent.addCategory(Intent.CATEGORY_DEFAULT);
+                    startActivity(intent);
+                }
+            })
+                    .setNegativeButton("아니오", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    }).create().show();
+            return false;
+
+        } else {
+            return true;
         }
     }
 }

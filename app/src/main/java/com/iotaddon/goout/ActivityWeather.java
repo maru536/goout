@@ -1,7 +1,10 @@
 package com.iotaddon.goout;
 
+import android.content.DialogInterface;
+import android.content.Intent;
 import android.graphics.Color;
 import android.graphics.drawable.ColorDrawable;
+import android.support.v7.app.AlertDialog;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.view.MenuItem;
@@ -32,15 +35,6 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
         chkPrecipitation = (CheckBox) findViewById(R.id.activity_weather_chkbox_precipitation);
         chkWind = (CheckBox) findViewById(R.id.activity_weather_chkbox_wind);
 
-/*        itemBox[0] = (RelativeLayout) findViewById(R.id.activity_weather_item0);
-        itemBox[1] = (RelativeLayout) findViewById(R.id.activity_weather_item1);
-        itemBox[2] = (RelativeLayout) findViewById(R.id.activity_weather_item2);
-        itemBox[3] = (RelativeLayout) findViewById(R.id.activity_weather_item3);
-        itemBox[4] = (RelativeLayout) findViewById(R.id.activity_weather_item4);
-        itemBox[5] = (RelativeLayout) findViewById(R.id.activity_weather_item5);
-        itemBox[6] = (RelativeLayout) findViewById(R.id.activity_weather_item6);*/
-
-
         chkTemp.setOnCheckedChangeListener(this);
         chkDust.setOnCheckedChangeListener(this);
         chkHumidity.setOnCheckedChangeListener(this);
@@ -49,39 +43,9 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
         chkWind.setOnCheckedChangeListener(this);
 
         setCheckBox();
-        /*setItemBox();*/
-
-
 
     }
 
-    /*private void setItemBox() {
-        int itemNum = 0;
-        for (int i = 0; i <= ITEM_NUM_MAXIMUM; i++) {
-            itemBox[i].setVisibility(View.INVISIBLE);
-            if (dataManager.getSelectedWeather(i)) {
-                itemNum++;
-            }
-        }
-
-        switch (itemNum) {
-            case 0:
-                break;
-            case 1:
-                break;
-            case 2:
-                break;
-            case 3:
-                break;
-            case 4:
-                break;
-            case 5:
-                break;
-            case 6:
-                break;
-        }
-        itemBox[itemNum].setVisibility(View.VISIBLE);
-    }*/
 
     private void setCheckBox() {
         chkTemp.setChecked(dataManager.getSelectedWeather(dataManager.TYPE_WEATHER_TEMP));
@@ -105,26 +69,46 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
 
     @Override
     public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
-        switch (buttonView.getId()) {
-            case R.id.activity_weather_chkbox_temp:
-                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_TEMP, isChecked);
-                break;
-            case R.id.activity_weather_chkbox_dust:
-                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_DUST, isChecked);
-                break;
-            case R.id.activity_weather_chkbox_humidity:
-                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_HUMIDITY, isChecked);
-                break;
-            case R.id.activity_weather_chkbox_sky:
-                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_SKY, isChecked);
-                break;
-            case R.id.activity_weather_chkbox_wind:
-                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_WIND, isChecked);
-                break;
-            case R.id.activity_weather_chkbox_precipitation:
-                dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_PRECIPITATION, isChecked);
-                break;
+        if (dataManager.getUserAddress().getLatitude() == 0) {
+            ((CheckBox)buttonView).setChecked(false);
+            AlertDialog.Builder gsDialog = new AlertDialog.Builder(this);
+            gsDialog.setTitle("내 위치 설정하기");
+            gsDialog.setMessage("날씨 정보를 사용하기 위해서 위치를 설정해야 합니다. 지금 위치설정을 하시겠습니까?");
+            gsDialog.setPositiveButton("예", new DialogInterface.OnClickListener() {
+                public void onClick(DialogInterface dialog, int which) {
+                    // GPS설정 화면으로 이동
+                    Intent intent = new Intent(getApplicationContext(), ActivityDeviceSettings.class);
+                    startActivity(intent);
+                }
+            })
+                    .setNegativeButton("아니요", new DialogInterface.OnClickListener() {
+                        public void onClick(DialogInterface dialog, int which) {
+                            return;
+                        }
+                    }).create().show();
+            return;
+        } else {
+            switch (buttonView.getId()) {
+                case R.id.activity_weather_chkbox_temp:
+                    dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_TEMP, isChecked);
+                    break;
+                case R.id.activity_weather_chkbox_dust:
+                    dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_DUST, isChecked);
+                    break;
+                case R.id.activity_weather_chkbox_humidity:
+                    dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_HUMIDITY, isChecked);
+                    break;
+                case R.id.activity_weather_chkbox_sky:
+                    dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_SKY, isChecked);
+                    break;
+                case R.id.activity_weather_chkbox_wind:
+                    dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_WIND, isChecked);
+                    break;
+                case R.id.activity_weather_chkbox_precipitation:
+                    dataManager.setSelectedWeather(DataManager.TYPE_WEATHER_PRECIPITATION, isChecked);
+                    break;
 
+            }
         }
     }
 }
