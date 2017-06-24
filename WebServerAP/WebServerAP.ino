@@ -5,6 +5,7 @@
 #define MAX_STR_LENGTH (2048)
 #define MAX_SSID_LENGTH (100)
 #define MAX_PWD_LENGTH (100)
+#define MAX_TEXT_LENGTH (301)
 
 char serverSsid[MAX_SSID_LENGTH] = "Wiznet_TestAP";         // your network SSID (name)
 char serverPwd[MAX_PWD_LENGTH] = "12345678";        // your network password
@@ -17,6 +18,7 @@ char str[MAX_STR_LENGTH] = "";
 int bracketCount;
 int pos;
 char serverAddr[] = "13.124.126.90";
+char ttsAddr[] = "api.voicerss.org";
 int serverPort = 8080;
 
 WiFiServer APServer(8080);
@@ -37,6 +39,9 @@ void setup()
   Serial.println(WL_CONNECTED);
 
   APServerStart();
+  //strcpy(clientSsid, "U+Net81F3");
+  //strcpy(clientPwd, "4000005619");
+  //clientStart();
 }
 
 void loop()
@@ -147,7 +152,7 @@ void APServerStart() {
 }
 
 void clientStart() {
-  initClient();
+  //initClient();
   WiFi.init(&Serial3);
 
     // check for the presence of the shield
@@ -172,24 +177,56 @@ void clientStart() {
     Serial.println();
     Serial.println("Starting connection to server...");
     
-    // if you get a connection, report back via serial
-    if (client.connect(serverAddr, 8080)) {
-        Serial.println("Connected to server");
-        requestDust(126.9658, 37.5714);
-    }
+    //requestDust(126.9658, 37.5714);
+    requestSpeech(String("오늘 날씨는 맑음 미세먼지 보통입니다 버스 도착까지 10분전입니다"), String("ko-kr"));
 }
 
 void requestDust(double lon, double lat) 
 {  
-  // Make a HTTP request
-  client.print("GET /dust?lon=");
-  client.print(lon);
-  client.print("&lat=");
-  client.print(lat);
-  client.println(" HTTP/1.1");
-  client.println("Host: arduino.cc");
-  client.println("Connection: close");
-  client.println();
+  // if you get a connection, report back via serial
+  if (client.connect(serverAddr, 8080)) {
+    Serial.println("Connected to server");
+    // Make a HTTP request
+    client.print("GET /dust?lon=");
+    client.print(lon);
+    client.print("&lat=");
+    client.print(lat);
+    client.println(" HTTP/1.1");
+    client.println("Host: arduino.cc");
+    client.println("Connection: close");
+    client.println();
+  }
+}
+
+void requestSpeech(String text, String lang) 
+{  
+  // if you get a connection, report back via serial
+  if (client.connect(ttsAddr, 80)) {
+    Serial.println("Connected to server");
+    // Make a HTTP request
+    //Serial.println(ttsAddr);
+    //Serial.print("GET /translate_tts?ie=UTF-8&q=Hello%20person&tl=en&total=1&idx=0&textlen=12&tk=554200.929215&client=tw-ob");
+    //client.print(text.length());
+    //client.print("&client=tw-ob&q=");
+    //client.print(text);
+    //client.print("&tl=");
+    //client.print(lang);
+    //Serial.println(" HTTP/1.1");
+    //Serial.println("cache-control: no-cache");
+    //Serial.println("postman-token: 39436dfd-900f-4cf4-9bc8-f6373f004992");
+    //Serial.println();
+    client.println("GET /?key=fb82492d22b541ce8983bbea7d0d984b&hl=en-us&src=Hello&c=WAV&f=8khz_8bit_mono HTTP/1.1");
+    client.println("Host: arduino.cc");
+    client.println("Connection: close");
+    client.println("cache-control: no-cache");
+    //client.print(text.length());
+    //client.print("&client=tw-ob&q=");
+    //client.print(text);
+    //client.print("&tl=");
+    //client.print(lang);
+    //client.println(" HTTP/1.1");
+    client.println();
+  }
 }
 
 void initClient() 

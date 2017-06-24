@@ -34,6 +34,7 @@ import java.net.Socket;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
 
 public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity implements View.OnClickListener{
 
@@ -49,6 +50,7 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
     private boolean isConnected = false;
     private ServerComm mServerComm = ServerComm.getInstance();
     private String deviceID;
+    private int mWifiID = -1;
 
     private static final int INTERNET_REQUEST_CODE = 101;
     private static final int ACCESS_NETWORK_STATE_REQUEST_CODE = 102;
@@ -56,6 +58,8 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
     private static final int ACCESS_WIFI_STATE_REQUEST_CODE = 104;
     private static final int READ_PHONE_STATE_REQUEST_CODE = 105;
     private static final int READ_CONTACTS_REQUEST_CODE = 106;
+    private static final int WIFI_CONNECT = 2;
+    private static final String WIFI_SSID = "Wiznet_TestAP";
     final static String TAG = "ConnectWifiActivity";
 
     @Override
@@ -134,25 +138,47 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.activity_device_settings_connect_wifi_btn_connect:
-                //Device AP의 Mac 주소 획득
-                String ssid = mETSsid.getText().toString();
-                String pwd = mETPwd.getText().toString();
+                List<WifiConfiguration> listWifiConfig = mWifiManager.getConfiguredNetworks();
+                if (listWifiConfig != null) {
+                    WifiConfiguration connectedWifi = new WifiConfiguration();
+                    if (listWifiConfig != null) {
+                        for (int i = 0; i < listWifiConfig.size(); i++) {
+                            if(listWifiConfig.get(i).SSID.equals("\""+WIFI_SSID+"\""))
+                                connectedWifi = listWifiConfig.get(i);
+                        }
+                        Log.d("KimDC", "\""+WIFI_SSID+"\"");
+                        Log.d("KimDC", "SSID: "+connectedWifi.SSID);
+                        Log.d("KimDC", "status: "+Integer.toString(connectedWifi.status));
+                        Log.d("KimDC", "wifiStatus: "+Integer.toString(mWifiManager.getWifiState()));
+                        Log.d("KimDC", "wifiEnable: "+Boolean.toString(mWifiManager.isWifiEnabled()));
+                        Log.d("KimDC", "pingsup: "+Boolean.toString(mWifiManager.pingSupplicant()));
+                    }
 
-                HashMap apInfo = new HashMap();
+                    if (connectedWifi.SSID.equals("\""+WIFI_SSID+"\"")) {
+                        //Device AP의 Mac 주소 획득
+                        String ssid = mETSsid.getText().toString();
+                        String pwd = mETPwd.getText().toString();
 
-                apInfo.put("ssid", ssid);
-                apInfo.put("pwd", pwd);
+                        HashMap apInfo = new HashMap();
 
-                JSONObject jsonAp = new JSONObject(apInfo);
+                        apInfo.put("ssid", ssid);
+                        apInfo.put("pwd", pwd);
 
-                new Thread(new ConnectThread("192.168.10.1", 8080)).start();
+                        JSONObject jsonAp = new JSONObject(apInfo);
 
-                while (!isConnected) {
-                    //wait socket open
+                        new Thread(new ConnectThread("192.168.10.1", 8080)).start();
+
+                        while (!isConnected) {
+                            //wait socket open
+                        }
+                        Log.d(TAG, jsonAp.toString());
+
+                        new Thread(new SenderThread(jsonAp.toString())).start();
+                    }
+                    else {
+
+                    }
                 }
-                Log.d(TAG, jsonAp.toString());
-
-                new Thread(new SenderThread(jsonAp.toString())).start();
 
                 break;
 
@@ -167,9 +193,11 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
             }
         }
 
-        int networkID = mWifiManager.addNetwork(wifiConfig);
-        if (networkID >= 0) {
-            mWifiManager.enableNetwork(networkID, true);
+        mWifiID = -1;
+        mWifiID = mWifiManager.addNetwork(wifiConfig);
+        if (mWifiID >= 0) {
+            Log.d("KimDC", Integer.toString(mWifiID));
+            mWifiManager.enableNetwork(mWifiID, true);
         }
     }
 
@@ -225,12 +253,9 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
 
 
             if (mSocket != null) {
-
                 try {
-
                     mOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream(), "UTF-8")), true);
                     mIn = new BufferedReader(new InputStreamReader(mSocket.getInputStream(), "UTF-8"));
-
                     isConnected = true;
                 } catch (IOException e) {
 
@@ -240,12 +265,9 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
 
 
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
-
                     if (isConnected) {
-
                         Log.d(TAG, "connected to " + serverIP);
                         Log.d(TAG, "ReceiverThread Start");
 
