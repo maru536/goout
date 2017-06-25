@@ -1,0 +1,1 @@
+VS1003(Streaming Version) library move to arduino\libraries folder
