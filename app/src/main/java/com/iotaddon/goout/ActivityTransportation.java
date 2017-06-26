@@ -12,11 +12,12 @@ import android.view.MenuItem;
 import android.view.View;
 import android.widget.CompoundButton;
 import android.widget.RadioButton;
+import android.widget.RelativeLayout;
 import android.widget.TextView;
 
 public class ActivityTransportation extends AppCompatActivity implements View.OnClickListener {
 
-    private TextView txtBus, txtSubway;
+    private RelativeLayout txtBus, txtSubway;
     private DataManager dataManager = DataManager.getInstance();
 
 
@@ -28,8 +29,8 @@ public class ActivityTransportation extends AppCompatActivity implements View.On
         getSupportActionBar().setBackgroundDrawable(new ColorDrawable(Color.parseColor("#33b5e5")));
         getSupportActionBar().setElevation(0);
 
-        txtBus = (TextView) findViewById(R.id.activity_transportation_txt_bus);
-        txtSubway = (TextView) findViewById(R.id.activity_transportation_txt_subway);
+        txtBus = (RelativeLayout) findViewById(R.id.activity_transportation_txt_bus);
+        txtSubway = (RelativeLayout) findViewById(R.id.activity_transportation_txt_subway);
 
         txtBus.setOnClickListener(this);
         txtSubway.setOnClickListener(this);

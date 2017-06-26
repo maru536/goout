@@ -147,6 +147,7 @@ public class FragmentSearchAroundBusStation extends Fragment implements OnMapRea
         mListener = null;
     }
 
+    @SuppressWarnings("MissingPermission")
     @Override
     public void onMapReady(GoogleMap googleMap) {
         this.googleMap = googleMap;
@@ -156,12 +157,17 @@ public class FragmentSearchAroundBusStation extends Fragment implements OnMapRea
         }
         USER_POSITION = new LatLng(dataManager.getUserAddress().getLatitude(), dataManager.getUserAddress().getLongitude());
 
+        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(USER_POSITION, 15.5f));
         CircleOptions circle1KM = new CircleOptions().center(USER_POSITION) //원점
                 .radius(500)      //반지름 단위 : m
-                .strokeWidth(0f)  //선너비 0f : 선없음
-                .fillColor(Color.parseColor("#88000022"));
+                .strokeWidth(0f);  //선너비 0f : 선없음
+        //.fillColor(Color.parseColor("#007ec650"));
         this.googleMap.addCircle(circle1KM);
-        this.googleMap.moveCamera(CameraUpdateFactory.newLatLngZoom(USER_POSITION, 16f));
+
+        this.googleMap.setMyLocationEnabled(true);
+        this.googleMap.getUiSettings().setMyLocationButtonEnabled(true);
+
+
         googleMap.setOnMarkerClickListener(this);
     }
 

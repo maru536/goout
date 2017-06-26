@@ -15,6 +15,7 @@ import android.view.MenuItem;
 import android.view.MotionEvent;
 import android.view.View;
 import android.view.ViewGroup;
+import android.widget.LinearLayout;
 import android.widget.TextView;
 
 import org.json.JSONArray;
@@ -34,7 +35,7 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
 
 
     private HttpResponseDataUpdateListener busListListener;
-    
+
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -44,7 +45,7 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
         getSupportActionBar().setElevation(0);
 
         Intent intent = getIntent();
-        STATION_ID = intent.getIntExtra("stationId",0);
+        STATION_ID = intent.getIntExtra("stationId", 0);
         arrayList = new ArrayList<>();
 
         busListListener = new HttpResponseDataUpdateListener() {
@@ -57,9 +58,9 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
                     JSONObject jsonMsgBody = jsonServiceResult.getJSONObject("msgBody");
                     JSONArray jsonItemList = jsonMsgBody.getJSONArray("itemList");
 
-                    for(int i=0;i<jsonItemList.length();i++){
+                    for (int i = 0; i < jsonItemList.length(); i++) {
                         JSONObject jsonObject = jsonItemList.getJSONObject(i);
-                        DataBusInfo dataBusInfo = new DataBusInfo(jsonObject.getInt("busRouteId"),jsonObject.getString("rtNm"));
+                        DataBusInfo dataBusInfo = new DataBusInfo(jsonObject.getString("stId"), jsonObject.getInt("busRouteId"), jsonObject.getString("rtNm"), jsonObject.getString("arrmsg1"), jsonObject.getString("arrmsg2"), jsonObject.getString("stationNm1"), jsonObject.getString("stationNm2"));
                         arrayList.add(dataBusInfo);
                     }
                 } catch (JSONException e) {
@@ -69,7 +70,7 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
             }
         };
 
-        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_TRANSPORTATION_BUS_LIST, STATION_ID+"");
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_TRANSPORTATION_BUS_LIST, STATION_ID + "");
         asyncTaskHttpCommunicator.setListener(busListListener);
         asyncTaskHttpCommunicator.execute();
 
@@ -81,7 +82,7 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
         adapter = new ActivityTransportationBusInfo.ItemAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);
 
-        final GestureDetector gestureDetector = new GestureDetector(ActivityTransportationBusInfo.this, new GestureDetector.SimpleOnGestureListener() {
+        /*final GestureDetector gestureDetector = new GestureDetector(ActivityTransportationBusInfo.this, new GestureDetector.SimpleOnGestureListener() {
             @Override
             public boolean onSingleTapUp(MotionEvent e) {
                 return true;
@@ -94,8 +95,13 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
                 View child = rv.findChildViewUnder(e.getX(), e.getY());
                 if (child != null && gestureDetector.onTouchEvent(e)) {
                     int position = rv.getChildAdapterPosition(child);
+                    dataManager.getDataBusInfo().setStId(arrayList.get(position).getStId());
                     dataManager.getDataBusInfo().setBusRouteId(arrayList.get(position).getBusRouteId());
                     dataManager.getDataBusInfo().setRtNm(arrayList.get(position).getRtNm());
+                    dataManager.getDataBusInfo().setArrmsg1(arrayList.get(position).getArrmsg1());
+                    dataManager.getDataBusInfo().setArrmsg2(arrayList.get(position).getArrmsg2());
+                    dataManager.getDataBusInfo().setStationNm1(arrayList.get(position).getStationNm1());
+                    dataManager.getDataBusInfo().setStationNm2(arrayList.get(position).getStationNm2());
                     setResult(RESULT_OK);
                     finish();
                 }
@@ -111,8 +117,7 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
             public void onRequestDisallowInterceptTouchEvent(boolean disallowIntercept) {
 
             }
-        });
-
+        });*/
 
 
     }
@@ -148,9 +153,32 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
 
         @Override
         public void onBindViewHolder(ActivityTransportationBusInfo.ItemAdapter.ViewHolder holder, final int position) {
-            DataBusInfo item = items.get(position);
+            final DataBusInfo item = items.get(position);
 
             holder.txtName.setText(item.getRtNm());
+
+            String info1, info2;
+
+            info1 = "이번 버스 : " + item.getArrmsg1() + "(" + item.getStationNm1() + ")";
+            info2 = "다음 버스 : " + item.getArrmsg2() + "(" + item.getStationNm2() + ")";
+
+            holder.linearLayout.setOnClickListener(new View.OnClickListener() {
+                @Override
+                public void onClick(View v) {
+                    dataManager.getDataBusInfo().setStId(item.getStId());
+                    dataManager.getDataBusInfo().setBusRouteId(item.getBusRouteId());
+                    dataManager.getDataBusInfo().setRtNm(item.getRtNm());
+                    dataManager.getDataBusInfo().setArrmsg1(item.getArrmsg1());
+                    dataManager.getDataBusInfo().setArrmsg2(item.getArrmsg2());
+                    dataManager.getDataBusInfo().setStationNm1(item.getStationNm1());
+                    dataManager.getDataBusInfo().setStationNm2(item.getStationNm2());
+                    setResult(RESULT_OK);
+                    finish();
+                }
+            });
+
+            holder.txtInfo1.setText(info1);
+            holder.txtInfo2.setText(info2);
         }
 
         @Override
@@ -159,10 +187,15 @@ public class ActivityTransportationBusInfo extends AppCompatActivity {
         }
 
         public class ViewHolder extends RecyclerView.ViewHolder {
-            TextView txtName;
+            TextView txtName, txtInfo1, txtInfo2;
+            LinearLayout linearLayout;
+
             public ViewHolder(View itemView) {
                 super(itemView);
-                txtName = (TextView)itemView.findViewById(R.id.item_businfo_contents_txt_name);
+                linearLayout = (LinearLayout) itemView.findViewById(R.id.item_bus_station_contents_linear_container);
+                txtName = (TextView) itemView.findViewById(R.id.item_businfo_contents_txt_name);
+                txtInfo1 = (TextView) itemView.findViewById(R.id.item_businfo_contents_txt_arrival);
+                txtInfo2 = (TextView) itemView.findViewById(R.id.item_businfo_contents_txt_arrival2);
             }
         }
     }

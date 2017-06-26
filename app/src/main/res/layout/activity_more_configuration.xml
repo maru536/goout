@@ -51,8 +51,6 @@
                         <RelativeLayout
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
-                            android:layout_marginRight="10dp"
-                            android:layout_marginLeft="10dp"
                             android:orientation="horizontal">
 
                             <TextView
@@ -66,7 +64,6 @@
                                 android:layout_alignBaseline="@id/activity_more_config_txt_value"
                                 android:layout_toRightOf="@id/activity_more_config_txt_value"
                                 android:id="@+id/activity_more_config_txt_unit"
-                                android:layout_marginLeft="5dp"
                                 android:text="C"/>
 
 
@@ -75,7 +72,7 @@
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
                             android:layout_gravity="center"
-                            android:text="보다 "/>
+                            android:text=" 보다 "/>
                         <TextView
                             android:layout_width="wrap_content"
                             android:layout_height="wrap_content"
@@ -204,6 +201,7 @@
                 android:layout_height="wrap_content"
                 android:layout_centerVertical="true"
                 android:layout_alignParentRight="true"
+                android:id="@+id/activity_more_config_chk_voice"
                 android:layout_marginRight="10dp"/>
 
         </RelativeLayout>

@@ -49,7 +49,7 @@ public class DataManager {
 
     private DataManager() {
         dataWeather = new DataWeather();
-        dataBusInfo = new DataBusInfo(0,"");
+        dataBusInfo = new DataBusInfo("",0,"","","","","");
         selectedLEDs[0] = TYPE_NONE;
         selectedLEDs[1] = TYPE_NONE;
         selectedLEDs[2] = TYPE_NONE;

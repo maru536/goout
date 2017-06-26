@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
 
     private LinearLayout drawerMenu[] = new LinearLayout[4];
     private DataManager dataManager = DataManager.getInstance();
-    private HttpResponseDataUpdateListener weatherListener, weatherDustListener;
+    private HttpResponseDataUpdateListener weatherListener, weatherDustListener, transportaitionBusListener;
 
     //private RelativeLayout contentWeather, contentTransportation, contentMemo;
     //private TextView txtGuide, txtMemoContent;
@@ -168,27 +168,51 @@ public class MainActivity extends AppCompatActivity
             }
         };
 
+        transportaitionBusListener = new HttpResponseDataUpdateListener() {
+            @Override
+            public void doUpdate(String res) {
+                try {
+                    Log.e("bus info res", res);
+                    JSONObject json = new JSONObject(res);
+                    JSONObject jsonServiceResult = json.getJSONObject("ServiceResult");
+                    JSONObject jsonMsgBody = jsonServiceResult.getJSONObject("msgBody");
+                    JSONArray jsonItemList = jsonMsgBody.getJSONArray("itemList");
+
+                    for (int i = 0; i < jsonItemList.length(); i++) {
+                        JSONObject jsonObject = jsonItemList.getJSONObject(i);
+                        if(dataManager.getDataBusInfo().getBusRouteId() == jsonObject.getInt("busRouteId")){
+                            DataBusInfo dataBusInfo = new DataBusInfo(jsonObject.getString("stId"),jsonObject.getInt("busRouteId"), jsonObject.getString("rtNm"), jsonObject.getString("arrmsg1"), jsonObject.getString("arrmsg2"), jsonObject.getString("stationNm1"), jsonObject.getString("stationNm2"));
+                            dataManager.getDataBusInfo().setStId(jsonObject.getString("stId"));
+                            dataManager.getDataBusInfo().setRtNm(jsonObject.getString("rtNm"));
+                            dataManager.getDataBusInfo().setBusRouteId(jsonObject.getInt("busRouteId"));
+                            dataManager.getDataBusInfo().setArrmsg1(jsonObject.getString("arrmsg1"));
+                            dataManager.getDataBusInfo().setArrmsg2(jsonObject.getString("arrmsg2"));
+                            dataManager.getDataBusInfo().setStationNm1(jsonObject.getString("stationNm1"));
+                            dataManager.getDataBusInfo().setStationNm2(jsonObject.getString("stationNm2"));
+                        }
+                    }
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+                adapter.notifyDataSetChanged();
+            }
+        };
+
         FloatingActionButton fab = (FloatingActionButton) findViewById(R.id.fab);
         fab.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View view) {
-                AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER, "");
-                asyncTaskHttpCommunicator.setListener(weatherListener);
-                asyncTaskHttpCommunicator.execute();
-                AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
-                asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
-                asyncTaskHttpCommunicatorDust.execute();
+                requestWeatherInfo();
+                requestDustInfo();
+                requestBusInfo();
             }
         });
 
         txtGuide = (TextView) findViewById(R.id.activity_main_txt);
 
-        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER, "");
-        asyncTaskHttpCommunicator.setListener(weatherListener);
-        asyncTaskHttpCommunicator.execute();
-        AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
-        asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
-        asyncTaskHttpCommunicatorDust.execute();
+        requestWeatherInfo();
+        requestDustInfo();
+        requestBusInfo();
 
         changeContentsState();
 
@@ -213,12 +237,9 @@ public class MainActivity extends AppCompatActivity
     @Override
     protected void onResume() {
         super.onResume();
-        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER, "");
-        asyncTaskHttpCommunicator.setListener(weatherListener);
-        asyncTaskHttpCommunicator.execute();
-        AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
-        asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
-        asyncTaskHttpCommunicatorDust.execute();
+        requestWeatherInfo();
+        requestDustInfo();
+        requestBusInfo();
     }
 
     @Override
@@ -313,6 +334,7 @@ public class MainActivity extends AppCompatActivity
                 holder.txtContents.setText(item.getContents());
                 holder.icon.setImageResource(R.drawable.ic_umbrella);
             } else if (item.getContentsType() == dataManager.TYPE_TRANSPORTATION_BUS) {
+                holder.icon.setImageResource(R.drawable.ic_directions_bus_black_24dp);
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
             } else if (item.getContentsType() == dataManager.TYPE_TRANSPORTATION_SUBWAY) {
@@ -395,6 +417,26 @@ public class MainActivity extends AppCompatActivity
 
         } else {
             return true;
+        }
+    }
+
+    void requestWeatherInfo() {
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER, "");
+        asyncTaskHttpCommunicator.setListener(weatherListener);
+        asyncTaskHttpCommunicator.execute();
+    }
+
+    void requestDustInfo() {
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
+        asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
+        asyncTaskHttpCommunicatorDust.execute();
+    }
+
+    void requestBusInfo() {
+        if (!dataManager.getDataBusInfo().getStId().equals("") && dataManager.getDataBusInfo().getBusRouteId() != 0 ) {
+            AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_TRANSPORTATION_BUS_LIST, dataManager.getDataBusInfo().getStId());
+            asyncTaskHttpCommunicator.setListener(transportaitionBusListener);
+            asyncTaskHttpCommunicator.execute();
         }
     }
 }

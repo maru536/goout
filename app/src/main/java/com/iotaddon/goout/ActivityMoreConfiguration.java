@@ -9,6 +9,7 @@ import android.os.Bundle;
 import android.util.Log;
 import android.view.MenuItem;
 import android.view.View;
+import android.widget.CheckBox;
 import android.widget.CompoundButton;
 import android.widget.ImageView;
 import android.widget.LinearLayout;
@@ -23,6 +24,7 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
     private TextView txtValue, txtUnit;
     private LinearLayout containerSky, containerOther;
     private RadioButton radioSunny, radioBlue, radioRain;
+    private CheckBox checkBox;
     private int type;
     private DataManager dataManager = DataManager.getInstance();
     private boolean isHigher;
@@ -47,6 +49,8 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
         imgArrow = (TextView)findViewById(R.id.activity_more_config_arrow);
         txtUnit = (TextView)findViewById(R.id.activity_more_config_txt_unit);
         txtValue = (TextView)findViewById(R.id.activity_more_config_txt_value);
+
+        checkBox = (CheckBox)findViewById(R.id.activity_more_config_chk_voice);
 
         Intent intent = getIntent();
         type = intent.getIntExtra("INFO_TYPE",0);
@@ -84,7 +88,7 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
             @Override
             public void onClick(View v) {
                 isHigher = !isHigher;
-                setWarningValue(type, warningValue, isHigher);
+                setWarningValue(type, warningValue, isHigher, checkBox.isChecked());
                 setArrowImage(isHigher);
             }
         });
@@ -117,6 +121,8 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                         txtValue.setText((int)warningValue+"");
                         break;
                     case DataManager.TYPE_TRANSPORTATION_BUS:
+                        warningValue = progress;
+                        txtValue.setText(progress+"");
                         break;
                     case DataManager.TYPE_TRANSPORTATION_SUBWAY:
                         break;
@@ -130,7 +136,14 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
 
             @Override
             public void onStopTrackingTouch(SeekBar seekBar) {
-                setWarningValue(type, warningValue, isHigher);
+                setWarningValue(type, warningValue, isHigher, checkBox.isChecked());
+            }
+        });
+
+        checkBox.setOnCheckedChangeListener(new CompoundButton.OnCheckedChangeListener() {
+            @Override
+            public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
+                setWarningValue(type, warningValue, isHigher, isChecked);
             }
         });
 
@@ -215,6 +228,12 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 setArrowImage(isHigher);
                 break;
             case DataManager.TYPE_TRANSPORTATION_BUS:
+                seekBar.setMax((dataManager.getDataBusInfo().MAX_VALUE_TRANSPORTATION_BUS));
+                txtUnit.setText(dataManager.getDataBusInfo().UNIT_TRANSPORTATION_BUS);
+                seekBar.setProgress(dataManager.getDataBusInfo().getWarningValue());
+                txtValue.setText(dataManager.getDataBusInfo().getWarningValue()+"");
+                isHigher = dataManager.getDataBusInfo().isHigher();
+                setArrowImage(isHigher);
                 break;
             case DataManager.TYPE_TRANSPORTATION_SUBWAY:
                 break;
@@ -239,30 +258,40 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
         return value - 100;
     }
 
-    private void setWarningValue(int type, double value, boolean isHigher){
+    private void setWarningValue(int type, double value, boolean isHigher, boolean isChecked){
         DataWeather dataWeather = dataManager.getDataWeather();
         switch(type){
             case DataManager.TYPE_WEATHER_HUMIDITY:
                 dataWeather.getDataWeatherHumidity().setWarningValue((int)value);
                 dataWeather.getDataWeatherHumidity().setHigher(isHigher);
+                dataWeather.getDataWeatherHumidity().setSelectVoice(isChecked);
+
                 break;
             case DataManager.TYPE_WEATHER_PRECIPITATION:
                 dataWeather.getDataWeatherPrecipitation().setWarningValue(value);
                 dataWeather.getDataWeatherPrecipitation().setHigher(isHigher);
+                dataWeather.getDataWeatherPrecipitation().setSelectVoice(isChecked);
                 break;
             case DataManager.TYPE_WEATHER_WIND:
                 dataWeather.getDataWeatherWind().setWarningValue(value);
                 dataWeather.getDataWeatherWind().setHigher(isHigher);
+                dataWeather.getDataWeatherWind().setSelectVoice(isChecked);
                 break;
             case DataManager.TYPE_WEATHER_DUST:
                 dataWeather.getDataWeatherDust().setWarningValue((int)value);
                 dataWeather.getDataWeatherDust().setHigher(isHigher);
+                dataWeather.getDataWeatherDust().setSelectVoice(isChecked);
+
                 break;
             case DataManager.TYPE_WEATHER_TEMP:
                 dataWeather.getDataWeatherTemperature().setWarningValue((int)value);
                 dataWeather.getDataWeatherTemperature().setHigher(isHigher);
+                dataWeather.getDataWeatherTemperature().setSelectVoice(isChecked);
                 break;
             case DataManager.TYPE_TRANSPORTATION_BUS:
+                dataManager.getDataBusInfo().setWarningValue((int)value);
+                dataManager.getDataBusInfo().setHigher(isHigher);
+                dataManager.getDataBusInfo().setSelectVoice(isChecked);
                 break;
             case DataManager.TYPE_TRANSPORTATION_SUBWAY:
                 break;
