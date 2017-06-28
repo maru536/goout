@@ -325,7 +325,7 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
                             @Override
                             public void run() {
                                 Log.d(TAG, "recv message: "+recvMessage);
-                                //mServerComm.regist(deviceID, recvMessage);
+                                mServerComm.regist(deviceID, recvMessage);
                             }
                         });
                     }

@@ -32,16 +32,17 @@ void sendHttpMacResponse(WiFiClient client);
 
 void setup()
 {
+  Serial.println("Start");
   Serial.begin(115200);
   Serial3.begin(115200);
 
   Serial.print("WL_CONNECTED : ");
   Serial.println(WL_CONNECTED);
 
-  APServerStart();
-  //strcpy(clientSsid, "U+Net81F3");
-  //strcpy(clientPwd, "4000005619");
-  //clientStart();
+  //APServerStart();
+  strcpy(clientSsid, "U+Net81F3");
+  strcpy(clientPwd, "4000005619");
+  clientStart();
 }
 
 void loop()
@@ -177,8 +178,8 @@ void clientStart() {
     Serial.println();
     Serial.println("Starting connection to server...");
     
-    //requestDust(126.9658, 37.5714);
-    requestSpeech(String("오늘 날씨는 맑음 미세먼지 보통입니다 버스 도착까지 10분전입니다"), String("ko-kr"));
+    requestDust(126.9658, 37.5714);
+    //requestSpeech(String("오늘 날씨는 맑음 미세먼지 보통입니다 버스 도착까지 10분전입니다"), String("ko-kr"));
 }
 
 void requestDust(double lon, double lat) 

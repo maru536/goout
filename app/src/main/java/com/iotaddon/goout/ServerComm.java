@@ -1,5 +1,9 @@
 package com.iotaddon.goout;
 
+import org.json.JSONObject;
+
+import java.util.HashMap;
+
 /**
  * Created by maru5 on 2017-05-20.
  */
@@ -28,13 +32,13 @@ public class ServerComm {
     public void regist(String deviceID, String macAddr) {
         mHttpProtocol.apGet(mApAddress);
 
-        /*HashMap id = new HashMap();
+        HashMap id = new HashMap();
 
         id.put("deviceId", deviceID);
         id.put("id", macAddr);
 
         JSONObject body = new JSONObject(id);
-        mHttpProtocol.post("/signup", body);*/
+        mHttpProtocol.post("/signup", body);
     }
 
     /*public static JSONObject memo(String deviceID, String content) {
