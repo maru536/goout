@@ -25,7 +25,7 @@
 #define MAX_RESPONSE_SIZE (512)
 #define SERIAL_PRINT 0
 
-#define IDLE_MODE 100
+//#define IDLE_MODE 100
 #define DETECT_MODE 0
 #define RECEIVE_DATA_MODE 1
 
@@ -56,7 +56,7 @@ boolean triggerTag = false;
 int status = WL_IDLE_STATUS;       // the Wifi radio's status
 char ttsServer[] = "api.voicerss.org";
 int ttsPort = 80;
-char gooutServer[] = "13.124.126.90";
+char gooutServer[] = "52.78.126.50";
 int gooutPort = 8080;
 char length_buf[MAX_NUMBER_SIZE] = "";
 char response_buf[MAX_RESPONSE_SIZE] = "";
@@ -98,7 +98,8 @@ void setup() {
   wifiInit("U+Net81F3", "4000005619");
   
   mode = RECEIVE_DATA_MODE;
-  requestDust(126.9658, 37.5714);
+  requestText();
+  //requestDust(126.9658, 37.5714);
 
   //부팅이 끝나면 웰컴라이트를 킨다
   //welcomeLight();
@@ -106,8 +107,23 @@ void setup() {
 
 void loop() {
   if (Serial.available()) {
-    c = 
+    c = Serial.read();
+
+    switch (c) {
+      case 'D':
+      mode = DETECT_MODE;
+      break;
+
+      case 'R':
+      mode = RECEIVE_DATA_MODE;
+      break;
+
+      case 'I':
+      mode = 2;
+      break;
+    }
   }
+  
   switch (mode) {
     case DETECT_MODE:
     // led를 켜둔 이력이 있다면
@@ -211,11 +227,11 @@ void loop() {
   
       // do nothing forevermore
       //while (true) ;
-      mode = DETECT_MODE;
+      //mode = DETECT_MODE;
     } 
     break;
 
-    case IDLE_MODE:
+    case 2:
 
     break;
   }

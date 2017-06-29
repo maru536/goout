@@ -64,3 +64,24 @@ bool requestInfo() {
     return false;
   }
 }
+
+bool requestText() {
+  Serial.println(WiFi.macAddress());
+  if (client.connect(gooutServer, gooutPort)) {
+    requestStart = millis();
+    Serial.println("Connected to Goout Server");
+    // Make a HTTP request
+
+    client.print("GET /sentence?deviceId=");
+    //client.print(WiFi.macAddress());
+    client.print("ggg");
+    client.println(" HTTP/1.1");
+    client.println("Content-Type: text/html; charset=utf-8");
+    client.println("Connection: close");
+    client.println();
+    return true;
+  }
+  else {
+    return false;
+  }
+}
