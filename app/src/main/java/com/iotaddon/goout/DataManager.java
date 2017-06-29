@@ -41,7 +41,7 @@ public class DataManager {
     private int selectedLEDs[] = new int[3];
     private boolean selectedTransportation[] = new boolean[2];
     private String savedMemo = "";
-    private DataUserAddress userAddress= new DataUserAddress(0,0,"");
+    private DataUserAddress userAddress = new DataUserAddress(0, 0, "");
     private boolean outAlarm = false;
     private DataWeather dataWeather;
     private DataBusInfo dataBusInfo;
@@ -49,7 +49,7 @@ public class DataManager {
 
     private DataManager() {
         dataWeather = new DataWeather();
-        dataBusInfo = new DataBusInfo("",0,"","","","","");
+        dataBusInfo = new DataBusInfo("", 0, "", "", "", "", "");
         selectedLEDs[0] = TYPE_NONE;
         selectedLEDs[1] = TYPE_NONE;
         selectedLEDs[2] = TYPE_NONE;
@@ -67,11 +67,11 @@ public class DataManager {
         return dataBusInfo;
     }
 
-    public void setSelectedLed(int led, int type){
+    public void setSelectedLed(int led, int type) {
         selectedLEDs[led] = type;
     }
 
-    public int getSelectedLed(int led){
+    public int getSelectedLed(int led) {
         return selectedLEDs[led];
     }
 
@@ -79,17 +79,18 @@ public class DataManager {
         return dataWeather;
     }
 
-    public void setUserAddress(double latitude, double longitude, String name){
+    public void setUserAddress(double latitude, double longitude, String name) {
         userAddress.setLatitude(latitude);
         userAddress.setLongitude(longitude);
         userAddress.setName(name);
+
     }
 
-    public void setSelectedTransportation(int type, boolean selected){
+    public void setSelectedTransportation(int type, boolean selected) {
         this.selectedTransportation[type] = selected;
     }
 
-    public boolean getSelectedTransportation(int type){
+    public boolean getSelectedTransportation(int type) {
         return this.selectedTransportation[type];
     }
 
@@ -97,11 +98,11 @@ public class DataManager {
         return userAddress;
     }
 
-    public void setSelectedWeather(int idx, boolean value){
+    public void setSelectedWeather(int idx, boolean value) {
         selectedWeather[idx] = value;
     }
 
-    public boolean getSelectedWeather(int idx){
+    public boolean getSelectedWeather(int idx) {
         return selectedWeather[idx];
     }
 

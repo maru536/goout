@@ -32,6 +32,7 @@ public class DataWeatherDust {
 
     public double getValue() {
         return value;
+
     }
 
     public void setValue(double value) {
@@ -48,6 +49,7 @@ public class DataWeatherDust {
 
     public boolean isSelectVoice() {
         return selectVoice;
+
     }
 
     public void setSelectVoice(boolean selectVoice) {

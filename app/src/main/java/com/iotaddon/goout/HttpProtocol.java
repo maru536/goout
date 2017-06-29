@@ -18,8 +18,13 @@ import okhttp3.Response;
  */
 
 public class HttpProtocol {
-    private static final String mServerAddress = "http://13.124.126.90:8080";
+    private static final String mServerAddress = "http://52.78.126.50:8080";
     private String mResponse;
+    private HttpResponseDataUpdateListener listener;
+
+    public void setListener(HttpResponseDataUpdateListener listener) {
+        this.listener = listener;
+    }
 
     public void post(String url, JSONObject body) {
         OkHttpClient client = new OkHttpClient();
@@ -82,6 +87,8 @@ public class HttpProtocol {
                     Log.d("KimDC", mResponse);
                     //mResponse = response.body().string();
                     //응답 왔을때 처리
+                    if(listener!=null)
+                        listener.doUpdate(mResponse);
                 }
             }
         });
@@ -117,6 +124,8 @@ public class HttpProtocol {
                     mResponse = response.body().string();
                     Log.d("KimDC", mResponse);
                     //응답 왔을때 처리
+                    if(listener!=null)
+                        listener.doUpdate(mResponse);
                 }
             }
         });

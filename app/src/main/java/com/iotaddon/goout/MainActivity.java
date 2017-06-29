@@ -41,7 +41,7 @@ public class MainActivity extends AppCompatActivity
 
     private LinearLayout drawerMenu[] = new LinearLayout[4];
     private DataManager dataManager = DataManager.getInstance();
-    private HttpResponseDataUpdateListener weatherListener, weatherDustListener, transportaitionBusListener;
+    private HttpResponseDataUpdateListener weatherListener, weatherDustListener, transportaitionBusListener, userGetConfigListener;
 
     //private RelativeLayout contentWeather, contentTransportation, contentMemo;
     //private TextView txtGuide, txtMemoContent;
@@ -63,7 +63,8 @@ public class MainActivity extends AppCompatActivity
         chkGpsService();
 
         FirebaseMessaging.getInstance().subscribeToTopic("out_alarm");
-        FirebaseInstanceId.getInstance().getToken();
+        dataManager.setFcmToken(FirebaseInstanceId.getInstance().getToken());
+
 
         recyclerView = (RecyclerView) findViewById(R.id.activity_main_recycleview);
         //recyclerView.setHasFixedSize(true);
@@ -72,6 +73,57 @@ public class MainActivity extends AppCompatActivity
         arrayList = new ArrayList<>();
         adapter = new MainActivity.ItemAdapter(arrayList, this);
         recyclerView.setAdapter(adapter);
+
+
+        userGetConfigListener = new HttpResponseDataUpdateListener() {
+            @Override
+            public void doUpdate(String res) {
+                DataManager dm = DataManager.getInstance();
+                DataWeather dw = dm.getDataWeather();
+
+                Log.e("config res##########", res);
+
+                try {
+                    JSONObject json = new JSONObject(res);
+
+                    dm.setFcmToken(json.getString("deviceId"));
+                    dw.getDataWeatherTemperature().setWarningValue(Integer.parseInt(json.getString("tempLimit")));
+                    dw.getDataWeatherHumidity().setWarningValue(Integer.parseInt(json.getString("humidityLimit")));
+                    dw.getDataWeatherDust().setWarningValue(Integer.parseInt(json.getString("dustLimit")));
+                    dm.getDataBusInfo().setWarningValue(Integer.parseInt(json.getString("transportLimit")));
+                    dm.setSavedMemo(json.getString("memo"));
+                    dm.setSelectedWeather(dm.TYPE_WEATHER_SKY, json.getBoolean("isEnableSkyInfo"));
+                    dm.setSelectedWeather(dm.TYPE_WEATHER_HUMIDITY, json.getBoolean("isEnableHumidityInfo"));
+                    dm.setSelectedWeather(dm.TYPE_WEATHER_TEMP, json.getBoolean("isEnableTempInfo"));
+                    dm.setSelectedWeather(dm.TYPE_WEATHER_DUST, json.getBoolean("isEnableDustInfo"));
+                    dm.setSelectedTransportation(dm.TYPE_TRANSPORTATION_BUS_SELECTED,json.getBoolean("isEnableBusInfo"));
+
+                    dm.setSelectedLed(DataManager.TYPE_LED_1, json.getInt("firstLEDInfo"));
+                    dm.setSelectedLed(DataManager.TYPE_LED_2, json.getInt("secondLEDInfo"));
+                    dm.setSelectedLed(DataManager.TYPE_LED_3, json.getInt("thirdLEDInfo"));
+                    dm.getUserAddress().setLatitude(Double.parseDouble(json.getString("latitude")));
+                    dm.getUserAddress().setLongitude(Double.parseDouble(json.getString("longitude")));
+                    dm.getUserAddress().setName(json.getString("name"));
+                    dm.setOutAlarm(json.getBoolean("alarm"));
+                    dm.getDataBusInfo().setBusRouteId(json.getInt("busRouteId"));
+                    dm.getDataBusInfo().setStId(json.getString("stId"));
+                    dm.getDataBusInfo().setRtNm(json.getString("rtNm"));
+                    dw.getDataWeatherTemperature().setHigher(json.getBoolean("isHigher_Temp"));
+                    dw.getDataWeatherHumidity().setHigher(json.getBoolean("isHigher_Humidity"));
+                    dm.getDataBusInfo().setHigher(json.getBoolean("isHigher_transportLimit"));
+
+                } catch (JSONException e) {
+                    e.printStackTrace();
+                }
+
+                requestWeatherInfo();
+                requestDustInfo();
+                requestBusInfo();
+
+            }
+        };
+
+        requestGetConfig();
 
         weatherListener = new HttpResponseDataUpdateListener() {
             @Override
@@ -180,8 +232,8 @@ public class MainActivity extends AppCompatActivity
 
                     for (int i = 0; i < jsonItemList.length(); i++) {
                         JSONObject jsonObject = jsonItemList.getJSONObject(i);
-                        if(dataManager.getDataBusInfo().getBusRouteId() == jsonObject.getInt("busRouteId")){
-                            DataBusInfo dataBusInfo = new DataBusInfo(jsonObject.getString("stId"),jsonObject.getInt("busRouteId"), jsonObject.getString("rtNm"), jsonObject.getString("arrmsg1"), jsonObject.getString("arrmsg2"), jsonObject.getString("stationNm1"), jsonObject.getString("stationNm2"));
+                        if (dataManager.getDataBusInfo().getBusRouteId() == jsonObject.getInt("busRouteId")) {
+                            DataBusInfo dataBusInfo = new DataBusInfo(jsonObject.getString("stId"), jsonObject.getInt("busRouteId"), jsonObject.getString("rtNm"), jsonObject.getString("arrmsg1"), jsonObject.getString("arrmsg2"), jsonObject.getString("stationNm1"), jsonObject.getString("stationNm2"));
                             dataManager.getDataBusInfo().setStId(jsonObject.getString("stId"));
                             dataManager.getDataBusInfo().setRtNm(jsonObject.getString("rtNm"));
                             dataManager.getDataBusInfo().setBusRouteId(jsonObject.getInt("busRouteId"));
@@ -209,10 +261,6 @@ public class MainActivity extends AppCompatActivity
         });
 
         txtGuide = (TextView) findViewById(R.id.activity_main_txt);
-
-        requestWeatherInfo();
-        requestDustInfo();
-        requestBusInfo();
 
         changeContentsState();
 
@@ -310,6 +358,7 @@ public class MainActivity extends AppCompatActivity
             holder.icon.setImageResource(R.mipmap.ic_launcher);
             SelectWeatherIcon.setWarningBorder(holder.container, item.getContentsType(), context);
             if (item.getContentsType() == dataManager.TYPE_WEATHER_HUMIDITY) {
+                holder.icon.setImageResource(R.drawable.humidity);
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_WIND) {
@@ -319,6 +368,8 @@ public class MainActivity extends AppCompatActivity
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_DUST) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
+                if (dataManager.getDataWeather().getDataWeatherDust().getValue() > 0)
+                    SelectWeatherIcon.setWeatherDustIcon(holder.icon, dataManager.getDataWeather().getDataWeatherDust().getGrade(), context);
             } else if (item.getContentsType() == dataManager.TYPE_WEATHER_TEMP) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
@@ -334,7 +385,7 @@ public class MainActivity extends AppCompatActivity
                 holder.txtContents.setText(item.getContents());
                 holder.icon.setImageResource(R.drawable.ic_umbrella);
             } else if (item.getContentsType() == dataManager.TYPE_TRANSPORTATION_BUS) {
-                holder.icon.setImageResource(R.drawable.ic_directions_bus_black_24dp);
+                holder.icon.setImageResource(R.drawable.bus_ic);
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
             } else if (item.getContentsType() == dataManager.TYPE_TRANSPORTATION_SUBWAY) {
@@ -343,7 +394,7 @@ public class MainActivity extends AppCompatActivity
             } else if (item.getContentsType() == dataManager.TYPE_MEMO) {
                 holder.txtTitle.setText(item.getTitle());
                 holder.txtContents.setText(item.getContents());
-                holder.icon.setImageResource(R.drawable.ic_note);
+                holder.icon.setImageResource(R.drawable.memo_ic);
                 holder.more.setVisibility(View.GONE);
             }
 
@@ -426,6 +477,12 @@ public class MainActivity extends AppCompatActivity
         asyncTaskHttpCommunicator.execute();
     }
 
+    void requestGetConfig() {
+        AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorConfig = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_USER_GET_CONFIG, dataManager.getFcmToken());
+        asyncTaskHttpCommunicatorConfig.setListener(userGetConfigListener);
+        asyncTaskHttpCommunicatorConfig.execute();
+    }
+
     void requestDustInfo() {
         AsyncTaskHttpCommunicator asyncTaskHttpCommunicatorDust = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_WEATHER_DUST, "");
         asyncTaskHttpCommunicatorDust.setListener(weatherDustListener);
@@ -433,7 +490,7 @@ public class MainActivity extends AppCompatActivity
     }
 
     void requestBusInfo() {
-        if (!dataManager.getDataBusInfo().getStId().equals("") && dataManager.getDataBusInfo().getBusRouteId() != 0 ) {
+        if (!dataManager.getDataBusInfo().getStId().equals("") && dataManager.getDataBusInfo().getBusRouteId() != 0) {
             AsyncTaskHttpCommunicator asyncTaskHttpCommunicator = new AsyncTaskHttpCommunicator(AsyncTaskHttpCommunicator.HTTP_URL_TRANSPORTATION_BUS_LIST, dataManager.getDataBusInfo().getStId());
             asyncTaskHttpCommunicator.setListener(transportaitionBusListener);
             asyncTaskHttpCommunicator.execute();

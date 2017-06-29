@@ -82,6 +82,8 @@ public class ActivityMemo extends AppCompatActivity implements View.OnClickListe
                     }else{
                         Toast.makeText(this, "메모 정보가 등록되었습니다.", Toast.LENGTH_SHORT).show();
                     }
+                    AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+                    asyncTaskHttpSetConfigCommunicator.execute();
                     finish();
                 } else {
                     Toast.makeText(this, "등록할 수 있는 문자를 초과했습니다. 내용을 수정해주세요.", Toast.LENGTH_SHORT).show();

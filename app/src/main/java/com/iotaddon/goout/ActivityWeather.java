@@ -109,6 +109,8 @@ public class ActivityWeather extends AppCompatActivity implements CompoundButton
                     break;
 
             }
+            AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+            asyncTaskHttpSetConfigCommunicator.execute();
         }
     }
 }

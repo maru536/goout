@@ -57,6 +57,8 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
             @Override
             public void onCheckedChanged(CompoundButton buttonView, boolean isChecked) {
                 dataManager.setOutAlarm(isChecked);
+                AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+                asyncTaskHttpSetConfigCommunicator.execute();
             }
         });
 
@@ -144,6 +146,8 @@ public class ActivityDeviceSettings extends AppCompatActivity implements View.On
                 txtPlace.setText(place.getName());
                 txtPlace.setVisibility(View.VISIBLE);
                 dataManager.setUserAddress(place.getLatLng().latitude,place.getLatLng().longitude,place.getName().toString());
+                AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+                asyncTaskHttpSetConfigCommunicator.execute();
             }
         }
     }

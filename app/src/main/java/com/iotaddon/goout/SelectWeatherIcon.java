@@ -91,6 +91,18 @@ public class SelectWeatherIcon {
         }
     }
 
+    public static void setWeatherDustIcon(ImageView imageView, String code, Context context){
+        if(code.equals("좋음")){
+            imageView.setImageDrawable(context.getDrawable(R.drawable.dust100));
+        }else if(code.equals("보통")){
+            imageView.setImageDrawable(context.getDrawable(R.drawable.dust75));
+        }else if(code.equals("나쁨")){
+            imageView.setImageDrawable(context.getDrawable(R.drawable.dust50));
+        }else if(code.equals("매우나쁨")){
+            imageView.setImageDrawable(context.getDrawable(R.drawable.dust0));
+        }
+    }
+
     public static boolean isDay(){
         Date date = new Date(System.currentTimeMillis());
         Calendar calendar = Calendar.getInstance();

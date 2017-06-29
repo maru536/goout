@@ -170,10 +170,14 @@ public class FragmentSearchBusStation extends Fragment {
         if(requestCode == 0) {
             if (resultCode == getActivity().RESULT_OK) {
                 dataManager.setSelectedTransportation(dataManager.TYPE_TRANSPORTATION_BUS_SELECTED, true);
+                AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+                asyncTaskHttpSetConfigCommunicator.execute();
                 getActivity().setResult(getActivity().RESULT_OK);
                 getActivity().finish();
             } else {
                 dataManager.setSelectedTransportation(dataManager.TYPE_TRANSPORTATION_BUS_SELECTED, false);
+                AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+                asyncTaskHttpSetConfigCommunicator.execute();
             }
         }
     }

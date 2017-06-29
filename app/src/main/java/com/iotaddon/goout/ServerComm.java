@@ -13,6 +13,10 @@ public class ServerComm {
         mHttpProtocol = new HttpProtocol();
     }
 
+    public void setListener(HttpResponseDataUpdateListener listener){
+        mHttpProtocol.setListener(listener);
+    }
+
     public static ServerComm getInstance() {
         if (mUniqueInstance == null) {
             synchronized (ServerComm.class) {
@@ -51,10 +55,15 @@ public class ServerComm {
         mHttpProtocol.get("/weather?lon="+longitude+"&lat="+latitude);
     }
 
+
+
     public void dust(double longitude, double latitude) {
         mHttpProtocol.get("/dust?lon="+longitude+"&lat="+latitude);
     }
 
+    public void getConfig(String deviceId) {
+        mHttpProtocol.get("/getconfig?deviceId="+deviceId);
+    }
     /*public static JSONObject traffic(double src_latitude, double src_longitude, double dst_latitude, double dst_longitude) {
         HashMap biPosition = new HashMap();
 
