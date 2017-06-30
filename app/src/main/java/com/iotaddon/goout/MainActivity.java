@@ -89,6 +89,7 @@ public class MainActivity extends AppCompatActivity
                     dm.setFcmToken(json.getString("deviceId"));
                     dw.getDataWeatherTemperature().setWarningValue(Integer.parseInt(json.getString("tempLimit")));
                     dw.getDataWeatherHumidity().setWarningValue(Integer.parseInt(json.getString("humidityLimit")));
+                    //dw.getDataWeatherSky().setWarningValue(Integer.parseInt(json.getString("skyLimit")));
                     dw.getDataWeatherDust().setWarningValue(Integer.parseInt(json.getString("dustLimit")));
                     dm.getDataBusInfo().setWarningValue(Integer.parseInt(json.getString("transportLimit")));
                     dm.setSavedMemo(json.getString("memo"));
