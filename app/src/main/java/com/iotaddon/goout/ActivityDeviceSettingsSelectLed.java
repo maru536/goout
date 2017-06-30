@@ -120,6 +120,8 @@ public class ActivityDeviceSettingsSelectLed extends AppCompatActivity implement
         }
 
         DataManager.getInstance().setSelectedLed(led,res);
+        AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+        asyncTaskHttpSetConfigCommunicator.execute();
     }
 
     @Override

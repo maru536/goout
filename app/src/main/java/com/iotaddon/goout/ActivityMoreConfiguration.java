@@ -182,6 +182,8 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 dataWeather.getDataWeatherSky().setWarningValue(dataWeather.getDataWeatherSky().WARNING_SKY_RAIN_SNOW);
                 break;
         }
+        AsyncTaskHttpSetConfigCommunicator asyncTaskHttpSetConfigCommunicator = new AsyncTaskHttpSetConfigCommunicator();
+        asyncTaskHttpSetConfigCommunicator.execute();
     }
 
     private void setSeekBarProperty(int type) {
