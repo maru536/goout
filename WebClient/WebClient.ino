@@ -13,6 +13,12 @@
 #define MAX_NUMBER_SIZE (10)
 #define MAX_MP3_HEADER_SIZE (3)
 
+#define IS_ALNUM(ch) \
+        ( ch >= 'a' && ch <= 'z' ) || \
+        ( ch >= 'A' && ch <= 'Z' ) || \
+        ( ch >= '0' && ch <= '9' ) || \
+        ( ch >= '-' && ch <= '.' ) 
+
 int status = WL_IDLE_STATUS;       // the Wifi radio's status
 char ttsServer[] = "api.voicerss.org";
 int ttsPort = 80;
@@ -39,10 +45,8 @@ void setup()
   Serial.begin(115200);
 
   audioInit();
-  wifiInit("U+Net81F3", "4000005619");
-  Serial.println(WiFi.macAddress());
-
-  //requestDust(126.9658, 37.5714);
+  //wifiInit("U+Net81F3", "4000005619");
+  wifiInit("hotpot", "asdf1234");
   requestTTS("안녕하세요");
 }
 
@@ -113,13 +117,16 @@ void loop()
 }
 
 
-bool requestTTS(String str) {
+bool requestTTS(char* str) {
+  
   if (client.connect(ttsServer, ttsPort)) {
-    String url;
+    char* url;
+    url = url_encode(str);
     Serial.println("Connected to TTS Server");
     // Make a HTTP request
-    //client.println("GET /?key=de834fef8cff4915a795a1192beb0cb1&hl=ko-kr&src=%EC%98%A4%EB%8A%98%20%EB%82%A0%EC%94%A8%EB%8A%94%20%EB%A7%91%EC%9D%8C,%20%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80%20%EB%86%8D%EB%8F%84%EB%8A%94%20%EB%82%98%EC%81%A8,%206411%EB%B2%88%20%EB%B2%84%EC%8A%A4%EB%8A%94%2013%EB%B6%84%20%EB%92%A4%EC%97%90%20%EB%8F%84%EC%B0%A9%ED%95%A9%EB%8B%88%EB%8B%A4.%20%EC%98%AC%EB%95%8C%20%EC%84%A0%EB%AC%BC%20%EC%B1%99%EA%B2%A8%EC%98%A4%EC%84%B8%EC%9A%94.&c=mp3&f=8khz_8bit_mono&r=2 HTTP/1.1");
-    client.println("GET /?key=de834fef8cff4915a795a1192beb0cb1&hl=ko-kr&src=%EB%82%A0%EC%94%A8%EB%8A%94%20%EB%A7%91%EC%9D%8C%20%EB%AF%B8%EC%84%B8%EB%A8%BC%EC%A7%80%EB%8A%94%20%EB%82%98%EC%81%A8%20%EB%B2%84%EC%8A%A4%205%EB%B6%84%EB%92%A4%20%EB%8F%84%EC%B0%A9&c=mp3&f=8khz_8bit_mono&r=2 HTTP/1.1");
+    client.print("GET /?key=de834fef8cff4915a795a1192beb0cb1&hl=ko-kr&src=");
+    client.print(url);
+    client.println("&c=mp3&f=8khz_16bit_mono&r=2 HTTP/1.1");
     client.println("Host: api.voicerss.org");
     client.println("Connection: keep-alive");
     client.println("Upgrade-Insecure-Requests: 1");
@@ -128,12 +135,41 @@ bool requestTTS(String str) {
     client.println("Accept-Encoding: gzip, deflate, sdch");
     client.println("Accept-Language: ko-KR,ko;q=0.8,en-US;q=0.6,en;q=0.4");
     client.println("");
+    free(url);
     return true;
   }
   else {
     Serial.println("Connect Fail!");
     return false;
   }
+  
+}
+
+char* url_encode( const char* str ){
+
+    int i, j = 0, len;
+    
+    char* tmp;
+    
+    len = strlen( str );
+    tmp = (char*) malloc( (sizeof(char) * 3 * len) +1 );
+
+    for( i = 0 ; i < len ; i++ ){
+
+        if( IS_ALNUM( str[i] ) )
+            tmp[j] = str[i];
+
+        else{
+        
+            snprintf( &tmp[j], 4, "%%%02X\n", (unsigned char)str[i] );
+            j += 2;
+
+        }
+        j++;
+        
+    }
+    tmp[j] = 0;
+    return tmp;
 }
 
 bool requestInfo() {

@@ -70,7 +70,8 @@ public class MainActivity extends AppCompatActivity
         btnWeather.setOnClickListener(new View.OnClickListener() {
             @Override
             public void onClick(View v) {
-                mServerComm.weather(126.9658000000, 37.5714000000);
+                //mServerComm.weather(126.9658000000, 37.5714000000);
+                mServerComm.test();
             }
         });
 

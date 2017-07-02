@@ -14,13 +14,17 @@ import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
 
 import org.json.JSONObject;
 
@@ -35,6 +39,7 @@ import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
 import java.util.List;
+
 
 public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity implements View.OnClickListener{
 
@@ -179,6 +184,13 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
 
                     }
                 }
+
+                Toast toast = Toast.makeText(getApplicationContext(),
+                        "화려한 외출 준비 완료", Toast.LENGTH_LONG);
+                toast.setGravity(Gravity.CENTER, 0, 0);
+                toast.show();
+
+                this.finish();
 
                 break;
 

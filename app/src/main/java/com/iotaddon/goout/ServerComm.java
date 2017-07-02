@@ -41,6 +41,10 @@ public class ServerComm {
         mHttpProtocol.post("/signup", body);
     }
 
+    public void test() {
+        mHttpProtocol.get("/getconfig?deviceId=cv2G51AFZzA:APA91bFA5H4hluPPa6Q1O9KxfyhLgbBEi8mlS-Z8o2wmmfMVaGQRJ7o1VqVqKsqSyhTiYBd2FOctSlaKt3FKFySeGKp_W9FagAdRdokGeIUf89iG8OH3m1itFwSKE-ovcc8mulwT5qyJ");
+    }
+
     /*public static JSONObject memo(String deviceID, String content) {
         HashMap id = new HashMap();
 

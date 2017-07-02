@@ -7,6 +7,7 @@ import org.json.JSONObject;
 import java.io.IOException;
 import okhttp3.Call;
 import okhttp3.Callback;
+import okhttp3.Headers;
 import okhttp3.MediaType;
 import okhttp3.OkHttpClient;
 import okhttp3.Request;
@@ -18,7 +19,7 @@ import okhttp3.Response;
  */
 
 public class HttpProtocol {
-    private static final String mServerAddress = "http://13.124.126.90:8080";
+    private static final String mServerAddress = "http://52.78.126.50:8080";
     private String mResponse;
 
     public void post(String url, JSONObject body) {
@@ -59,9 +60,14 @@ public class HttpProtocol {
         Request request = new Request.Builder()
                 .url(mServerAddress + url)
                 .get()
-                .addHeader("cache-control", "no-cache")
-                .addHeader("postman-token", "4d9324a7-0db1-b170-3852-b15b7ea6910a")
+                //.addHeader("cache-control", "no-cache")
+                //.addHeader("postman-token", "4d9324a7-0db1-b170-3852-b15b7ea6910a")
                 .build();
+        Headers headers = request.headers();
+        Log.d("KimDCR", headers.toString());
+        for (int i = 0; i < headers.size(); i++) {
+            Log.d("KimDCR", headers.value(i).toString());
+        }
 
         client.newCall(request).enqueue(new Callback() {
             @Override
