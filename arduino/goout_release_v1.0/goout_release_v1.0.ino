@@ -100,7 +100,7 @@ void setup() {
   /* HDS 셋팅 */
   settingHDS();
   /* 오디오 셋팅 */
-  //audioInit();
+  audioInit();
   /* 모드 셋팅 */
   mode = DETECT_MODE;
   recv_mode = -1;
