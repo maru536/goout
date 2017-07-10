@@ -52,7 +52,7 @@ public class AsyncTaskHttpSetConfigCommunicator extends AsyncTask<Void, Void, Vo
             json.put("ip", "");
             json.put("tempLimit", dm.getDataWeather().getDataWeatherTemperature().getWarningValue() + "");
             json.put("humidityLimit", dm.getDataWeather().getDataWeatherHumidity().getWarningValue() + "");
-            //json.put("skyLimit", dm.getDataWeather().getDataWeatherSky().getWarningValue() + "");
+            json.put("skyLimit", dm.getDataWeather().getDataWeatherSky().getWarningValue());
             json.put("rainLimit", "");
             json.put("dustLimit", dm.getDataWeather().getDataWeatherDust().getWarningValue());
             json.put("transportLimit", dm.getDataBusInfo().getWarningValue());
@@ -77,8 +77,9 @@ public class AsyncTaskHttpSetConfigCommunicator extends AsyncTask<Void, Void, Vo
             json.put("isHigher_Temp", dm.getDataWeather().getDataWeatherTemperature().isHigher());
             json.put("isHigher_Humidity", dm.getDataWeather().getDataWeatherHumidity().isHigher());
             json.put("isHigher_rainLimit", true);
+            json.put("isHigher_dustLimit", dm.getDataWeather().getDataWeatherDust().isHigher());
             json.put("isHigher_transportLimit", dm.getDataBusInfo().isHigher());
-
+            Log.e("json log###", json.toString());
             Log.e("setconfig######", "setconfig####################");
             post(strUrl, json.toString());
         } catch (IOException e) {

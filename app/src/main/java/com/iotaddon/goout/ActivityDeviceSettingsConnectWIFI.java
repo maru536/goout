@@ -1,22 +1,34 @@
 package com.iotaddon.goout;
 
+import android.Manifest;
 import android.app.ProgressDialog;
 import android.content.Context;
 import android.content.Intent;
+import android.content.pm.PackageManager;
 import android.net.wifi.WifiConfiguration;
 import android.net.wifi.WifiManager;
+import android.os.Handler;
+import android.os.Message;
 import android.provider.Settings;
+import android.support.v4.app.ActivityCompat;
+import android.support.v4.content.ContextCompat;
 import android.support.v7.app.ActionBar;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
 import android.util.Log;
+import android.view.Gravity;
 import android.view.MenuItem;
 import android.view.View;
 import android.widget.Button;
 import android.widget.EditText;
+import android.widget.ImageView;
+import android.widget.LinearLayout;
 import android.widget.ProgressBar;
 import android.widget.RelativeLayout.LayoutParams;
 import android.widget.TextView;
+import android.widget.Toast;
+
+import com.google.firebase.iid.FirebaseInstanceId;
 
 import org.json.JSONObject;
 
@@ -26,10 +38,14 @@ import java.io.IOException;
 import java.io.InputStreamReader;
 import java.io.OutputStreamWriter;
 import java.io.PrintWriter;
+import java.net.InetSocketAddress;
 import java.net.Socket;
+import java.net.SocketAddress;
 import java.net.SocketTimeoutException;
 import java.net.UnknownHostException;
 import java.util.HashMap;
+import java.util.List;
+
 
 public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity implements View.OnClickListener{
 
@@ -45,14 +61,91 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
     private boolean isConnected = false;
     private ServerComm mServerComm = ServerComm.getInstance();
     private String deviceID;
+    private int mWifiID = -1;
 
+    private Handler mHandler;
+    private HashMap apInfo;
+
+    private static final int INTERNET_REQUEST_CODE = 101;
+    private static final int ACCESS_NETWORK_STATE_REQUEST_CODE = 102;
+    private static final int CHANGE_WIFI_STATE_REQUEST_CODE = 103;
+    private static final int ACCESS_WIFI_STATE_REQUEST_CODE = 104;
+    private static final int READ_PHONE_STATE_REQUEST_CODE = 105;
+    private static final int READ_CONTACTS_REQUEST_CODE = 106;
+    private static final int WIFI_CONNECT = 2;
+    private static final String WIFI_SSID = "Wiznet_TestAP";
     final static String TAG = "ConnectWifiActivity";
+
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
         setContentView(R.layout.activity_device_settings_connect_wifi);
         getSupportActionBar().setDisplayHomeAsUpEnabled(true);
+
+        mHandler = new Handler(){
+            @Override
+            public void handleMessage(Message msg) {
+                super.handleMessage(msg);
+                if(msg.what==1){
+                    JSONObject jsonAp = new JSONObject(apInfo);
+                    new Thread(new SenderThread(jsonAp.toString())).start();
+                    Toast toast = Toast.makeText(getApplicationContext(),
+                            "화려한 외출 준비 완료", Toast.LENGTH_LONG);
+                    toast.setGravity(Gravity.CENTER, 0, 0);
+                    toast.show();
+                    finish();
+                }else{
+                    Toast.makeText(ActivityDeviceSettingsConnectWIFI.this, "연결에 실패했습니다.", Toast.LENGTH_SHORT).show();
+                }
+            }
+        };
+
+
+
+        int permission = ContextCompat.checkSelfPermission(this, Manifest.permission.INTERNET);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.INTERNET}, INTERNET_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_NETWORK_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_NETWORK_STATE}, ACCESS_NETWORK_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.CHANGE_WIFI_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.CHANGE_WIFI_STATE}, CHANGE_WIFI_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.ACCESS_WIFI_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.ACCESS_WIFI_STATE}, ACCESS_WIFI_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_PHONE_STATE);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_PHONE_STATE}, READ_PHONE_STATE_REQUEST_CODE);
+        }
+
+        permission = ContextCompat.checkSelfPermission(this, Manifest.permission.READ_CONTACTS);
+
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            Log.i("tag", "Permission to record denied");
+            ActivityCompat.requestPermissions(this, new String[]{Manifest.permission.READ_CONTACTS}, READ_CONTACTS_REQUEST_CODE);
+        }
+
+
         deviceID = Settings.Secure.getString(getContentResolver(), Settings.Secure.ANDROID_ID);
 
         mWifiManager = (WifiManager)this.getApplicationContext().getSystemService(Context.WIFI_SERVICE);
@@ -80,25 +173,44 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
     public void onClick(View v) {
         switch(v.getId()){
             case R.id.activity_device_settings_connect_wifi_btn_connect:
-                //Device AP의 Mac 주소 획득
-                String ssid = mETSsid.getText().toString();
-                String pwd = mETPwd.getText().toString();
+                List<WifiConfiguration> listWifiConfig = mWifiManager.getConfiguredNetworks();
+                if (listWifiConfig != null) {
+                    Log.e("bfore ######", "before");
+                    WifiConfiguration connectedWifi = new WifiConfiguration();
+                    Log.e("after ######", "after");
+                    if (listWifiConfig != null) {
+                        for (int i = 0; i < listWifiConfig.size(); i++) {
+                            if(listWifiConfig.get(i).SSID.equals("\""+WIFI_SSID+"\""))
+                                connectedWifi = listWifiConfig.get(i);
+                        }
+                        Log.d("KimDC", "\""+WIFI_SSID+"\"");
+                        Log.d("KimDC", "SSID: "+connectedWifi.SSID);
+                        Log.d("KimDC", "status: "+Integer.toString(connectedWifi.status));
+                        Log.d("KimDC", "wifiStatus: "+Integer.toString(mWifiManager.getWifiState()));
+                        Log.d("KimDC", "wifiEnable: "+Boolean.toString(mWifiManager.isWifiEnabled()));
+                        Log.d("KimDC", "pingsup: "+Boolean.toString(mWifiManager.pingSupplicant()));
+                    }
 
-                HashMap apInfo = new HashMap();
+                    Log.e("for after ######", "for after");
 
-                apInfo.put("ssid", ssid);
-                apInfo.put("pwd", pwd);
+                    if (connectedWifi.SSID.equals("\""+WIFI_SSID+"\"")) {
+                        //Device AP의 Mac 주소 획득
+                        String ssid = mETSsid.getText().toString();
+                        String pwd = mETPwd.getText().toString();
+                        String deviceId = FirebaseInstanceId.getInstance().getToken();
 
-                JSONObject jsonAp = new JSONObject(apInfo);
+                        apInfo = new HashMap();
 
-                new Thread(new ConnectThread("192.168.10.1", 80)).start();
+                        apInfo.put("ssid", ssid);
+                        apInfo.put("pwd", pwd);
+                        apInfo.put("deviceId", deviceId);
 
-                while (!isConnected) {
-                    //wait socket open
+                        new Thread(new ConnectThread("192.168.12.101", 8080)).start();
+                    }
+                    else {
+
+                    }
                 }
-                Log.d(TAG, jsonAp.toString());
-
-                new Thread(new SenderThread(jsonAp.toString())).start();
 
                 break;
 
@@ -113,9 +225,11 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
             }
         }
 
-        int networkID = mWifiManager.addNetwork(wifiConfig);
-        if (networkID >= 0) {
-            mWifiManager.enableNetwork(networkID, true);
+        mWifiID = -1;
+        mWifiID = mWifiManager.addNetwork(wifiConfig);
+        if (mWifiID >= 0) {
+            Log.d("KimDC", Integer.toString(mWifiID));
+            mWifiManager.enableNetwork(mWifiID, true);
         }
     }
 
@@ -144,17 +258,26 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
         ConnectThread(String ip, int port) {
             serverIP = ip;
             serverPort = port;
+
+            Log.e("connected####Thread","constructor");
         }
 
         @Override
         public void run() {
 
+
+            Log.e("else ##########", "#############");
             try {
-                mSocket = new Socket(serverIP, serverPort);
+                Log.e("else0 ##########", "#############");
+                SocketAddress socketAddress = new InetSocketAddress(serverIP,serverPort);
+                mSocket = new Socket();
+                mSocket.connect(socketAddress,3000);
+                //mSocket = new Socket(serverIP, serverPort);
                 //ReceiverThread: java.net.SocketTimeoutException: Read timed out 때문에 주석처리
                 //mSocket.setSoTimeout(3000);
-
+                Log.e("else1 ##########", "#############");
                 mServerIP = mSocket.getRemoteSocketAddress().toString();
+                Log.e("else2 ##########", "#############");
 
             } catch( UnknownHostException e )
             {
@@ -169,36 +292,31 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
                 Log.e(TAG, ("ConnectThread:" + e.getMessage()));
             }
 
-
             if (mSocket != null) {
-
                 try {
-
                     mOut = new PrintWriter(new BufferedWriter(new OutputStreamWriter(mSocket.getOutputStream(), "UTF-8")), true);
                     mIn = new BufferedReader(new InputStreamReader(mSocket.getInputStream(), "UTF-8"));
-
                     isConnected = true;
+                    mHandler.sendEmptyMessage(1);
                 } catch (IOException e) {
-
+                    mHandler.sendEmptyMessage(0);
                     Log.e(TAG, ("ConnectThread:" + e.getMessage()));
                 }
+            }else{
+                mHandler.sendEmptyMessage(0);
             }
 
 
             runOnUiThread(new Runnable() {
-
                 @Override
                 public void run() {
-
                     if (isConnected) {
-
                         Log.d(TAG, "connected to " + serverIP);
                         Log.d(TAG, "ReceiverThread Start");
 
                         mReceiverThread = new Thread(new ReceiverThread());
                         mReceiverThread.start();
                     }else{
-
                         Log.d(TAG, "failed to connect to server " + serverIP);
                     }
 
@@ -249,7 +367,7 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
                             @Override
                             public void run() {
                                 Log.d(TAG, "recv message: "+recvMessage);
-                                //mServerComm.regist(deviceID, recvMessage);
+                                mServerComm.regist(deviceID, recvMessage);
                             }
                         });
                     }
@@ -281,5 +399,64 @@ public class ActivityDeviceSettingsConnectWIFI extends AppCompatActivity impleme
             }
         }
 
+    }
+
+    @Override
+    public void onRequestPermissionsResult(int requestCode, String permissions[], int[] grantResults) {
+        switch (requestCode) {
+            case INTERNET_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "INTERNET Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "INTERNET Permission has been granted by user");
+                }
+            }
+
+            case ACCESS_NETWORK_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "ACCESS_NETWORK_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "ACCESS_NETWORK_STATE Permission has been granted by user");
+                }
+            }
+
+            case CHANGE_WIFI_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "CHANGE_WIFI_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "CHANGE_WIFI_STATE Permission has been granted by user");
+                }
+            }
+
+            case ACCESS_WIFI_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "ACCESS_WIFI_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "ACCESS_WIFI_STATE Permission has been granted by user");
+                }
+            }
+
+            case READ_PHONE_STATE_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "READ_PHONE_STATE Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "READ_PHONE_STATE Permission has been granted by user");
+                }
+            }
+
+            case READ_CONTACTS_REQUEST_CODE: {
+                if (grantResults.length == 0 || grantResults[0] != PackageManager.PERMISSION_GRANTED) {
+                    Log.i("tag", "READ_CONTACTS Permission has been denied by user");
+                }
+                else {
+                    Log.i("tag", "READ_CONTACTS Permission has been granted by user");
+                }
+            }
+        }
     }
 }
