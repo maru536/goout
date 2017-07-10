@@ -229,12 +229,8 @@ public class ActivityMoreConfiguration extends AppCompatActivity {
                 seekBar.setMax((dataWeather.getDataWeatherTemperature().MAX_VALUE_WEATHER_TEMP));
                 txtUnit.setText(dataWeather.getDataWeatherTemperature().UNIT_WEATHER_TEMP);
                 seekBar.setProgress(convertMinusToPlus(dataWeather.getDataWeatherTemperature().getWarningValue()));
-<<<<<<< HEAD
-                txtValue.setText(dataWeather.getDataWeatherTemperature().getWarningValue() + "");
-=======
                 warningValue = dataWeather.getDataWeatherHumidity().getWarningValue();
                 txtValue.setText(dataWeather.getDataWeatherTemperature().getWarningValue()+"");
->>>>>>> d7b337a058e908b15d61b3f64416ac9596726421
                 isHigher = dataWeather.getDataWeatherTemperature().isHigher();
                 setArrowImage(isHigher);
                 break;
