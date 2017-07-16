@@ -1,0 +1,9 @@
+spring:
+  jpa:
+    hibernate:
+      ddl-auto: create
+  datasource:
+    url: jdbc:mysql://localhost:3306/device_config?useUnicode=yes&characterEncoding=UTF-8
+    username: root
+    password: wj
+    driverClassName: com.mysql.jdbc.Driver

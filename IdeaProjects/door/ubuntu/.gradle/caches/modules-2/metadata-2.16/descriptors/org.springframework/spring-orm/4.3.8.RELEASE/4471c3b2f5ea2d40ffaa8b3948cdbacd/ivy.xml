@@ -1,0 +1,47 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ivy-module version="2.0" xmlns:m="http://ant.apache.org/ivy/maven">
+  <info organisation="org.springframework" module="spring-orm" revision="4.3.8.RELEASE" status="release" publication="20170520092250">
+    <license name="Apache License, Version 2.0" url="http://www.apache.org/licenses/LICENSE-2.0"/>
+    <description homepage="https://github.com/spring-projects/spring-framework">Spring Object/Relational Mapping</description>
+  </info>
+  <configurations>
+    <conf name="default" visibility="public" description="runtime dependencies and master artifact can be used with this conf" extends="runtime,master"/>
+    <conf name="master" visibility="public" description="contains only the artifact published by this module itself, with no transitive dependencies"/>
+    <conf name="compile" visibility="public" description="this is the default scope, used if none is specified. Compile dependencies are available in all classpaths."/>
+    <conf name="provided" visibility="public" description="this is much like compile, but indicates you expect the JDK or a container to provide it. It is only available on the compilation classpath, and is not transitive."/>
+    <conf name="runtime" visibility="public" description="this scope indicates that the dependency is not required for compilation, but is for execution. It is in the runtime and test classpaths, but not the compile classpath." extends="compile"/>
+    <conf name="test" visibility="private" description="this scope indicates that the dependency is not required for normal use of the application, and is only available for the test compilation and execution phases." extends="runtime"/>
+    <conf name="system" visibility="public" description="this scope is similar to provided except that you have to provide the JAR which contains it explicitly. The artifact is always available and is not looked up in a repository."/>
+    <conf name="sources" visibility="public" description="this configuration contains the source artifact of this module, if any."/>
+    <conf name="javadoc" visibility="public" description="this configuration contains the javadoc artifact of this module, if any."/>
+    <conf name="optional" visibility="public" description="contains all optional dependencies"/>
+  </configurations>
+  <publications/>
+  <dependencies>
+    <dependency org="javax.jdo" name="jdo-api" rev="3.1" force="true" conf="optional-&gt;compile(*),master(*)">
+      <exclude org="javax.transaction" module="transaction-api" name="*" type="*" ext="*" conf="" matcher="exact"/>
+    </dependency>
+    <dependency org="javax.servlet" name="javax.servlet-api" rev="3.0.1" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="javax.transaction" name="javax.transaction-api" rev="1.2" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="org.apache.openjpa" name="openjpa" rev="2.4.1" force="true" conf="optional-&gt;compile(*),master(*)">
+      <exclude org="org.apache.geronimo.specs" module="geronimo-jpa_2.0_spec" name="*" type="*" ext="*" conf="" matcher="exact"/>
+      <exclude org="junit" module="junit" name="*" type="*" ext="*" conf="" matcher="exact"/>
+      <exclude org="org.apache.geronimo.specs" module="geronimo-jta_1.1_spec" name="*" type="*" ext="*" conf="" matcher="exact"/>
+      <exclude org="org.apache.geronimo.specs" module="geronimo-jms_1.1_spec" name="*" type="*" ext="*" conf="" matcher="exact"/>
+    </dependency>
+    <dependency org="org.eclipse.persistence" name="javax.persistence" rev="2.0.5" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.core" rev="2.4.2" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="org.eclipse.persistence" name="org.eclipse.persistence.jpa" rev="2.4.2" force="true" conf="optional-&gt;compile(*),master(*)">
+      <exclude org="org.eclipse.persistence" module="javax.persistence" name="*" type="*" ext="*" conf="" matcher="exact"/>
+    </dependency>
+    <dependency org="org.hibernate" name="hibernate-core" rev="5.2.10.Final" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="org.hibernate" name="hibernate-entitymanager" rev="4.3.11.Final" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="org.springframework" name="spring-aop" rev="4.3.8.RELEASE" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="org.springframework" name="spring-beans" rev="4.3.8.RELEASE" force="true" conf="compile-&gt;compile(*),master(*);runtime-&gt;runtime(*)"/>
+    <dependency org="org.springframework" name="spring-context" rev="4.3.8.RELEASE" force="true" conf="optional-&gt;compile(*),master(*)"/>
+    <dependency org="org.springframework" name="spring-core" rev="4.3.8.RELEASE" force="true" conf="compile-&gt;compile(*),master(*);runtime-&gt;runtime(*)"/>
+    <dependency org="org.springframework" name="spring-jdbc" rev="4.3.8.RELEASE" force="true" conf="compile-&gt;compile(*),master(*);runtime-&gt;runtime(*)"/>
+    <dependency org="org.springframework" name="spring-tx" rev="4.3.8.RELEASE" force="true" conf="compile-&gt;compile(*),master(*);runtime-&gt;runtime(*)"/>
+    <dependency org="org.springframework" name="spring-web" rev="4.3.8.RELEASE" force="true" conf="optional-&gt;compile(*),master(*)"/>
+  </dependencies>
+</ivy-module>
